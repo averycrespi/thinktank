@@ -1,5 +1,16 @@
 {
   "name": "thinktank",
+  "description": "Thinktank board game",
+  "keywords": [
+    "thinktank",
+    "board game"
+  ],
+  "homepage": "https://github.com/averycrespi/thinktank",
+  "author": {
+    "name": "Avery Crespi",
+    "email": "averycrespi@gmail.com"
+  },
+  "license": "MIT",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,6 +21,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "boardgame.io": "^0.39.14",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
