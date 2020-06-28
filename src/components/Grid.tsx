@@ -1,5 +1,6 @@
 import { NUM_COLS, NUM_ROWS, isHome, toIndex } from "../logic/grid";
 
+import { Piece } from "../logic/piece";
 import React from "react";
 
 const cellStyle = {
@@ -15,20 +16,26 @@ const homeStyle = {
 };
 
 interface GridProps {
-  cells: Array<any>;
-  handleClick(index: number): void;
+  cells: Array<Piece>;
+  colors: any;
+  onClick(index: number): void;
 }
 
-const Grid = ({ cells, handleClick }: GridProps) => {
+const Grid = ({ cells, colors, onClick }: GridProps) => {
   let tbody = [];
   for (let y = 0; y < NUM_ROWS; y++) {
     let tr = [];
     for (let x = 0; x < NUM_COLS; x++) {
       const index = toIndex(x, y);
       const style = isHome(x, y) ? homeStyle : cellStyle;
+      const piece = cells[index];
       tr.push(
-        <td key={index} style={style} onClick={() => handleClick(index)}>
-          {cells[index]}
+        <td key={index} style={style} onClick={() => onClick(index)}>
+          {piece ? (
+            <span style={{ color: colors[piece.playerId] }}>{piece.token}</span>
+          ) : (
+            ""
+          )}
         </td>
       );
     }
