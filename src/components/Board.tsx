@@ -1,6 +1,8 @@
+import React, { useState } from "react";
+
 import Grid from "./Grid";
-import React from "react";
-import { Token } from "../logic/piece";
+import Selector from "./Selector";
+import { Token } from "../logic/token";
 
 interface BoardProps {
   G: any;
@@ -8,13 +10,14 @@ interface BoardProps {
 }
 
 const Board = ({ G, moves }: BoardProps) => {
-  const onClick = (index: number) => moves.placePiece(index, Token.Blocker);
+  const [activeToken, setActiveToken] = useState(Token.Blocker);
+  const onSelect = (token: Token) => setActiveToken(token);
+  const onCellClick = (index: number) => moves.placePiece(index, activeToken);
   return (
-    <Grid
-      cells={G.cells}
-      colors={{ "0": "red", "1": "blue" }}
-      onClick={onClick}
-    />
+    <div>
+      <Selector onSelect={onSelect} />
+      <Grid cells={G.cells} onCellClick={onCellClick} />
+    </div>
   );
 };
 

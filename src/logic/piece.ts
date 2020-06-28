@@ -1,16 +1,7 @@
-export enum Token {
-  Blocker = "O",
-  UpTank = "^",
-  DownTank = "v",
-  LeftTank = "<",
-  RightTank = ">",
-  PlusInfiltrator = "+",
-  DiagInfiltrator = "X",
-  Mine = "*",
-  HomeBase = "@",
-}
+import { Player } from "./player";
+import { Token } from "./token";
 
 export interface Piece {
   token: Token;
-  playerId: string;
+  player: Player;
 }

@@ -1,9 +1,9 @@
-import { NUM_COLS, NUM_ROWS, fromIndex, toIndex } from "./grid";
+import { NUM_COLS, NUM_ROWS, coordsToIndex, indexToCoords } from "./grid";
 
-test("fromIndex undoes toIndex", () => {
+test("indexToCoords undoes coordsToIndex", () => {
   for (let y = 0; y < NUM_ROWS; y++) {
     for (let x = 0; x < NUM_COLS; x++) {
-      expect(fromIndex(toIndex(x, y))).toStrictEqual([x, y]);
+      expect(indexToCoords(coordsToIndex({ x, y }))).toStrictEqual({ x, y });
     }
   }
 });

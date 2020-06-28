@@ -1,61 +1,84 @@
-// Define the size of the grid.
 export const NUM_ROWS = 18;
 export const NUM_COLS = 15;
 
-// Define the size of the home area.
+export interface Coords {
+  x: number;
+  y: number;
+}
+
+export const coordsToIndex = ({ x, y }: Coords): number => y * NUM_COLS + x;
+
+export const indexToCoords = (index: number): Coords => ({
+  x: index % NUM_COLS,
+  y: Math.floor(index / NUM_COLS),
+});
+
+interface Bounds {
+  topLeft: Coords;
+  bottomRight: Coords;
+}
+
+const inBounds = (
+  { x, y }: Coords,
+  { topLeft, bottomRight }: Bounds
+): boolean =>
+  x >= topLeft.x && x <= bottomRight.x && y >= topLeft.y && y <= bottomRight.y;
+
 const HOME_OFFSET = 2;
 const HOME_WIDTH = 3;
 const HOME_HEIGHT = 4;
 
-// Define the size of the safe area.
+export const isRedHome = (coords: Coords): boolean =>
+  inBounds(coords, {
+    topLeft: { x: HOME_OFFSET, y: HOME_OFFSET },
+    bottomRight: {
+      x: HOME_OFFSET + HOME_WIDTH - 1,
+      y: HOME_OFFSET + HOME_HEIGHT - 1,
+    },
+  });
+
+export const isBlueHome = (coords: Coords): boolean =>
+  inBounds(coords, {
+    topLeft: {
+      x: NUM_COLS - HOME_OFFSET - HOME_WIDTH,
+      y: NUM_ROWS - HOME_OFFSET - HOME_HEIGHT,
+    },
+    bottomRight: {
+      x: NUM_COLS - HOME_OFFSET - 1,
+      y: NUM_ROWS - HOME_OFFSET - 1,
+    },
+  });
+
 const SAFE_OFFSET = HOME_OFFSET - 1;
 const SAFE_WIDTH = HOME_WIDTH + 2;
 const SAFE_HEIGHT = HOME_HEIGHT + 2;
 
-interface Bounds {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-}
-
-export const toIndex = (x: number, y: number): number => y * NUM_COLS + x;
-
-export const fromIndex = (index: number): [number, number] => [
-  index % NUM_COLS,
-  Math.floor(index / NUM_COLS),
-];
-
-const inBounds = (x: number, y: number, b: Bounds): boolean =>
-  x >= b.x1 && x <= b.x2 && y >= b.y1 && y <= b.y2;
-
-export const isHome = (x: number, y: number): boolean =>
-  inBounds(x, y, {
-    x1: HOME_OFFSET,
-    y1: HOME_OFFSET,
-    x2: HOME_OFFSET + HOME_WIDTH - 1,
-    y2: HOME_OFFSET + HOME_HEIGHT - 1,
-  }) ||
-  inBounds(x, y, {
-    x1: NUM_COLS - HOME_OFFSET - HOME_WIDTH,
-    y1: NUM_ROWS - HOME_OFFSET - HOME_HEIGHT,
-    x2: NUM_COLS - HOME_OFFSET - 1,
-    y2: NUM_ROWS - HOME_OFFSET - 1,
+export const isRedSafe = (coords: Coords): boolean =>
+  inBounds(coords, {
+    topLeft: { x: SAFE_OFFSET, y: SAFE_OFFSET },
+    bottomRight: {
+      x: SAFE_OFFSET + SAFE_WIDTH - 1,
+      y: SAFE_OFFSET + SAFE_HEIGHT - 1,
+    },
   });
 
-const isSafe = (x: number, y: number): boolean =>
-  inBounds(x, y, {
-    x1: SAFE_OFFSET,
-    y1: SAFE_OFFSET,
-    x2: SAFE_OFFSET + SAFE_WIDTH - 1,
-    y2: SAFE_OFFSET + SAFE_HEIGHT - 1,
-  }) ||
-  inBounds(x, y, {
-    x1: NUM_COLS - SAFE_OFFSET - SAFE_WIDTH,
-    y1: NUM_ROWS - SAFE_OFFSET - SAFE_HEIGHT,
-    x2: NUM_COLS - SAFE_OFFSET - 1,
-    y2: NUM_ROWS - SAFE_OFFSET - 1,
+export const isBlueSafe = (coords: Coords): boolean =>
+  inBounds(coords, {
+    topLeft: {
+      x: NUM_COLS - SAFE_OFFSET - SAFE_WIDTH,
+      y: NUM_ROWS - SAFE_OFFSET - SAFE_HEIGHT,
+    },
+    bottomRight: {
+      x: NUM_COLS - SAFE_OFFSET - 1,
+      y: NUM_ROWS - SAFE_OFFSET - 1,
+    },
   });
 
-export const canPlace = (x: number, y: number): boolean =>
-  isSafe(x, y) && !isHome(x, y);
+const BASE_OFFSET = 3;
+
+export const redBaseSpawn = (): Coords => ({ x: BASE_OFFSET, y: BASE_OFFSET });
+
+export const blueBaseSpawn = (): Coords => ({
+  x: NUM_COLS - BASE_OFFSET - 1,
+  y: NUM_ROWS - BASE_OFFSET - 1,
+});
