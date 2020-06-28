@@ -1,5 +1,5 @@
-import { Piece } from "../logic/piece";
-import { Player } from "../logic/player";
+import { Piece, Player } from "../logic";
+
 import React from "react";
 
 interface CellProps {
@@ -11,8 +11,8 @@ const Cell = ({ piece }: CellProps) => {
     return null;
   }
   const classes = [
-    piece.player === Player.Red ? "red-piece" : "",
-    piece.player === Player.Blue ? "blue-piece" : "",
+    piece.player === Player.Red ? "piece-red" : "",
+    piece.player === Player.Blue ? "piece-blue" : "",
   ];
   return <span className={classes.join(" ")}>{piece.token}</span>;
 };

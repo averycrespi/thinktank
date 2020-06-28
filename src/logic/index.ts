@@ -9,3 +9,13 @@ export enum Token {
   Mine = "*",
   Base = "@",
 }
+
+export enum Player {
+  Red = "0",
+  Blue = "1",
+}
+
+export interface Piece {
+  token: Token;
+  player: Player;
+}

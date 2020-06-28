@@ -1,5 +1,5 @@
 import React from "react";
-import { Token } from "../logic/token";
+import { Token } from "../logic";
 
 interface SelectorProps {
   onSelect(token: Token): void;

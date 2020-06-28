@@ -1,23 +1,23 @@
 .cell {
-  border: 1px solid #555555;
+  border: 1px solid #555;
   width: 25px;
   height: 25px;
   line-height: 25px;
   text-align: center;
 }
 
-.red-home {
+.home-red {
   background: #ff000050;
 }
 
-.blue-home {
+.home-blue {
   background: #0000ff50;
 }
 
-.red-piece {
+.piece-red {
   color: #f00;
 }
 
-.blue-piece {
+.piece-blue {
   color: #00f;
 }

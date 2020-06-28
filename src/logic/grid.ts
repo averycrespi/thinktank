@@ -1,7 +1,7 @@
 export const NUM_ROWS = 18;
 export const NUM_COLS = 15;
 
-export interface Coords {
+interface Coords {
   x: number;
   y: number;
 }
@@ -28,8 +28,8 @@ const HOME_OFFSET = 2;
 const HOME_WIDTH = 3;
 const HOME_HEIGHT = 4;
 
-export const isRedHome = (coords: Coords): boolean =>
-  inBounds(coords, {
+export const isRedHome = (index: number): boolean =>
+  inBounds(indexToCoords(index), {
     topLeft: { x: HOME_OFFSET, y: HOME_OFFSET },
     bottomRight: {
       x: HOME_OFFSET + HOME_WIDTH - 1,
@@ -37,8 +37,8 @@ export const isRedHome = (coords: Coords): boolean =>
     },
   });
 
-export const isBlueHome = (coords: Coords): boolean =>
-  inBounds(coords, {
+export const isBlueHome = (index: number): boolean =>
+  inBounds(indexToCoords(index), {
     topLeft: {
       x: NUM_COLS - HOME_OFFSET - HOME_WIDTH,
       y: NUM_ROWS - HOME_OFFSET - HOME_HEIGHT,
@@ -49,36 +49,39 @@ export const isBlueHome = (coords: Coords): boolean =>
     },
   });
 
-const SAFE_OFFSET = HOME_OFFSET - 1;
-const SAFE_WIDTH = HOME_WIDTH + 2;
-const SAFE_HEIGHT = HOME_HEIGHT + 2;
+const SPAWN_OFFSET = HOME_OFFSET - 1;
+const SPAWN_WIDTH = HOME_WIDTH + 2;
+const SPAWN_HEIGHT = HOME_HEIGHT + 2;
 
-export const isRedSafe = (coords: Coords): boolean =>
-  inBounds(coords, {
-    topLeft: { x: SAFE_OFFSET, y: SAFE_OFFSET },
+export const isRedSpawn = (index: number): boolean =>
+  inBounds(indexToCoords(index), {
+    topLeft: { x: SPAWN_OFFSET, y: SPAWN_OFFSET },
     bottomRight: {
-      x: SAFE_OFFSET + SAFE_WIDTH - 1,
-      y: SAFE_OFFSET + SAFE_HEIGHT - 1,
+      x: SPAWN_OFFSET + SPAWN_WIDTH - 1,
+      y: SPAWN_OFFSET + SPAWN_HEIGHT - 1,
     },
-  });
+  }) && !isRedHome(index);
 
-export const isBlueSafe = (coords: Coords): boolean =>
-  inBounds(coords, {
+export const isBlueSpawn = (index: number): boolean =>
+  inBounds(indexToCoords(index), {
     topLeft: {
-      x: NUM_COLS - SAFE_OFFSET - SAFE_WIDTH,
-      y: NUM_ROWS - SAFE_OFFSET - SAFE_HEIGHT,
+      x: NUM_COLS - SPAWN_OFFSET - SPAWN_WIDTH,
+      y: NUM_ROWS - SPAWN_OFFSET - SPAWN_HEIGHT,
     },
     bottomRight: {
-      x: NUM_COLS - SAFE_OFFSET - 1,
-      y: NUM_ROWS - SAFE_OFFSET - 1,
+      x: NUM_COLS - SPAWN_OFFSET - 1,
+      y: NUM_ROWS - SPAWN_OFFSET - 1,
     },
-  });
+  }) && !isBlueHome(index);
 
-const BASE_OFFSET = 3;
+const HOME_CENTER_OFFSET = 3;
 
-export const redBaseSpawn = (): Coords => ({ x: BASE_OFFSET, y: BASE_OFFSET });
+export const RED_HOME_CENTER = coordsToIndex({
+  x: HOME_CENTER_OFFSET,
+  y: HOME_CENTER_OFFSET,
+});
 
-export const blueBaseSpawn = (): Coords => ({
-  x: NUM_COLS - BASE_OFFSET - 1,
-  y: NUM_ROWS - BASE_OFFSET - 1,
+export const BLUE_HOME_CENTER = coordsToIndex({
+  x: NUM_COLS - HOME_CENTER_OFFSET - 1,
+  y: NUM_ROWS - HOME_CENTER_OFFSET - 1,
 });

@@ -1,47 +1,40 @@
 import {
+  BLUE_HOME_CENTER,
   NUM_COLS,
   NUM_ROWS,
-  blueBaseSpawn,
-  coordsToIndex,
-  indexToCoords,
-  redBaseSpawn,
+  RED_HOME_CENTER,
 } from "./logic/grid";
-import { canBluePlace, canRedPlace } from "./logic/rules";
+import { Player, Token } from "./logic";
 
 import { INVALID_MOVE } from "boardgame.io/core";
-import { Player } from "./logic/player";
-import { Token } from "./logic/token";
+import { canPlace } from "./logic/place";
 
-const placePiece = (G: any, ctx: any, index: number, token: Token) => {
-  if (G.cells[index] !== null) {
+const placePiece = (G: any, ctx: any, token: Token, index: number) => {
+  if (canPlace(G.pieces, ctx.currentPlayer, token, index)) {
+    G.pieces[index] = { token, player: ctx.currentPlayer };
+  } else {
     return INVALID_MOVE;
   }
-  const coords = indexToCoords(index);
-  if (ctx.currentPlayer === Player.Red && !canRedPlace(coords, token)) {
-    return INVALID_MOVE;
-  }
-  if (ctx.currentPlayer === Player.Blue && !canBluePlace(coords, token)) {
-    return INVALID_MOVE;
-  }
-  G.cells[index] = { token, player: ctx.currentPlayer };
 };
 
-const rotatePiece = (G: any, ctx: any, index: number, token: Token) => {};
+const rotatePiece = (G: any, ctx: any, token: Token, index: number) =>
+  INVALID_MOVE;
 
-const movePiece = (G: any, ctx: any, src: number, dest: number) => {};
+const movePiece = (G: any, ctx: any, srcIndex: number, destIndex: number) =>
+  INVALID_MOVE;
 
 const Game = {
   setup: () => {
-    let cells = Array(NUM_ROWS * NUM_COLS).fill(null);
-    cells[coordsToIndex(redBaseSpawn())] = {
+    let pieces = Array(NUM_ROWS * NUM_COLS).fill(null);
+    pieces[RED_HOME_CENTER] = {
       token: Token.Base,
       player: Player.Red,
     };
-    cells[coordsToIndex(blueBaseSpawn())] = {
+    pieces[BLUE_HOME_CENTER] = {
       token: Token.Base,
       player: Player.Blue,
     };
-    return { cells };
+    return { pieces };
   },
   moves: { placePiece, rotatePiece, movePiece },
   turn: { moveLimit: 1 },

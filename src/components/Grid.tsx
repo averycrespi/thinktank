@@ -9,15 +9,15 @@ import {
 } from "../logic/grid";
 
 import Cell from "./Cell";
-import { Piece } from "../logic/piece";
+import { Piece } from "../logic";
 import React from "react";
 
 interface GridProps {
-  cells: Array<Piece>;
+  pieces: Array<Piece>;
   onCellClick(index: number): void;
 }
 
-const Grid = ({ cells, onCellClick }: GridProps) => {
+const Grid = ({ pieces, onCellClick }: GridProps) => {
   let tbody = [];
   for (let y = 0; y < NUM_ROWS; y++) {
     let tr = [];
@@ -25,8 +25,8 @@ const Grid = ({ cells, onCellClick }: GridProps) => {
       const index = coordsToIndex({ x, y });
       const classes = [
         "cell",
-        isRedHome({ x, y }) ? "red-home" : "",
-        isBlueHome({ x, y }) ? "blue-home" : "",
+        isRedHome(index) ? "home-red" : "",
+        isBlueHome(index) ? "home-blue" : "",
       ];
       tr.push(
         <td
@@ -34,7 +34,7 @@ const Grid = ({ cells, onCellClick }: GridProps) => {
           className={classes.join(" ")}
           onClick={() => onCellClick(index)}
         >
-          <Cell piece={cells[index]} />
+          <Cell piece={pieces[index]} />
         </td>
       );
     }
