@@ -1,6 +1,37 @@
-import { NUM_COLS, NUM_ROWS, adjacentTo, coordsToIndex } from "./grid";
-import { Piece, Player } from ".";
+import {
+  adjacentTo,
+  orthogonallyAdjacentTo,
+  diagonallyAdjacentTo,
+  isHome,
+  dualAdjacentTo,
+} from "./grid";
+import { Token, Piece, Player } from ".";
+import { filter } from "../utils/setOps";
 
+/** Find all destinations of a token at an index. Does not consider threats. */
+const destinationsOf = (token: Token, index: number): Set<number> => {
+  switch (token) {
+    case Token.Blocker:
+      return filter(adjacentTo(index), (i) => !isHome(i));
+    case Token.UpTank:
+    case Token.DownTank:
+    case Token.LeftTank:
+    case Token.RightTank:
+      return filter(orthogonallyAdjacentTo(index), (i) => !isHome(i));
+    case Token.OrthogonalInfiltrator:
+      return filter(orthogonallyAdjacentTo(index), (i) => !isHome(i));
+    case Token.DiagonalInfiltrator:
+      return filter(diagonallyAdjacentTo(index), (i) => !isHome(i));
+    case Token.Mine:
+      return filter(dualAdjacentTo(index), (i) => !isHome(i));
+    case Token.Base:
+      return filter(adjacentTo(index), (i) => isHome(i));
+    default:
+      return new Set<number>();
+  }
+};
+
+/** Check if a movement is valid. */
 export const canMove = (
   pieces: Array<Piece>,
   player: Player,
@@ -8,32 +39,32 @@ export const canMove = (
   destIndex: number
 ): boolean => {
   if (!pieces[srcIndex] || pieces[srcIndex].player !== player) {
-    // Cannot move from an empty cell or an enemy piece.
+    // Cannot move an empty cell or an enemy piece.
     return false;
   } else if (pieces[destIndex]) {
     // Cannot move to an occupied cell.
     return false;
-  } else if (!adjacentTo(srcIndex).has(destIndex)) {
-    return false; //TODO: handle movements
+  } else if (!destinationsOf(pieces[srcIndex].token, srcIndex).has(destIndex)) {
+    // Destination must be valid.
+    return false;
   } else {
     return true;
   }
 };
 
+/** Find all valid movements from a source index. */
 export const validMovements = (
   pieces: Array<Piece>,
   player: Player,
   srcIndex: number
 ): Set<number> => {
   const movements = new Set<number>();
-  for (let y = 0; y < NUM_ROWS; y++) {
-    for (let x = 0; x < NUM_COLS; x++) {
-      const destIndex = coordsToIndex({ x, y });
-      if (canMove(pieces, player, srcIndex, destIndex)) {
-        movements.add(destIndex);
-      }
+  const destinations = destinationsOf(pieces[srcIndex].token, srcIndex);
+  // Optimization: reduce the search space to the destinations.
+  for (const destIndex of destinations) {
+    if (canMove(pieces, player, srcIndex, destIndex)) {
+      movements.add(destIndex);
     }
   }
-  movements.delete(srcIndex);
   return movements;
 };

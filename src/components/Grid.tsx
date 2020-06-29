@@ -1,8 +1,8 @@
 import "../styles/grid.css";
 
 import {
-  NUM_COLS,
-  NUM_ROWS,
+  GRID_WIDTH,
+  GRID_HEIGHT,
   coordsToIndex,
   isBlueHome,
   isRedHome,
@@ -14,21 +14,21 @@ import React from "react";
 
 interface GridProps {
   pieces: Array<Piece>;
-  activeCells?: Set<number>;
+  highlighted?: Set<number>;
   onCellClick(index: number): void;
 }
 
-const Grid = ({ pieces, activeCells = new Set(), onCellClick }: GridProps) => {
+const Grid = ({ pieces, highlighted = new Set(), onCellClick }: GridProps) => {
   let tbody = [];
-  for (let y = 0; y < NUM_ROWS; y++) {
+  for (let y = 0; y < GRID_HEIGHT; y++) {
     let tr = [];
-    for (let x = 0; x < NUM_COLS; x++) {
+    for (let x = 0; x < GRID_WIDTH; x++) {
       const index = coordsToIndex({ x, y });
       const classes = [
         "cell",
         isRedHome(index) ? "home-red" : "",
         isBlueHome(index) ? "home-blue" : "",
-        activeCells.has(index) ? "active" : "",
+        highlighted.has(index) ? "highlighted" : "",
       ];
       tr.push(
         <td

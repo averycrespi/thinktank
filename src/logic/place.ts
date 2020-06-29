@@ -1,12 +1,13 @@
 import {
-  NUM_COLS,
-  NUM_ROWS,
+  GRID_WIDTH,
+  GRID_HEIGHT,
   coordsToIndex,
   isBlueSpawn,
   isRedSpawn,
 } from "./grid";
 import { Piece, Player, Token } from ".";
 
+/** Check if a placement is valid. */
 export const canPlace = (
   pieces: Array<Piece>,
   player: Player,
@@ -27,14 +28,15 @@ export const canPlace = (
   }
 };
 
+/** Find all valid placements for a token. */
 export const validPlacements = (
   pieces: Array<Piece>,
   player: Player,
   token: Token
 ): Set<number> => {
   let placements = new Set<number>();
-  for (let y = 0; y < NUM_ROWS; y++) {
-    for (let x = 0; x < NUM_COLS; x++) {
+  for (let y = 0; y < GRID_HEIGHT; y++) {
+    for (let x = 0; x < GRID_WIDTH; x++) {
       const index = coordsToIndex({ x, y });
       if (canPlace(pieces, player, token, index)) {
         placements.add(index);

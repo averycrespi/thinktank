@@ -1,7 +1,7 @@
 import {
   BLUE_HOME_CENTER,
-  NUM_COLS,
-  NUM_ROWS,
+  GRID_WIDTH,
+  GRID_HEIGHT,
   RED_HOME_CENTER,
   coordsToIndex,
   indexToCoords,
@@ -12,16 +12,16 @@ import {
 } from "./grid";
 
 test("indexToCoords is inverse of coordsToIndex", () => {
-  for (let y = 0; y < NUM_ROWS; y++) {
-    for (let x = 0; x < NUM_COLS; x++) {
+  for (let y = 0; y < GRID_HEIGHT; y++) {
+    for (let x = 0; x < GRID_WIDTH; x++) {
       expect(indexToCoords(coordsToIndex({ x, y }))).toStrictEqual({ x, y });
     }
   }
 });
 
 test("home regions and spawn regions do not overlap", () => {
-  for (let y = 0; y < NUM_ROWS; y++) {
-    for (let x = 0; x < NUM_COLS; x++) {
+  for (let y = 0; y < GRID_HEIGHT; y++) {
+    for (let x = 0; x < GRID_WIDTH; x++) {
       const index = coordsToIndex({ x, y });
       expect(isRedHome(index) && isRedSpawn(index)).toBe(false);
       expect(isBlueHome(index) && isBlueSpawn(index)).toBe(false);
