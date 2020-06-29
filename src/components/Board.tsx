@@ -24,15 +24,15 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
   const { currentPlayer: player } = ctx;
 
   const [action, setAction] = useState(Action.None);
+  const [highlighted, setHighlighted] = useState(new Set<number>());
   const [activeToken, setActiveToken] = useState(Token.Blocker);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [activeCells, setActiveCells] = useState(new Set<number>());
 
   const onTokenSelect = (token: Token) => {
     console.debug("Transition: Any -> Place");
     setAction(Action.Place);
+    setHighlighted(validPlacements(pieces, player, token));
     setActiveToken(token);
-    setActiveCells(validPlacements(pieces, player, token));
   };
 
   const onCellClick = (index: number) => {
@@ -41,28 +41,33 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
         if (pieces[index] && pieces[index].player === player) {
           console.debug("Transition: None -> Move");
           setAction(Action.Move);
+          setHighlighted(validMovements(pieces, player, index));
           setActiveIndex(index);
-          setActiveCells(validMovements(pieces, player, index));
         }
         break;
       case Action.Place:
         if (canPlace(pieces, player, activeToken, index)) {
           console.debug("Transition: Place -> None");
           setAction(Action.None);
-          setActiveCells(new Set<number>());
+          setHighlighted(new Set<number>());
           moves.placePiece(activeToken, index);
+        } else if (pieces[index] && pieces[index].player === player) {
+          console.debug("Transition: Place -> Move");
+          setAction(Action.Move);
+          setHighlighted(validMovements(pieces, player, index));
+          setActiveIndex(index);
         }
         break;
       case Action.Move:
         if (canMove(pieces, player, activeIndex, index)) {
           console.debug("Transition: Move -> None");
           setAction(Action.None);
-          setActiveCells(new Set<number>());
+          setHighlighted(new Set<number>());
           moves.movePiece(activeIndex, index);
         } else if (pieces[index] && pieces[index].player === player) {
           console.debug("Transition: Move -> Move");
+          setHighlighted(validMovements(pieces, player, index));
           setActiveIndex(index);
-          setActiveCells(validMovements(pieces, player, index));
         }
         break;
     }
@@ -72,10 +77,11 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
     <div>
       <Grid
         pieces={G.pieces}
-        activeCells={activeCells}
+        highlighted={highlighted}
         onCellClick={onCellClick}
       />
       <Selector onTokenSelect={onTokenSelect} />
+      <p>{"Action: " + Action[action]}</p>
     </div>
   );
 };

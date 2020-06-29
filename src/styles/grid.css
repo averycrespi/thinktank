@@ -6,7 +6,7 @@
   text-align: center;
 }
 
-.cell.active {
+.cell.highlighted {
   background: #999;
 }
 
@@ -14,7 +14,7 @@
   background: #ff000030;
 }
 
-.home-red.active {
+.home-red.highlighted {
   background: #ff000060;
 }
 
@@ -22,7 +22,7 @@
   background: #0000ff30;
 }
 
-.home-blue.active {
+.home-blue.highlighted {
   background: #0000ff60;
 }
 
