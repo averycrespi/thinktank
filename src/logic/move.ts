@@ -1,9 +1,4 @@
-import {
-  NUM_COLS,
-  NUM_ROWS,
-  coordsToIndex,
-  orthogonallyAdjacentTo,
-} from "./grid";
+import { NUM_COLS, NUM_ROWS, adjacentTo, coordsToIndex } from "./grid";
 import { Piece, Player } from ".";
 
 export const canMove = (
@@ -18,7 +13,7 @@ export const canMove = (
   } else if (pieces[destIndex]) {
     // Cannot move to an occupied cell.
     return false;
-  } else if (!orthogonallyAdjacentTo(srcIndex).has(destIndex)) {
+  } else if (!adjacentTo(srcIndex).has(destIndex)) {
     return false; //TODO: handle movements
   } else {
     return true;
