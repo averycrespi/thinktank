@@ -6,16 +6,24 @@
   text-align: center;
 }
 
-.active {
+.cell.active {
   background: #999;
 }
 
 .home-red {
-  background: #ff000050;
+  background: #ff000030;
+}
+
+.home-red.active {
+  background: #ff000060;
 }
 
 .home-blue {
-  background: #0000ff50;
+  background: #0000ff30;
+}
+
+.home-blue.active {
+  background: #0000ff60;
 }
 
 .piece-red {

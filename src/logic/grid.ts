@@ -85,3 +85,27 @@ export const BLUE_HOME_CENTER = coordsToIndex({
   x: NUM_COLS - HOME_CENTER_OFFSET - 1,
   y: NUM_ROWS - HOME_CENTER_OFFSET - 1,
 });
+
+const withOffsets = (
+  index: number,
+  offsets: Array<[number, number]>
+): Set<number> => {
+  const { x, y } = indexToCoords(index);
+  const s = new Set<number>();
+  for (const [xo, yo] of offsets) {
+    const x2 = x + xo;
+    const y2 = y + yo;
+    if (0 <= x2 && x2 < NUM_COLS && 0 <= y2 && y2 < NUM_ROWS) {
+      s.add(coordsToIndex({ x: x2, y: y2 }));
+    }
+  }
+  return s;
+};
+
+export const orthogonallyAdjacentTo = (index: number): Set<Number> =>
+  withOffsets(index, [
+    [-1, 0],
+    [0, -1],
+    [0, 1],
+    [1, 0],
+  ]);

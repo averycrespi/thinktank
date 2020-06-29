@@ -14,10 +14,13 @@ export const canPlace = (
   index: number
 ): boolean => {
   if (pieces[index]) {
+    // Cannot place a piece on top of another piece.
     return false;
   } else if (player === Player.Red && !isRedSpawn(index)) {
+    // Red cannot place a piece outside of red spawn.
     return false;
   } else if (player === Player.Blue && !isBlueSpawn(index)) {
+    // Blue cannot place a piece outside of blue spawn.
     return false;
   } else {
     return true;

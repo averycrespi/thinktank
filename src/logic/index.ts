@@ -4,8 +4,8 @@ export enum Token {
   DownTank = "v",
   LeftTank = "<",
   RightTank = ">",
-  PlusInfiltrator = "+",
-  DiagInfiltrator = "X",
+  OrthogonalInfiltrator = "+",
+  DiagonalInfiltrator = "X",
   Mine = "*",
   Base = "@",
 }

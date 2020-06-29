@@ -13,8 +13,8 @@ const Selector = ({ onTokenSelect }: SelectorProps) => {
     Token.DownTank,
     Token.LeftTank,
     Token.RightTank,
-    Token.PlusInfiltrator,
-    Token.DiagInfiltrator,
+    Token.OrthogonalInfiltrator,
+    Token.DiagonalInfiltrator,
     Token.Mine,
   ];
   for (const token of tokens) {

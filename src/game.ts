@@ -7,6 +7,7 @@ import {
 import { Player, Token } from "./logic";
 
 import { INVALID_MOVE } from "boardgame.io/core";
+import { canMove } from "./logic/move";
 import { canPlace } from "./logic/place";
 
 const placePiece = (G: any, ctx: any, token: Token, index: number) => {
@@ -17,10 +18,16 @@ const placePiece = (G: any, ctx: any, token: Token, index: number) => {
   }
 };
 
-const rotatePiece = (G: any, ctx: any, token: Token, index: number) =>
-  INVALID_MOVE;
+const movePiece = (G: any, ctx: any, srcIndex: number, destIndex: number) => {
+  if (canMove(G.pieces, ctx.currentPlayer, srcIndex, destIndex)) {
+    G.pieces[destIndex] = G.pieces[srcIndex];
+    G.pieces[srcIndex] = null;
+  } else {
+    return INVALID_MOVE;
+  }
+};
 
-const movePiece = (G: any, ctx: any, srcIndex: number, destIndex: number) =>
+const rotatePiece = (G: any, ctx: any, token: Token, index: number) =>
   INVALID_MOVE;
 
 const Game = {
@@ -36,7 +43,7 @@ const Game = {
     };
     return { pieces };
   },
-  moves: { placePiece, rotatePiece, movePiece },
+  moves: { placePiece, movePiece, rotatePiece },
   turn: { moveLimit: 1 },
 };
 

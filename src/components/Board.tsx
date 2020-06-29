@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { canMove, validMovements } from "../logic/move";
 import { canPlace, validPlacements } from "../logic/place";
 
 import Grid from "./Grid";
@@ -23,20 +24,47 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
   const { currentPlayer: player } = ctx;
 
   const [action, setAction] = useState(Action.None);
-  const [token, setToken] = useState(Token.Blocker);
+  const [activeToken, setActiveToken] = useState(Token.Blocker);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [activeCells, setActiveCells] = useState(new Set<number>());
 
   const onTokenSelect = (token: Token) => {
+    console.debug("Transition: Any -> Place");
     setAction(Action.Place);
-    setToken(token);
+    setActiveToken(token);
     setActiveCells(validPlacements(pieces, player, token));
   };
 
   const onCellClick = (index: number) => {
-    if (action === Action.Place && canPlace(pieces, player, token, index)) {
-      setAction(Action.None);
-      setActiveCells(new Set<number>());
-      moves.placePiece(token, index);
+    switch (action) {
+      case Action.None:
+        if (pieces[index] && pieces[index].player === player) {
+          console.debug("Transition: None -> Move");
+          setAction(Action.Move);
+          setActiveIndex(index);
+          setActiveCells(validMovements(pieces, player, index));
+        }
+        break;
+      case Action.Place:
+        if (canPlace(pieces, player, activeToken, index)) {
+          console.debug("Transition: Place -> None");
+          setAction(Action.None);
+          setActiveCells(new Set<number>());
+          moves.placePiece(activeToken, index);
+        }
+        break;
+      case Action.Move:
+        if (canMove(pieces, player, activeIndex, index)) {
+          console.debug("Transition: Move -> None");
+          setAction(Action.None);
+          setActiveCells(new Set<number>());
+          moves.movePiece(activeIndex, index);
+        } else if (pieces[index] && pieces[index].player === player) {
+          console.debug("Transition: Move -> Move");
+          setActiveIndex(index);
+          setActiveCells(validMovements(pieces, player, index));
+        }
+        break;
     }
   };
 
