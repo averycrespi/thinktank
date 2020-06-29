@@ -149,3 +149,16 @@ export const diagonallyAdjacentTo = (index: number): Set<number> =>
 /** Find indices adjacent to an index. */
 export const adjacentTo = (index: number): Set<number> =>
   new Set([...orthogonallyAdjacentTo(index), ...diagonallyAdjacentTo(index)]);
+
+/** Find indices dual-adjacent to an index. */
+export const dualAdjacentTo = (index: number): Set<number> => {
+  const s = new Set<number>();
+  for (const adj of adjacentTo(index)) {
+    s.add(adj);
+    for (const dualAdj of adjacentTo(adj)) {
+      s.add(dualAdj);
+    }
+  }
+  s.delete(index); // An index is not dual-adjacent to itself.
+  return s;
+};

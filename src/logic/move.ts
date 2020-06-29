@@ -3,6 +3,7 @@ import {
   orthogonallyAdjacentTo,
   diagonallyAdjacentTo,
   isHome,
+  dualAdjacentTo,
 } from "./grid";
 import { Token, Piece, Player } from ".";
 import { filter } from "../utils/setOps";
@@ -22,7 +23,7 @@ const destinationsOf = (token: Token, index: number): Set<number> => {
     case Token.DiagonalInfiltrator:
       return filter(diagonallyAdjacentTo(index), (i) => !isHome(i));
     case Token.Mine:
-      return new Set<number>(); //TODO: implement mine movement
+      return filter(dualAdjacentTo(index), (i) => !isHome(i));
     case Token.Base:
       return filter(adjacentTo(index), (i) => isHome(i));
     default:
