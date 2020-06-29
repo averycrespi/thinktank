@@ -1,4 +1,4 @@
-import { NUM_COLS, NUM_ROWS, adjacentTo, coordsToIndex } from "./grid";
+import { GRID_WIDTH, GRID_HEIGHT, adjacentTo, coordsToIndex } from "./grid";
 import { Piece, Player } from ".";
 
 export const canMove = (
@@ -26,8 +26,8 @@ export const validMovements = (
   srcIndex: number
 ): Set<number> => {
   const movements = new Set<number>();
-  for (let y = 0; y < NUM_ROWS; y++) {
-    for (let x = 0; x < NUM_COLS; x++) {
+  for (let y = 0; y < GRID_HEIGHT; y++) {
+    for (let x = 0; x < GRID_WIDTH; x++) {
       const destIndex = coordsToIndex({ x, y });
       if (canMove(pieces, player, srcIndex, destIndex)) {
         movements.add(destIndex);

@@ -1,6 +1,6 @@
 import {
-  NUM_COLS,
-  NUM_ROWS,
+  GRID_WIDTH,
+  GRID_HEIGHT,
   coordsToIndex,
   isBlueSpawn,
   isRedSpawn,
@@ -33,8 +33,8 @@ export const validPlacements = (
   token: Token
 ): Set<number> => {
   let placements = new Set<number>();
-  for (let y = 0; y < NUM_ROWS; y++) {
-    for (let x = 0; x < NUM_COLS; x++) {
+  for (let y = 0; y < GRID_HEIGHT; y++) {
+    for (let x = 0; x < GRID_WIDTH; x++) {
       const index = coordsToIndex({ x, y });
       if (canPlace(pieces, player, token, index)) {
         placements.add(index);

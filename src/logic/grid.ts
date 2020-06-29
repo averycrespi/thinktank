@@ -1,6 +1,6 @@
 // Defines the dimensions of the grid.
-export const NUM_ROWS = 18;
-export const NUM_COLS = 15;
+export const GRID_HEIGHT = 18;
+export const GRID_WIDTH = 15;
 
 /**
  * Represents a coordinate pair.
@@ -14,15 +14,15 @@ export interface Coords {
  * Convert a coordinate pair to an index.
  * This function is the inverse of indexToCoords.
  */
-export const coordsToIndex = ({ x, y }: Coords): number => y * NUM_COLS + x;
+export const coordsToIndex = ({ x, y }: Coords): number => y * GRID_WIDTH + x;
 
 /**
  * Convert an index to a coordinate pair.
  * This function is the inverse of coordsToIndex.
  */
 export const indexToCoords = (index: number): Coords => ({
-  x: index % NUM_COLS,
-  y: Math.floor(index / NUM_COLS),
+  x: index % GRID_WIDTH,
+  y: Math.floor(index / GRID_WIDTH),
 });
 
 /**
@@ -39,7 +39,7 @@ interface Bounds {
  */
 const GRID_BOUNDS = {
   topLeft: { x: 0, y: 0 },
-  bottomRight: { x: NUM_COLS, y: NUM_ROWS },
+  bottomRight: { x: GRID_WIDTH, y: GRID_HEIGHT },
 };
 
 /**
@@ -74,12 +74,12 @@ export const isRedHome = (index: number): boolean =>
 export const isBlueHome = (index: number): boolean =>
   inBounds(indexToCoords(index), {
     topLeft: {
-      x: NUM_COLS - HOME_OFFSET - HOME_WIDTH,
-      y: NUM_ROWS - HOME_OFFSET - HOME_HEIGHT,
+      x: GRID_WIDTH - HOME_OFFSET - HOME_WIDTH,
+      y: GRID_HEIGHT - HOME_OFFSET - HOME_HEIGHT,
     },
     bottomRight: {
-      x: NUM_COLS - HOME_OFFSET,
-      y: NUM_ROWS - HOME_OFFSET,
+      x: GRID_WIDTH - HOME_OFFSET,
+      y: GRID_HEIGHT - HOME_OFFSET,
     },
   });
 
@@ -107,12 +107,12 @@ export const isRedSpawn = (index: number): boolean =>
 export const isBlueSpawn = (index: number): boolean =>
   inBounds(indexToCoords(index), {
     topLeft: {
-      x: NUM_COLS - SPAWN_OFFSET - SPAWN_WIDTH,
-      y: NUM_ROWS - SPAWN_OFFSET - SPAWN_HEIGHT,
+      x: GRID_WIDTH - SPAWN_OFFSET - SPAWN_WIDTH,
+      y: GRID_HEIGHT - SPAWN_OFFSET - SPAWN_HEIGHT,
     },
     bottomRight: {
-      x: NUM_COLS - SPAWN_OFFSET,
-      y: NUM_ROWS - SPAWN_OFFSET,
+      x: GRID_WIDTH - SPAWN_OFFSET,
+      y: GRID_HEIGHT - SPAWN_OFFSET,
     },
   }) && !isBlueHome(index);
 
@@ -131,8 +131,8 @@ export const RED_HOME_CENTER = coordsToIndex({
  * Defines the center of the blue home region.
  */
 export const BLUE_HOME_CENTER = coordsToIndex({
-  x: NUM_COLS - HOME_CENTER_OFFSET - 1,
-  y: NUM_ROWS - HOME_CENTER_OFFSET - 1,
+  x: GRID_WIDTH - HOME_CENTER_OFFSET - 1,
+  y: GRID_HEIGHT - HOME_CENTER_OFFSET - 1,
 });
 
 /**

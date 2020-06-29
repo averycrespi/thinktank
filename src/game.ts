@@ -1,7 +1,7 @@
 import {
   BLUE_HOME_CENTER,
-  NUM_COLS,
-  NUM_ROWS,
+  GRID_WIDTH,
+  GRID_HEIGHT,
   RED_HOME_CENTER,
 } from "./logic/grid";
 import { Player, Token } from "./logic";
@@ -32,7 +32,7 @@ const rotatePiece = (G: any, ctx: any, token: Token, index: number) =>
 
 const Game = {
   setup: () => {
-    let pieces = Array(NUM_ROWS * NUM_COLS).fill(null);
+    let pieces = Array(GRID_WIDTH * GRID_HEIGHT).fill(null);
     pieces[RED_HOME_CENTER] = {
       token: Token.Base,
       player: Player.Red,

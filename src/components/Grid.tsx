@@ -1,8 +1,8 @@
 import "../styles/grid.css";
 
 import {
-  NUM_COLS,
-  NUM_ROWS,
+  GRID_WIDTH,
+  GRID_HEIGHT,
   coordsToIndex,
   isBlueHome,
   isRedHome,
@@ -20,9 +20,9 @@ interface GridProps {
 
 const Grid = ({ pieces, activeCells = new Set(), onCellClick }: GridProps) => {
   let tbody = [];
-  for (let y = 0; y < NUM_ROWS; y++) {
+  for (let y = 0; y < GRID_HEIGHT; y++) {
     let tr = [];
-    for (let x = 0; x < NUM_COLS; x++) {
+    for (let x = 0; x < GRID_WIDTH; x++) {
       const index = coordsToIndex({ x, y });
       const classes = [
         "cell",
