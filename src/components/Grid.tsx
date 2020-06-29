@@ -14,10 +14,11 @@ import React from "react";
 
 interface GridProps {
   pieces: Array<Piece>;
+  activeCells?: Set<number>;
   onCellClick(index: number): void;
 }
 
-const Grid = ({ pieces, onCellClick }: GridProps) => {
+const Grid = ({ pieces, activeCells = new Set(), onCellClick }: GridProps) => {
   let tbody = [];
   for (let y = 0; y < NUM_ROWS; y++) {
     let tr = [];
@@ -27,6 +28,7 @@ const Grid = ({ pieces, onCellClick }: GridProps) => {
         "cell",
         isRedHome(index) ? "home-red" : "",
         isBlueHome(index) ? "home-blue" : "",
+        activeCells.has(index) ? "active" : "",
       ];
       tr.push(
         <td

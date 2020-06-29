@@ -6,6 +6,10 @@
   text-align: center;
 }
 
+.active {
+  background: #999;
+}
+
 .home-red {
   background: #ff000050;
 }

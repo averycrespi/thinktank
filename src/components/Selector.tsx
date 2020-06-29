@@ -2,10 +2,10 @@ import React from "react";
 import { Token } from "../logic";
 
 interface SelectorProps {
-  onSelect(token: Token): void;
+  onTokenSelect(token: Token): void;
 }
 
-const Selector = ({ onSelect }: SelectorProps) => {
+const Selector = ({ onTokenSelect }: SelectorProps) => {
   const div = [];
   const tokens = [
     Token.Blocker,
@@ -19,7 +19,7 @@ const Selector = ({ onSelect }: SelectorProps) => {
   ];
   for (const token of tokens) {
     div.push(
-      <button key={token} onClick={() => onSelect(token as Token)}>
+      <button key={token} onClick={() => onTokenSelect(token as Token)}>
         {token}
       </button>
     );
