@@ -6,12 +6,17 @@ import Grid from "./Grid";
 import Selector from "./Selector";
 import { Token } from "../logic";
 
-enum Action {
+enum State {
   None,
   Place,
   Move,
   Rotate,
 }
+
+const DEFAULT_STATE = State.None;
+const DEFAULT_HIGHLIGHTED = new Set<number>();
+const DEFAULT_TOKEN = Token.Blocker;
+const DEFAULT_INDEX = 0;
 
 interface BoardProps {
   G: any;
@@ -23,53 +28,53 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
   const { pieces } = G;
   const { currentPlayer: player } = ctx;
 
-  const [action, setAction] = useState(Action.None);
-  const [highlighted, setHighlighted] = useState(new Set<number>());
-  const [activeToken, setActiveToken] = useState(Token.Blocker);
-  const [activeIndex, setActiveIndex] = useState(0);
+  /**
+   * The following code defines a state machine with transitions:
+   *    Any -> Place: Player selects a token.
+   *    Any -> Move: Player clicks one of their pieces.
+   *    Place -> None: Player places a piece.
+   *    Move -> None: Player moves a piece.
+   */
 
-  const onTokenSelect = (token: Token) => {
-    console.debug("Transition: Any -> Place");
-    setAction(Action.Place);
-    setHighlighted(validPlacements(pieces, player, token));
-    setActiveToken(token);
+  const [state, setState] = useState(DEFAULT_STATE);
+  const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
+  const [activeToken, setActiveToken] = useState(DEFAULT_TOKEN);
+  const [activeIndex, setActiveIndex] = useState(DEFAULT_INDEX);
+
+  const transitions = {
+    toNone: () => {
+      setState(State.None);
+      setHighlighted(DEFAULT_HIGHLIGHTED);
+      setActiveToken(DEFAULT_TOKEN);
+      setActiveIndex(DEFAULT_INDEX);
+    },
+    toPlace: (token: Token) => {
+      setState(State.Place);
+      setHighlighted(validPlacements(pieces, player, token));
+      setActiveToken(token);
+      setActiveIndex(DEFAULT_INDEX);
+    },
+    toMove: (index: number) => {
+      setState(State.Move);
+      setHighlighted(validMovements(pieces, player, index));
+      setActiveToken(DEFAULT_TOKEN);
+      setActiveIndex(index);
+    },
   };
 
+  const onTokenSelect = (token: Token) => transitions.toPlace(token);
+
   const onCellClick = (index: number) => {
-    switch (action) {
-      case Action.None:
-        if (pieces[index] && pieces[index].player === player) {
-          console.debug("Transition: None -> Move");
-          setAction(Action.Move);
-          setHighlighted(validMovements(pieces, player, index));
-          setActiveIndex(index);
-        }
-        break;
-      case Action.Place:
-        if (canPlace(pieces, player, activeToken, index)) {
-          console.debug("Transition: Place -> None");
-          setAction(Action.None);
-          setHighlighted(new Set<number>());
-          moves.placePiece(activeToken, index);
-        } else if (pieces[index] && pieces[index].player === player) {
-          console.debug("Transition: Place -> Move");
-          setAction(Action.Move);
-          setHighlighted(validMovements(pieces, player, index));
-          setActiveIndex(index);
-        }
-        break;
-      case Action.Move:
-        if (canMove(pieces, player, activeIndex, index)) {
-          console.debug("Transition: Move -> None");
-          setAction(Action.None);
-          setHighlighted(new Set<number>());
-          moves.movePiece(activeIndex, index);
-        } else if (pieces[index] && pieces[index].player === player) {
-          console.debug("Transition: Move -> Move");
-          setHighlighted(validMovements(pieces, player, index));
-          setActiveIndex(index);
-        }
-        break;
+    if (pieces[index] && pieces[index].player === player) {
+      transitions.toMove(index);
+    }
+    if (state === State.Place && canPlace(pieces, player, activeToken, index)) {
+      moves.placePiece(activeToken, index);
+      transitions.toNone();
+    }
+    if (state === State.Move && canMove(pieces, player, activeIndex, index)) {
+      moves.movePiece(activeIndex, index);
+      transitions.toNone();
     }
   };
 
@@ -81,7 +86,7 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
         onCellClick={onCellClick}
       />
       <Selector onTokenSelect={onTokenSelect} />
-      <p>{"Action: " + Action[action]}</p>
+      <p>{"State: " + State[state]}</p>
     </div>
   );
 };
