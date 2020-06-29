@@ -7,9 +7,7 @@ import {
 } from "./grid";
 import { Piece, Player, Token } from ".";
 
-/**
- * Check if a placement is valid.
- */
+/** Check if a placement is valid. */
 export const canPlace = (
   pieces: Array<Piece>,
   player: Player,
@@ -30,9 +28,7 @@ export const canPlace = (
   }
 };
 
-/**
- * Find all valid placements for a token.
- */
+/** Find all valid placements for a token. */
 export const validPlacements = (
   pieces: Array<Piece>,
   player: Player,

@@ -2,37 +2,35 @@ import {
   adjacentTo,
   orthogonallyAdjacentTo,
   diagonallyAdjacentTo,
+  isHome,
 } from "./grid";
 import { Token, Piece, Player } from ".";
+import { filter } from "../utils/setOps";
 
-/**
- * Find all destinations of a token at an index.
- */
+/** Find all destinations of a token at an index. Does not consider threats. */
 const destinationsOf = (token: Token, index: number): Set<number> => {
   switch (token) {
     case Token.Blocker:
-      return adjacentTo(index);
+      return filter(adjacentTo(index), (i) => !isHome(i));
     case Token.UpTank:
     case Token.DownTank:
     case Token.LeftTank:
     case Token.RightTank:
-      return orthogonallyAdjacentTo(index);
+      return filter(orthogonallyAdjacentTo(index), (i) => !isHome(i));
     case Token.OrthogonalInfiltrator:
-      return orthogonallyAdjacentTo(index);
+      return filter(orthogonallyAdjacentTo(index), (i) => !isHome(i));
     case Token.DiagonalInfiltrator:
-      return diagonallyAdjacentTo(index);
+      return filter(diagonallyAdjacentTo(index), (i) => !isHome(i));
     case Token.Mine:
       return new Set<number>(); //TODO: implement mine movement
     case Token.Base:
-      return adjacentTo(index);
+      return filter(adjacentTo(index), (i) => isHome(i));
     default:
       return new Set<number>();
   }
 };
 
-/**
- * Check if a movement is valid.
- */
+/** Check if a movement is valid. */
 export const canMove = (
   pieces: Array<Piece>,
   player: Player,
@@ -53,9 +51,7 @@ export const canMove = (
   }
 };
 
-/**
- * Find all valid movements from a source index.
- */
+/** Find all valid movements from a source index. */
 export const validMovements = (
   pieces: Array<Piece>,
   player: Player,
