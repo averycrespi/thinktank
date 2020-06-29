@@ -6,10 +6,9 @@ import {
 import { Token, Piece, Player } from ".";
 
 /**
- * Find the neighbors of a index.
- * The neighborhood depends on the token at the index.
+ * Find the neighborhood of a token at an index.
  */
-const neighborsOf = (token: Token, index: number): Set<number> => {
+const neighborhoodOf = (token: Token, index: number): Set<number> => {
   switch (token) {
     case Token.Blocker:
       return adjacentTo(index);
@@ -46,7 +45,7 @@ export const canMove = (
   } else if (pieces[destIndex]) {
     // Cannot move to an occupied cell.
     return false;
-  } else if (!neighborsOf(pieces[srcIndex].token, srcIndex).has(destIndex)) {
+  } else if (!neighborhoodOf(pieces[srcIndex].token, srcIndex).has(destIndex)) {
     // Cannot move outside of the source's neighborhood.
     return false;
   } else {
@@ -63,9 +62,9 @@ export const validMovements = (
   srcIndex: number
 ): Set<number> => {
   const movements = new Set<number>();
-  const neighbors = neighborsOf(pieces[srcIndex].token, srcIndex);
-  // Optimization: narrow the search space to the neighborhood.
-  for (const destIndex of neighbors) {
+  const neighborhood = neighborhoodOf(pieces[srcIndex].token, srcIndex);
+  // Optimization: reduce the search space to the neighborhood.
+  for (const destIndex of neighborhood) {
     if (canMove(pieces, player, srcIndex, destIndex)) {
       movements.add(destIndex);
     }
