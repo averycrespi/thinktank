@@ -6,9 +6,9 @@ import {
 import { Token, Piece, Player } from ".";
 
 /**
- * Find the neighborhood of a token at an index.
+ * Find all destinations of a token at an index.
  */
-const neighborhoodOf = (token: Token, index: number): Set<number> => {
+const destinationsOf = (token: Token, index: number): Set<number> => {
   switch (token) {
     case Token.Blocker:
       return adjacentTo(index);
@@ -45,8 +45,8 @@ export const canMove = (
   } else if (pieces[destIndex]) {
     // Cannot move to an occupied cell.
     return false;
-  } else if (!neighborhoodOf(pieces[srcIndex].token, srcIndex).has(destIndex)) {
-    // Cannot move outside of the source's neighborhood.
+  } else if (!destinationsOf(pieces[srcIndex].token, srcIndex).has(destIndex)) {
+    // Destination must be valid.
     return false;
   } else {
     return true;
@@ -62,9 +62,9 @@ export const validMovements = (
   srcIndex: number
 ): Set<number> => {
   const movements = new Set<number>();
-  const neighborhood = neighborhoodOf(pieces[srcIndex].token, srcIndex);
-  // Optimization: reduce the search space to the neighborhood.
-  for (const destIndex of neighborhood) {
+  const destinations = destinationsOf(pieces[srcIndex].token, srcIndex);
+  // Optimization: reduce the search space to the destinations.
+  for (const destIndex of destinations) {
     if (canMove(pieces, player, srcIndex, destIndex)) {
       movements.add(destIndex);
     }

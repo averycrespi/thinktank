@@ -8,7 +8,7 @@ import {
 import { Piece, Player, Token } from ".";
 
 /**
- * Check is a placement is valid.
+ * Check if a placement is valid.
  */
 export const canPlace = (
   pieces: Array<Piece>,

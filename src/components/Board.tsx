@@ -28,14 +28,6 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
   const { pieces } = G;
   const { currentPlayer: player } = ctx;
 
-  /**
-   * The following code defines a state machine with transitions:
-   *    Any -> Place: Player selects a token.
-   *    Any -> Move: Player clicks one of their pieces.
-   *    Place -> None: Player places a piece.
-   *    Move -> None: Player moves a piece.
-   */
-
   const [state, setState] = useState(DEFAULT_STATE);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
   const [activeToken, setActiveToken] = useState(DEFAULT_TOKEN);
