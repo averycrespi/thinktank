@@ -180,6 +180,6 @@ export const isThreatened = (
     case Token.Base:
       return (
         canBeShot(pieces, player, index) || canBeExploded(pieces, player, index)
-      );
+      ); // TODO: can bases be infiltrated?
   }
 };
