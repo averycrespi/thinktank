@@ -57,11 +57,8 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
   const onTokenSelect = (token: Token) => transitions.toPlace(token);
 
   const onCellClick = (index: number) => {
-    if (
-      index !== activeIndex &&
-      pieces.has(index) &&
-      pieces.get(index)!.player === player
-    ) {
+    const p = pieces.get(index);
+    if (index !== activeIndex && p && p.player === player) {
       transitions.toMove(index);
     } else if (
       state === State.Place &&

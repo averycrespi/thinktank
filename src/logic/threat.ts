@@ -136,6 +136,22 @@ export const canBeExploded = (
   return false;
 };
 
+/** Check if an index can explode an ally. */
+export const canExplodeAlly = (
+  pieces: Map<number, Piece>,
+  player: Player,
+  index: number
+): boolean => {
+  let hasAlly = false;
+  let hasTrigger = false;
+  for (const adjIndex of adjacentTo(index)) {
+    const p = pieces.get(adjIndex);
+    hasAlly = hasAlly || (!!p && p.player === player && p.token !== Token.Mine);
+    hasTrigger = hasTrigger || (!!p && p.player !== player); // TODO: what triggers a mine?
+  }
+  return hasAlly && hasTrigger;
+};
+
 /** Check if a piece is threatened. */
 export const isThreatened = (
   pieces: Map<number, Piece>,
@@ -160,7 +176,7 @@ export const isThreatened = (
         canBeShot(pieces, player, index) || canBeExploded(pieces, player, index)
       );
     case Token.Mine:
-      return false; // TODO: prevent exploding allies
+      return canExplodeAlly(pieces, player, index);
     case Token.Base:
       return (
         canBeShot(pieces, player, index) || canBeExploded(pieces, player, index)
