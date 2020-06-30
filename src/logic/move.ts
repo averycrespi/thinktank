@@ -8,10 +8,10 @@ import {
 } from "./grid";
 
 import { filter } from "../utils/setOps";
-import { isThreatened } from "./threat";
+import { inDanger } from "./danger";
 
 /** Find all indices that are reachable from a piece. */
-const reachableFrom = ({ token }: Piece, index: number): Set<number> => {
+const reachableFrom = (token: Token, index: number): Set<number> => {
   switch (token) {
     case Token.Blocker:
       return filter(adjacentTo(index), (i) => !isHome(i));
@@ -42,19 +42,27 @@ export const canMove = (
 ): boolean => {
   const src = pieces.get(srcIndex);
   const dest = pieces.get(destIndex);
-  if (!src || src.player !== player) {
-    return false; // Cannot move from an empty cell or an opponent's piece.
+  if (!src) {
+    return false; // Cannot move from an empty cell.
+  } else if (src.player !== player) {
+    return false; // Cannot move an opponent's piece.
   } else if (dest) {
     return false; // Cannot move to an occupied cell.
-  } else if (
-    !reachableFrom({ player, token: src.token }, srcIndex).has(destIndex)
-  ) {
+  } else if (!reachableFrom(src.token, srcIndex).has(destIndex)) {
     return false; // Must be able to reach the destination.
-  } else if (isThreatened(pieces, { player, token: src.token }, destIndex)) {
-    return false; // Cannot move to a threatened destination.
-  } else {
-    return true;
   }
+  // Simulate the movement and check for consequences.
+  const potential = new Map(pieces);
+  potential.set(destIndex, potential.get(srcIndex)!);
+  potential.delete(srcIndex);
+  // We need to check if ANY of the player's pieces are endangered.
+  // For example, moving a blocker could endanger pieces behind it.
+  for (const [index, piece] of potential.entries()) {
+    if (piece.player === player && inDanger(potential, index)) {
+      return false; // No-suicide rule: cannot endanger your own piece.
+    }
+  }
+  return true;
 };
 
 /** Find all possible movements from an index. */
@@ -63,13 +71,14 @@ export const possibleMovements = (
   player: Player,
   index: number
 ): Set<number> => {
+  // Optimization: pre-check if the cell is occupied.
   const src = pieces.get(index);
   if (!src) {
-    return new Set<number>(); // Cannot move from an empty cell.
+    return new Set<number>();
   }
   // Optimization: reduce the search space to the reachable indices.
   const movements = new Set<number>();
-  const reachable = reachableFrom({ player, token: src.token }, index);
+  const reachable = reachableFrom(src.token, index);
   for (const destIndex of reachable) {
     if (canMove(pieces, player, index, destIndex)) {
       movements.add(destIndex);
