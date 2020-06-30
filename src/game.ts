@@ -1,7 +1,7 @@
 import {
   BLUE_HOME_CENTER,
-  GRID_WIDTH,
   GRID_HEIGHT,
+  GRID_WIDTH,
   RED_HOME_CENTER,
 } from "./logic/grid";
 import { Player, Token } from "./logic";
@@ -11,7 +11,7 @@ import { canMove } from "./logic/move";
 import { canPlace } from "./logic/place";
 
 const placePiece = (G: any, ctx: any, token: Token, index: number) => {
-  if (canPlace(G.pieces, ctx.currentPlayer, token, index)) {
+  if (canPlace(G.pieces, { player: ctx.currentPlayer, token }, index)) {
     G.pieces[index] = { token, player: ctx.currentPlayer };
   } else {
     return INVALID_MOVE;

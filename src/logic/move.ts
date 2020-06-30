@@ -1,16 +1,17 @@
+import { Piece, Player, Token } from ".";
 import {
   adjacentTo,
-  orthogonallyAdjacentTo,
   diagonallyAdjacentTo,
-  isHome,
   dualAdjacentTo,
+  isHome,
+  orthogonallyAdjacentTo,
 } from "./grid";
-import { Token, Piece, Player } from ".";
+
 import { filter } from "../utils/setOps";
 import { isThreatened } from "./threat";
 
 /** Find all indices that are reachable from a piece. */
-const reachableFrom = (token: Token, index: number): Set<number> => {
+const reachableFrom = ({ token }: Piece, index: number): Set<number> => {
   switch (token) {
     case Token.Blocker:
       return filter(adjacentTo(index), (i) => !isHome(i));
@@ -41,12 +42,12 @@ export const canMove = (
 ): boolean => {
   const token = pieces[srcIndex].token;
   if (!pieces[srcIndex] || pieces[srcIndex].player !== player) {
-    return false; // Cannot move an empty cell or an opponent piece.
+    return false; // Cannot move from an empty cell or an opponent's piece.
   } else if (pieces[destIndex]) {
     return false; // Cannot move to an occupied cell.
-  } else if (!reachableFrom(token, srcIndex).has(destIndex)) {
+  } else if (!reachableFrom({ player, token }, srcIndex).has(destIndex)) {
     return false; // Must be able to reach the destination.
-  } else if (isThreatened(pieces, player, token, destIndex)) {
+  } else if (isThreatened(pieces, { player, token }, destIndex)) {
     return false; // Cannot move to a threatened destination.
   } else {
     return true;
@@ -57,13 +58,19 @@ export const canMove = (
 export const validMovements = (
   pieces: Array<Piece>,
   player: Player,
-  srcIndex: number
+  index: number
 ): Set<number> => {
   const movements = new Set<number>();
-  const reachable = reachableFrom(pieces[srcIndex].token, srcIndex);
+  if (!pieces[index] || pieces[index].player !== player) {
+    return movements; // Cannot move from an empty cell or an opponent's piece.
+  }
   // Optimization: reduce the search space to the reachable indices.
+  const reachable = reachableFrom(
+    { player, token: pieces[index].token },
+    index
+  );
   for (const destIndex of reachable) {
-    if (canMove(pieces, player, srcIndex, destIndex)) {
+    if (canMove(pieces, player, index, destIndex)) {
       movements.add(destIndex);
     }
   }

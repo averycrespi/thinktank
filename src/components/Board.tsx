@@ -16,7 +16,7 @@ enum State {
 const DEFAULT_STATE = State.None;
 const DEFAULT_HIGHLIGHTED = new Set<number>();
 const DEFAULT_TOKEN = Token.Blocker;
-const DEFAULT_INDEX = 0;
+const DEFAULT_INDEX = -1;
 
 interface BoardProps {
   G: any;
@@ -42,7 +42,7 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
     },
     toPlace: (token: Token) => {
       setState(State.Place);
-      setHighlighted(validPlacements(pieces, player, token));
+      setHighlighted(validPlacements(pieces, { player, token }));
       setActiveToken(token);
       setActiveIndex(DEFAULT_INDEX);
     },
@@ -57,14 +57,22 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
   const onTokenSelect = (token: Token) => transitions.toPlace(token);
 
   const onCellClick = (index: number) => {
-    if (pieces[index] && pieces[index].player === player) {
+    if (
+      index !== activeIndex &&
+      pieces[index] &&
+      pieces[index].player === player
+    ) {
       transitions.toMove(index);
-    }
-    if (state === State.Place && canPlace(pieces, player, activeToken, index)) {
+    } else if (
+      state === State.Place &&
+      canPlace(pieces, { player, token: activeToken }, index)
+    ) {
       moves.placePiece(activeToken, index);
       transitions.toNone();
-    }
-    if (state === State.Move && canMove(pieces, player, activeIndex, index)) {
+    } else if (
+      state === State.Move &&
+      canMove(pieces, player, activeIndex, index)
+    ) {
       moves.movePiece(activeIndex, index);
       transitions.toNone();
     }
