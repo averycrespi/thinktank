@@ -1,8 +1,8 @@
 import "../styles/grid.css";
 
 import {
-  GRID_WIDTH,
   GRID_HEIGHT,
+  GRID_WIDTH,
   coordsToIndex,
   isBlueHome,
   isRedHome,
@@ -13,7 +13,7 @@ import { Piece } from "../logic";
 import React from "react";
 
 interface GridProps {
-  pieces: Array<Piece>;
+  pieces: Map<number, Piece>;
   highlighted?: Set<number>;
   onCellClick(index: number): void;
 }
@@ -36,7 +36,7 @@ const Grid = ({ pieces, highlighted = new Set(), onCellClick }: GridProps) => {
           className={classes.join(" ")}
           onClick={() => onCellClick(index)}
         >
-          <Cell piece={pieces[index]} />
+          <Cell piece={pieces.get(index)} />
         </td>
       );
     }

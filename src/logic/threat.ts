@@ -11,18 +11,18 @@ import { Piece, Player, Token } from ".";
 
 /** Check if an index can be shot from below. */
 export const canBeShotFromBelow = (
-  pieces: Array<Piece>,
+  pieces: Map<number, Piece>,
   player: Player,
   index: number
 ): boolean => {
   const { x, y: targetY } = indexToCoords(index);
   for (let y = targetY + 1; y < GRID_HEIGHT; y++) {
-    const piece = pieces[coordsToIndex({ x, y })];
-    if (!piece) {
+    const p = pieces.get(coordsToIndex({ x, y }));
+    if (!p) {
       continue;
-    } else if (piece.player !== player && piece.token === Token.UpTank) {
+    } else if (p.player !== player && p.token === Token.UpTank) {
       return true; // Opponent's tank has a line of fire.
-    } else if (piece.player === player && piece.token === Token.Blocker) {
+    } else if (p.player === player && p.token === Token.Blocker) {
       return false; // Index is protected by a blocker.
     }
   }
@@ -31,18 +31,18 @@ export const canBeShotFromBelow = (
 
 /** Check if an index can be shot from above. */
 export const canBeShotFromAbove = (
-  pieces: Array<Piece>,
+  pieces: Map<number, Piece>,
   player: Player,
   index: number
 ): boolean => {
   const { x, y: targetY } = indexToCoords(index);
   for (let y = targetY - 1; y >= 0; y--) {
-    const piece = pieces[coordsToIndex({ x, y })];
-    if (!piece) {
+    const p = pieces.get(coordsToIndex({ x, y }));
+    if (!p) {
       continue;
-    } else if (piece.player !== player && piece.token === Token.DownTank) {
+    } else if (p.player !== player && p.token === Token.DownTank) {
       return true; // Opponent's tank has a line of fire.
-    } else if (piece.player === player && piece.token === Token.Blocker) {
+    } else if (p.player === player && p.token === Token.Blocker) {
       return false; // Index is protected by a blocker.
     }
   }
@@ -51,18 +51,18 @@ export const canBeShotFromAbove = (
 
 /** Check if an index can be shot from the right. */
 export const canBeShotFromRight = (
-  pieces: Array<Piece>,
+  pieces: Map<number, Piece>,
   player: Player,
   index: number
 ): boolean => {
   const { x: targetX, y } = indexToCoords(index);
   for (let x = targetX + 1; x < GRID_WIDTH; x++) {
-    const piece = pieces[coordsToIndex({ x, y })];
-    if (!piece) {
+    const p = pieces.get(coordsToIndex({ x, y }));
+    if (!p) {
       continue;
-    } else if (piece.player !== player && piece.token === Token.LeftTank) {
+    } else if (p.player !== player && p.token === Token.LeftTank) {
       return true; // Opponent's tank has a line of fire.
-    } else if (piece.player === player && piece.token === Token.Blocker) {
+    } else if (p.player === player && p.token === Token.Blocker) {
       return false; // Index is protected by a blocker.
     }
   }
@@ -71,18 +71,18 @@ export const canBeShotFromRight = (
 
 /** Check if an index can be shot from the left. */
 export const canBeShotFromLeft = (
-  pieces: Array<Piece>,
+  pieces: Map<number, Piece>,
   player: Player,
   index: number
 ): boolean => {
   const { x: targetX, y } = indexToCoords(index);
   for (let x = targetX - 1; x >= 0; x--) {
-    const piece = pieces[coordsToIndex({ x, y })];
-    if (!piece) {
+    const p = pieces.get(coordsToIndex({ x, y }));
+    if (!p) {
       continue;
-    } else if (piece.player !== player && piece.token === Token.RightTank) {
+    } else if (p.player !== player && p.token === Token.RightTank) {
       return true; // Opponent's tank has a line of fire.
-    } else if (piece.player === player && piece.token === Token.Blocker) {
+    } else if (p.player === player && p.token === Token.Blocker) {
       return false; // Index is protected by a blocker.
     }
   }
@@ -91,7 +91,7 @@ export const canBeShotFromLeft = (
 
 /** Check if an index can be shot. */
 export const canBeShot = (
-  pieces: Array<Piece>,
+  pieces: Map<number, Piece>,
   player: Player,
   index: number
 ): boolean =>
@@ -102,18 +102,18 @@ export const canBeShot = (
 
 /** Check if an index can be infiltrated. */
 export const canBeInfiltrated = (
-  pieces: Array<Piece>,
+  pieces: Map<number, Piece>,
   player: Player,
   index: number
 ): boolean => {
-  for (const i of orthogonallyAdjacentTo(index)) {
-    const p = pieces[i];
+  for (const adjIndex of orthogonallyAdjacentTo(index)) {
+    const p = pieces.get(adjIndex);
     if (p && p.player !== player && p.token === Token.OrthogonalInfiltrator) {
       return true;
     }
   }
-  for (const i of diagonallyAdjacentTo(index)) {
-    const p = pieces[i];
+  for (const adjIndex of diagonallyAdjacentTo(index)) {
+    const p = pieces.get(adjIndex);
     if (p && p.player !== player && p.token === Token.DiagonalInfiltrator) {
       return true;
     }
@@ -123,12 +123,12 @@ export const canBeInfiltrated = (
 
 /** Check if an index can be exploded. */
 export const canBeExploded = (
-  pieces: Array<Piece>,
+  pieces: Map<number, Piece>,
   player: Player,
   index: number
 ): boolean => {
-  for (const i of adjacentTo(index)) {
-    const p = pieces[i];
+  for (const adjIndex of adjacentTo(index)) {
+    const p = pieces.get(adjIndex);
     if (p && p.player !== player && p.token === Token.Mine) {
       return true;
     }
@@ -138,7 +138,7 @@ export const canBeExploded = (
 
 /** Check if a piece is threatened. */
 export const isThreatened = (
-  pieces: Array<Piece>,
+  pieces: Map<number, Piece>,
   { token, player }: Piece,
   index: number
 ): boolean => {

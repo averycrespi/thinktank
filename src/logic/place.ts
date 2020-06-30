@@ -9,13 +9,13 @@ import { Piece, Player } from ".";
 
 import { isThreatened } from "./threat";
 
-/** Check if a placement is valid. */
+/** Check if a placement is possible. */
 export const canPlace = (
-  pieces: Array<Piece>,
+  pieces: Map<number, Piece>,
   { player, token }: Piece,
   index: number
 ): boolean => {
-  if (pieces[index]) {
+  if (pieces.has(index)) {
     return false; // Cannot place a piece on top of another piece.
   } else if (player === Player.Red && !isRedSpawn(index)) {
     return false; // Red cannot place a piece outside of red spawn.
@@ -28,9 +28,9 @@ export const canPlace = (
   }
 };
 
-/** Find all valid placements for a token. */
-export const validPlacements = (
-  pieces: Array<Piece>,
+/** Find all possible placements for a token. */
+export const possiblePlacements = (
+  pieces: Map<number, Piece>,
   { player, token }: Piece
 ): Set<number> => {
   let placements = new Set<number>();

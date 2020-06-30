@@ -3,7 +3,7 @@ import { Piece, Player } from "../logic";
 import React from "react";
 
 interface CellProps {
-  piece: Piece;
+  piece?: Piece;
 }
 
 const Cell = ({ piece }: CellProps) => {

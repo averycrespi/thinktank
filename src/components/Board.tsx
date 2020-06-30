@@ -1,10 +1,10 @@
+import { Piece, Player, Token } from "../logic";
 import React, { useState } from "react";
-import { canMove, validMovements } from "../logic/move";
-import { canPlace, validPlacements } from "../logic/place";
+import { canMove, possibleMovements } from "../logic/move";
+import { canPlace, possiblePlacements } from "../logic/place";
 
 import Grid from "./Grid";
 import Selector from "./Selector";
-import { Token } from "../logic";
 
 enum State {
   None,
@@ -25,8 +25,8 @@ interface BoardProps {
 }
 
 const Board = ({ G, ctx, moves }: BoardProps) => {
-  const { pieces } = G;
-  const { currentPlayer: player } = ctx;
+  const pieces: Map<number, Piece> = G.pieces;
+  const player: Player = ctx.currentPlayer;
 
   const [state, setState] = useState(DEFAULT_STATE);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
@@ -42,13 +42,13 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
     },
     toPlace: (token: Token) => {
       setState(State.Place);
-      setHighlighted(validPlacements(pieces, { player, token }));
+      setHighlighted(possiblePlacements(pieces, { player, token }));
       setActiveToken(token);
       setActiveIndex(DEFAULT_INDEX);
     },
     toMove: (index: number) => {
       setState(State.Move);
-      setHighlighted(validMovements(pieces, player, index));
+      setHighlighted(possibleMovements(pieces, player, index));
       setActiveToken(DEFAULT_TOKEN);
       setActiveIndex(index);
     },
@@ -59,8 +59,8 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
   const onCellClick = (index: number) => {
     if (
       index !== activeIndex &&
-      pieces[index] &&
-      pieces[index].player === player
+      pieces.has(index) &&
+      pieces.get(index)!.player === player
     ) {
       transitions.toMove(index);
     } else if (
