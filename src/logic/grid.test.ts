@@ -1,7 +1,7 @@
 import {
   BLUE_HOME_CENTER,
-  GRID_WIDTH,
   GRID_HEIGHT,
+  GRID_WIDTH,
   RED_HOME_CENTER,
   coordsToIndex,
   indexToCoords,
@@ -33,3 +33,5 @@ test("home centers lie within home regions", () => {
   expect(isRedHome(RED_HOME_CENTER)).toBe(true);
   expect(isBlueHome(BLUE_HOME_CENTER)).toBe(true);
 });
+
+// TODO: write more grid tests

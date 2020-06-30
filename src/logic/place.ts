@@ -6,6 +6,7 @@ import {
   isRedSpawn,
 } from "./grid";
 import { Piece, Player, Token } from ".";
+import { isThreatened } from "./threat";
 
 /** Check if a placement is valid. */
 export const canPlace = (
@@ -15,14 +16,13 @@ export const canPlace = (
   index: number
 ): boolean => {
   if (pieces[index]) {
-    // Cannot place a piece on top of another piece.
-    return false;
+    return false; // Cannot place a piece on top of another piece.
   } else if (player === Player.Red && !isRedSpawn(index)) {
-    // Red cannot place a piece outside of red spawn.
-    return false;
+    return false; // Red cannot place a piece outside of red spawn.
   } else if (player === Player.Blue && !isBlueSpawn(index)) {
-    // Blue cannot place a piece outside of blue spawn.
-    return false;
+    return false; // Blue cannot place a piece outside of blue spawn.
+  } else if (isThreatened(pieces, player, token, index)) {
+    return false; // Cannot place a piece at a threatened location.
   } else {
     return true;
   }
