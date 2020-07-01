@@ -6,14 +6,14 @@ import { canPlace, possiblePlacements } from "../../logic/place";
 import Grid from "./Grid";
 import Selector from "./Selector";
 
-enum State {
+enum Action {
   None,
   Place,
   Move,
   Rotate,
 }
 
-const DEFAULT_STATE = State.None;
+const DEFAULT_ACTION = Action.None;
 const DEFAULT_HIGHLIGHTED = new Set<number>();
 const DEFAULT_TOKEN = Token.Blocker;
 const DEFAULT_INDEX = -1;
@@ -26,26 +26,26 @@ interface ControllerProps {
 }
 
 const Controller = ({ pieces, hand, player, moves }: ControllerProps) => {
-  const [state, setState] = useState(DEFAULT_STATE);
+  const [action, setAction] = useState(DEFAULT_ACTION);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
   const [activeToken, setActiveToken] = useState(DEFAULT_TOKEN);
   const [activeIndex, setActiveIndex] = useState(DEFAULT_INDEX);
 
   const transitions = {
     toNone: () => {
-      setState(State.None);
+      setAction(Action.None);
       setHighlighted(DEFAULT_HIGHLIGHTED);
       setActiveToken(DEFAULT_TOKEN);
       setActiveIndex(DEFAULT_INDEX);
     },
     toPlace: (token: Token) => {
-      setState(State.Place);
+      setAction(Action.Place);
       setHighlighted(possiblePlacements(pieces, hand, { player, token }));
       setActiveToken(token);
       setActiveIndex(DEFAULT_INDEX);
     },
     toMove: (index: number) => {
-      setState(State.Move);
+      setAction(Action.Move);
       setHighlighted(possibleMovements(pieces, player, index));
       setActiveToken(DEFAULT_TOKEN);
       setActiveIndex(index);
@@ -59,13 +59,13 @@ const Controller = ({ pieces, hand, player, moves }: ControllerProps) => {
     if (index !== activeIndex && p && p.player === player) {
       transitions.toMove(index);
     } else if (
-      state === State.Place &&
+      action === Action.Place &&
       canPlace(pieces, hand, { player, token: activeToken }, index)
     ) {
       moves.placePiece(activeToken, index);
       transitions.toNone();
     } else if (
-      state === State.Move &&
+      action === Action.Move &&
       canMove(pieces, player, activeIndex, index)
     ) {
       moves.movePiece(activeIndex, index);

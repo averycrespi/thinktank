@@ -1,10 +1,10 @@
 import Board from "./components/Board";
 import { Client } from "boardgame.io/react";
-import Game from "./logic/game";
 import React from "react";
 import ReactDOM from "react-dom";
+import { game } from "./logic/game";
 
-const App = Client({ game: Game, board: Board });
+const App = Client({ game, board: Board });
 
 ReactDOM.render(
   <React.StrictMode>

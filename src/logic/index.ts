@@ -80,3 +80,8 @@ export class Hand {
     }
   };
 }
+
+export interface G {
+  pieces: Map<number, Piece>;
+  hands: Map<Player, Hand>;
+}
