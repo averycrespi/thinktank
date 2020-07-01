@@ -65,7 +65,7 @@ const onTurnEnd = (G: any, ctx: any) => {
   const hands: Map<Player, Map<SimpleToken, number>> = G.hands;
   const history: Array<string> = G.history;
   const player: Player = ctx.currentPlayer;
-  // First pass: capture infiltrated pieces and track exploding mines.
+  // First pass: capture infiltrated pieces and mark exploding mines.
   const exploding = new Set<number>();
   for (const [index, piece] of pieces.entries()) {
     if (canBeInfiltrated(pieces, index)) {
@@ -76,19 +76,21 @@ const onTurnEnd = (G: any, ctx: any) => {
       exploding.add(index);
     }
   }
-  // Second pass: remove shot, exploded, and exploding pieces.
+  // Second pass: remove shot and exploded pieces.
   for (const [index, piece] of pieces.entries()) {
-    if (
-      canBeShot(pieces, index) ||
-      canBeExploded(pieces, index) ||
-      exploding.has(index)
-    ) {
+    if (canBeShot(pieces, index) || canBeExploded(pieces, index)) {
       pieces.delete(index);
       const hand = hands.get(piece.player)!;
       const simple = simplify(piece.token);
       hand.set(simple, hand.get(simple)! + 1);
       history.push(player + " destroyed " + piece.token + " at " + index);
     }
+  }
+  // Third pass: remove exploding mines.
+  for (const index of exploding.values()) {
+    pieces.delete(index);
+    const hand = hands.get(player)!;
+    hand.set(SimpleToken.Mine, hand.get(SimpleToken.Mine)! + 1);
   }
 };
 
