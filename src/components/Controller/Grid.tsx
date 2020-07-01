@@ -1,4 +1,4 @@
-import "../styles/grid.css";
+import "../../styles/grid.css";
 
 import {
   GRID_HEIGHT,
@@ -6,15 +6,15 @@ import {
   coordsToIndex,
   isBlueHome,
   isRedHome,
-} from "../logic/grid";
+} from "../../logic/grid";
 
 import Cell from "./Cell";
-import { Piece } from "../logic";
+import { Piece } from "../../logic";
 import React from "react";
 
 interface GridProps {
-  pieces: Map<number, Piece>;
-  highlighted?: Set<number>;
+  readonly pieces: Map<number, Piece>;
+  readonly highlighted?: Set<number>;
   onCellClick(index: number): void;
 }
 

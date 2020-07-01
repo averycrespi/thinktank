@@ -1,9 +1,9 @@
-import { Piece, Player } from "../logic";
+import { Piece, Player } from "../../logic";
 
 import React from "react";
 
 interface CellProps {
-  piece?: Piece;
+  readonly piece?: Piece;
 }
 
 const Cell = ({ piece }: CellProps) => {

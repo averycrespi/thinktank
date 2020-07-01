@@ -1,10 +1,9 @@
-import { Piece, Player, SimpleToken, Token } from "../logic";
+import { Piece, Player, SimpleToken, Token } from "../../logic";
 import React, { useState } from "react";
-import { canMove, possibleMovements } from "../logic/move";
-import { canPlace, possiblePlacements } from "../logic/place";
+import { canMove, possibleMovements } from "../../logic/move";
+import { canPlace, possiblePlacements } from "../../logic/place";
 
 import Grid from "./Grid";
-import Hand from "./Hand";
 import Selector from "./Selector";
 
 enum State {
@@ -19,14 +18,14 @@ const DEFAULT_HIGHLIGHTED = new Set<number>();
 const DEFAULT_TOKEN = Token.Blocker;
 const DEFAULT_INDEX = -1;
 
-interface UserInterfaceProps {
-  pieces: Map<number, Piece>;
-  hand: Map<SimpleToken, number>;
-  player: Player;
-  moves: any;
+interface ControllerProps {
+  readonly pieces: Map<number, Piece>;
+  readonly hand: Map<SimpleToken, number>;
+  readonly player: Player;
+  readonly moves: any;
 }
 
-const UserInterface = ({ pieces, hand, player, moves }: UserInterfaceProps) => {
+const Controller = ({ pieces, hand, player, moves }: ControllerProps) => {
   const [state, setState] = useState(DEFAULT_STATE);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
   const [activeToken, setActiveToken] = useState(DEFAULT_TOKEN);
@@ -76,8 +75,6 @@ const UserInterface = ({ pieces, hand, player, moves }: UserInterfaceProps) => {
 
   return (
     <div id="interface">
-      <Hand hand={hand} player={player} />
-      <p>{"State: " + State[state]}</p>
       <Grid
         pieces={pieces}
         highlighted={highlighted}
@@ -88,4 +85,4 @@ const UserInterface = ({ pieces, hand, player, moves }: UserInterfaceProps) => {
   );
 };
 
-export default UserInterface;
+export default Controller;

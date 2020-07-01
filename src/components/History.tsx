@@ -1,7 +1,7 @@
 import React from "react";
 
 interface HistoryProps {
-  history?: Array<string>;
+  readonly history?: Array<string>;
 }
 
 const History = ({ history = new Array<string>() }: HistoryProps) => (

@@ -1,15 +1,15 @@
-import { BLUE_HOME_CENTER, RED_HOME_CENTER } from "./logic/grid";
-import { Piece, Player, SimpleToken, Token, simplify } from "./logic";
+import { BLUE_HOME_CENTER, RED_HOME_CENTER } from "./grid";
+import { Piece, Player, SimpleToken, Token, simplify } from ".";
 import {
   canBeExploded,
   canBeInfiltrated,
   canBeShot,
   canExplodeSelf,
-} from "./logic/danger";
+} from "./danger";
 
 import { INVALID_MOVE } from "boardgame.io/core";
-import { canMove } from "./logic/move";
-import { canPlace } from "./logic/place";
+import { canMove } from "./move";
+import { canPlace } from "./place";
 
 const setup = () => {
   let pieces = new Map<number, Piece>();

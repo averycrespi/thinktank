@@ -1,17 +1,17 @@
+import Controller from "./Controller";
 import History from "./History";
 import React from "react";
-import UserInterface from "./UserInterface";
 
 interface BoardProps {
-  G: any;
-  ctx: any;
-  moves: any;
+  readonly G: any;
+  readonly ctx: any;
+  readonly moves: any;
 }
 
 const Board = ({ G, ctx, moves }: BoardProps) => {
   return (
     <div id="board">
-      <UserInterface
+      <Controller
         pieces={G.pieces}
         hand={G.hands.get(ctx.currentPlayer)!}
         player={ctx.currentPlayer}

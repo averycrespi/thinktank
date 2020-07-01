@@ -1,9 +1,9 @@
-import { SimpleToken, Token, simplify } from "../logic";
+import { SimpleToken, Token, simplify } from "../../logic";
 
 import React from "react";
 
 interface SelectorProps {
-  hand?: Map<SimpleToken, number>;
+  readonly hand?: Map<SimpleToken, number>;
   onTokenSelect(token: Token): void;
 }
 
@@ -27,9 +27,9 @@ const Selector = ({
       <button
         key={token}
         disabled={!hand.get(simplify(token))}
-        onClick={() => onTokenSelect(token as Token)}
+        onClick={() => onTokenSelect(token)}
       >
-        {token}
+        {token + " (" + (hand.get(simplify(token)) ?? 0) + ")"}
       </button>
     );
   }
