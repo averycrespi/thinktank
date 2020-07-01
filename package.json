@@ -22,6 +22,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "boardgame.io": "^0.39.14",
+    "esm": "^3.2.25",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
@@ -32,6 +33,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "build:server": "tsc -p tsconfig.server.json",
+    "run:server": "node -r esm build/server/server.js",
+    "serve": "yarn build:server && yarn run:server",
     "todo": "grep -r TODO src/"
   },
   "eslintConfig": {
