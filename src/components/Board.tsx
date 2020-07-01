@@ -1,5 +1,4 @@
 import Controller from "./Controller";
-import History from "./History";
 import React from "react";
 
 interface BoardProps {
@@ -17,7 +16,6 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
         player={ctx.currentPlayer}
         moves={moves}
       />
-      <History history={G.history} />
     </div>
   );
 };

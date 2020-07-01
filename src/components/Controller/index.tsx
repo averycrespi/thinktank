@@ -1,4 +1,4 @@
-import { Piece, Player, SimpleToken, Token } from "../../logic";
+import { Hand, Piece, Player, Token } from "../../logic";
 import React, { useState } from "react";
 import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
@@ -20,7 +20,7 @@ const DEFAULT_INDEX = -1;
 
 interface ControllerProps {
   readonly pieces: Map<number, Piece>;
-  readonly hand: Map<SimpleToken, number>;
+  readonly hand: Hand;
   readonly player: Player;
   readonly moves: any;
 }

@@ -5,19 +5,19 @@ import {
   isBlueSpawn,
   isRedSpawn,
 } from "./grid";
-import { Piece, Player, SimpleToken, simplify } from ".";
+import { Hand, Piece, Player } from ".";
 
 import { inDanger } from "./danger";
 
 /** Check if a placement is possible. */
 export const canPlace = (
   pieces: Map<number, Piece>,
-  hand: Map<SimpleToken, number>,
+  hand: Hand,
   { player, token }: Piece,
   index: number
 ): boolean => {
-  if (!hand.get(simplify(token))) {
-    return false; // Token must be available in hand.
+  if (!hand.has(token)) {
+    return false; // Token must be in hand.
   } else if (pieces.has(index)) {
     return false; // Cannot place a piece on top of another piece.
   } else if (player === Player.Red && !isRedSpawn(index)) {
@@ -41,11 +41,11 @@ export const canPlace = (
 /** Find all possible placements for a token. */
 export const possiblePlacements = (
   pieces: Map<number, Piece>,
-  hand: Map<SimpleToken, number>,
+  hand: Hand,
   { player, token }: Piece
 ): Set<number> => {
-  // Optimization: pre-check if token is available in hand.
-  if (!hand.get(simplify(token))) {
+  // Optimization: check if token is in hand.
+  if (!hand.has(token)) {
     return new Set<number>();
   }
   let placements = new Set<number>();

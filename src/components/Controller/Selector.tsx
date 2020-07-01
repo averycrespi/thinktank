@@ -1,16 +1,13 @@
-import { SimpleToken, Token, simplify } from "../../logic";
+import { Hand, Token } from "../../logic";
 
 import React from "react";
 
 interface SelectorProps {
-  readonly hand?: Map<SimpleToken, number>;
+  readonly hand: Hand;
   onTokenSelect(token: Token): void;
 }
 
-const Selector = ({
-  hand = new Map<SimpleToken, number>(),
-  onTokenSelect,
-}: SelectorProps) => {
+const Selector = ({ hand, onTokenSelect }: SelectorProps) => {
   const div = [];
   const tokens = [
     Token.Blocker,
@@ -26,10 +23,10 @@ const Selector = ({
     div.push(
       <button
         key={token}
-        disabled={!hand.get(simplify(token))}
+        disabled={!hand.has(token)}
         onClick={() => onTokenSelect(token)}
       >
-        {token + " (" + (hand.get(simplify(token)) ?? 0) + ")"}
+        {token + " (" + hand.count(token) + ")"}
       </button>
     );
   }

@@ -71,7 +71,7 @@ export const possibleMovements = (
   player: Player,
   index: number
 ): Set<number> => {
-  // Optimization: pre-check if the cell is occupied.
+  // Optimization: check if the cell is occupied.
   const src = pieces.get(index);
   if (!src) {
     return new Set<number>();
