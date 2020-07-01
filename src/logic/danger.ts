@@ -177,29 +177,43 @@ export const canBeExploded = (
   return false;
 };
 
-/** Check if a piece can explode an ally. */
-const canExplodeAlly = (pieces: Map<number, Piece>, index: number): boolean => {
+/** Check if a piece can explode itself. */
+export const canExplodeSelf = (
+  pieces: Map<number, Piece>,
+  index: number
+): boolean => {
   const mine = pieces.get(index);
   if (!mine || mine.token !== Token.Mine) {
     return false;
   }
-  let hasAlly = false;
-  let hasTrigger = false;
+  for (const adjIndex of adjacentTo(index)) {
+    const adj = pieces.get(adjIndex);
+    if (adj && adj.player !== mine.player) {
+      return true;
+    }
+  }
+  return false;
+};
+
+/** Check if a piece can explode an ally. */
+const canExplodeAlly = (pieces: Map<number, Piece>, index: number): boolean => {
+  const mine = pieces.get(index);
+  if (!mine || !canExplodeSelf(pieces, index)) {
+    return false;
+  }
   for (const adjIndex of adjacentTo(index)) {
     const adj = pieces.get(adjIndex);
     if (adj && adj.player === mine.player && EXPLODABLE.has(adj.token)) {
-      hasAlly = true;
-    }
-    if (adj && adj.player !== mine.player) {
-      hasTrigger = true;
+      return true;
     }
   }
-  return hasAlly && hasTrigger;
+  return false;
 };
 
 /** Check if a piece or its ally is in danger. */
 export const inDanger = (pieces: Map<number, Piece>, index: number): boolean =>
   canBeShot(pieces, index) ||
   canBeInfiltrated(pieces, index) ||
-  canBeExploded(pieces, index) ||
+  // Mines are allowed to explode themselves.
+  (!canExplodeSelf(pieces, index) && canBeExploded(pieces, index)) ||
   canExplodeAlly(pieces, index);
