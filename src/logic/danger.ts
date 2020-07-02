@@ -21,17 +21,17 @@ const SHOOTABLE = new Set<Token>([
 
 /** Check if piece is in the line of fire. */
 const inLineOfFire = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   destIndex: number,
   srcIndices: Array<number>,
   tank: Token.UpTank | Token.DownTank | Token.RightTank | Token.LeftTank
 ): boolean => {
-  const dest = pieces.get(destIndex);
+  const dest = cells[destIndex];
   if (!dest || !SHOOTABLE.has(dest.token)) {
     return false;
   }
   for (const srcIndex of srcIndices) {
-    const src = pieces.get(srcIndex);
+    const src = cells[srcIndex];
     if (!src) {
       continue; // Keep looking for a tank or blocker.
     } else if (src.player !== dest.player && src.token === tank) {
@@ -45,7 +45,7 @@ const inLineOfFire = (
 
 /** Check if a piece can be shot from below. */
 const canBeShotFromBelow = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   index: number
 ): boolean => {
   const { x, y: destY } = indexToCoords(index);
@@ -53,12 +53,12 @@ const canBeShotFromBelow = (
   for (let y = destY + 1; y < GRID_HEIGHT; y++) {
     srcIndices.push(coordsToIndex({ x, y }));
   }
-  return inLineOfFire(pieces, index, srcIndices, Token.UpTank);
+  return inLineOfFire(cells, index, srcIndices, Token.UpTank);
 };
 
 /** Check if a piece can be shot from above. */
 const canBeShotFromAbove = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   index: number
 ): boolean => {
   const { x, y: destY } = indexToCoords(index);
@@ -66,12 +66,12 @@ const canBeShotFromAbove = (
   for (let y = destY - 1; y >= 0; y--) {
     srcIndices.push(coordsToIndex({ x, y }));
   }
-  return inLineOfFire(pieces, index, srcIndices, Token.DownTank);
+  return inLineOfFire(cells, index, srcIndices, Token.DownTank);
 };
 
 /** Check if a piece can be shot from the right. */
 const canBeShotFromRight = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   index: number
 ): boolean => {
   const { x: destX, y } = indexToCoords(index);
@@ -79,12 +79,12 @@ const canBeShotFromRight = (
   for (let x = destX + 1; x < GRID_WIDTH; x++) {
     srcIndices.push(coordsToIndex({ x, y }));
   }
-  return inLineOfFire(pieces, index, srcIndices, Token.LeftTank);
+  return inLineOfFire(cells, index, srcIndices, Token.LeftTank);
 };
 
 /** Check if a piece can be shot from the left. */
 const canBeShotFromLeft = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   index: number
 ): boolean => {
   const { x: destX, y } = indexToCoords(index);
@@ -92,15 +92,15 @@ const canBeShotFromLeft = (
   for (let x = destX - 1; x >= 0; x--) {
     srcIndices.push(coordsToIndex({ x, y }));
   }
-  return inLineOfFire(pieces, index, srcIndices, Token.RightTank);
+  return inLineOfFire(cells, index, srcIndices, Token.RightTank);
 };
 
 /** Check if a piece can be shot. */
-export const canBeShot = (pieces: Map<number, Piece>, index: number): boolean =>
-  canBeShotFromBelow(pieces, index) ||
-  canBeShotFromAbove(pieces, index) ||
-  canBeShotFromRight(pieces, index) ||
-  canBeShotFromLeft(pieces, index);
+export const canBeShot = (cells: Array<Piece | null>, index: number): boolean =>
+  canBeShotFromBelow(cells, index) ||
+  canBeShotFromAbove(cells, index) ||
+  canBeShotFromRight(cells, index) ||
+  canBeShotFromLeft(cells, index);
 
 // Defines which tokens can be infiltrated.
 const INFILTRATABLE = new Set<Token>([
@@ -113,15 +113,15 @@ const INFILTRATABLE = new Set<Token>([
 
 /** Check if a piece can be infiltrated. */
 export const canBeInfiltrated = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   index: number
 ): boolean => {
-  const dest = pieces.get(index);
+  const dest = cells[index];
   if (!dest || !INFILTRATABLE.has(dest.token)) {
     return false;
   }
   for (const adjIndex of adjacentTo(index)) {
-    const src = pieces.get(adjIndex);
+    const src = cells[adjIndex];
     if (
       src &&
       src.player !== dest.player &&
@@ -148,15 +148,15 @@ const EXPLODABLE = new Set<Token>([
 
 /** Check if a piece can be exploded. */
 export const canBeExploded = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   index: number
 ): boolean => {
-  const dest = pieces.get(index);
+  const dest = cells[index];
   if (!dest || !EXPLODABLE.has(dest.token)) {
     return false;
   }
   for (const adjIndex of adjacentTo(index)) {
-    const src = pieces.get(adjIndex);
+    const src = cells[adjIndex];
     if (src && src.player !== dest.player && src.token === Token.Mine) {
       return true;
     }
@@ -166,15 +166,15 @@ export const canBeExploded = (
 
 /** Check if a piece can explode itself. */
 export const canExplodeSelf = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   index: number
 ): boolean => {
-  const mine = pieces.get(index);
+  const mine = cells[index];
   if (!mine || mine.token !== Token.Mine) {
     return false;
   }
   for (const adjIndex of adjacentTo(index)) {
-    const adj = pieces.get(adjIndex);
+    const adj = cells[adjIndex];
     if (adj && adj.player !== mine.player) {
       return true;
     }
@@ -183,13 +183,13 @@ export const canExplodeSelf = (
 };
 
 /** Check if a piece can explode an ally. */
-const canExplodeAlly = (pieces: Map<number, Piece>, index: number): boolean => {
-  const mine = pieces.get(index);
-  if (!mine || !canExplodeSelf(pieces, index)) {
+const canExplodeAlly = (cells: Array<Piece | null>, index: number): boolean => {
+  const mine = cells[index];
+  if (!mine || !canExplodeSelf(cells, index)) {
     return false;
   }
   for (const adjIndex of adjacentTo(index)) {
-    const adj = pieces.get(adjIndex);
+    const adj = cells[adjIndex];
     if (adj && adj.player === mine.player && EXPLODABLE.has(adj.token)) {
       return true;
     }
@@ -198,9 +198,9 @@ const canExplodeAlly = (pieces: Map<number, Piece>, index: number): boolean => {
 };
 
 /** Check if a piece or its ally is in danger. */
-export const inDanger = (pieces: Map<number, Piece>, index: number): boolean =>
-  canBeShot(pieces, index) ||
-  canBeInfiltrated(pieces, index) ||
+export const inDanger = (cells: Array<Piece | null>, index: number): boolean =>
+  canBeShot(cells, index) ||
+  canBeInfiltrated(cells, index) ||
   // Mines are allowed to explode themselves.
-  (!canExplodeSelf(pieces, index) && canBeExploded(pieces, index)) ||
-  canExplodeAlly(pieces, index);
+  (!canExplodeSelf(cells, index) && canBeExploded(cells, index)) ||
+  canExplodeAlly(cells, index);

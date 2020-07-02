@@ -81,7 +81,8 @@ export class Hand {
   };
 }
 
+/** Represents the game state. Must be serializable. */
 export interface G {
-  pieces: Map<number, Piece>;
+  cells: Array<Piece | null>;
   hands: Map<Player, Hand>;
 }

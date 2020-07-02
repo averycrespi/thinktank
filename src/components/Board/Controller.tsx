@@ -19,13 +19,13 @@ const DEFAULT_TOKEN = Token.Blocker;
 const DEFAULT_INDEX = -1;
 
 interface ControllerProps {
-  readonly pieces: Map<number, Piece>;
+  readonly cells: Array<Piece | null>;
   readonly hand: Hand;
   readonly player: Player;
   readonly moves: any;
 }
 
-const Controller = ({ pieces, hand, player, moves }: ControllerProps) => {
+const Controller = ({ cells, hand, player, moves }: ControllerProps) => {
   const [action, setAction] = useState(DEFAULT_ACTION);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
   const [activeToken, setActiveToken] = useState(DEFAULT_TOKEN);
@@ -40,13 +40,13 @@ const Controller = ({ pieces, hand, player, moves }: ControllerProps) => {
     },
     toPlace: (token: Token) => {
       setAction(Action.Place);
-      setHighlighted(possiblePlacements(pieces, hand, { player, token }));
+      setHighlighted(possiblePlacements(cells, hand, { player, token }));
       setActiveToken(token);
       setActiveIndex(DEFAULT_INDEX);
     },
     toMove: (index: number) => {
       setAction(Action.Move);
-      setHighlighted(possibleMovements(pieces, player, index));
+      setHighlighted(possibleMovements(cells, player, index));
       setActiveToken(DEFAULT_TOKEN);
       setActiveIndex(index);
     },
@@ -55,18 +55,18 @@ const Controller = ({ pieces, hand, player, moves }: ControllerProps) => {
   const onTokenSelect = (token: Token) => transitions.toPlace(token);
 
   const onCellClick = (index: number) => {
-    const p = pieces.get(index);
+    const p = cells[index];
     if (index !== activeIndex && p && p.player === player) {
       transitions.toMove(index);
     } else if (
       action === Action.Place &&
-      canPlace(pieces, hand, { player, token: activeToken }, index)
+      canPlace(cells, hand, { player, token: activeToken }, index)
     ) {
       moves.placePiece(activeToken, index);
       transitions.toNone();
     } else if (
       action === Action.Move &&
-      canMove(pieces, player, activeIndex, index)
+      canMove(cells, player, activeIndex, index)
     ) {
       moves.movePiece(activeIndex, index);
       transitions.toNone();
@@ -75,11 +75,7 @@ const Controller = ({ pieces, hand, player, moves }: ControllerProps) => {
 
   return (
     <div id="interface">
-      <Grid
-        pieces={pieces}
-        highlighted={highlighted}
-        onCellClick={onCellClick}
-      />
+      <Grid cells={cells} highlighted={highlighted} onCellClick={onCellClick} />
       <Selector hand={hand} onTokenSelect={onTokenSelect} />
     </div>
   );

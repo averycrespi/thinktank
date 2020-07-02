@@ -13,12 +13,12 @@ import { Piece } from "../../logic";
 import React from "react";
 
 interface GridProps {
-  readonly pieces: Map<number, Piece>;
+  readonly cells: Array<Piece | null>;
   readonly highlighted?: Set<number>;
   onCellClick(index: number): void;
 }
 
-const Grid = ({ pieces, highlighted = new Set(), onCellClick }: GridProps) => {
+const Grid = ({ cells, highlighted = new Set(), onCellClick }: GridProps) => {
   let tbody = [];
   for (let y = 0; y < GRID_HEIGHT; y++) {
     let tr = [];
@@ -36,7 +36,7 @@ const Grid = ({ pieces, highlighted = new Set(), onCellClick }: GridProps) => {
           className={classes.join(" ")}
           onClick={() => onCellClick(index)}
         >
-          <Cell piece={pieces.get(index)} />
+          <Cell piece={cells[index]} />
         </td>
       );
     }

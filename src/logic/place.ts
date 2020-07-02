@@ -11,14 +11,14 @@ import { inDanger } from "./danger";
 
 /** Check if a placement is possible. */
 export const canPlace = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   hand: Hand,
   { player, token }: Piece,
   index: number
 ): boolean => {
   if (!hand.has(token)) {
     return false; // Token must be in hand.
-  } else if (pieces.has(index)) {
+  } else if (cells[index]) {
     return false; // Cannot place a piece on top of another piece.
   } else if (player === Player.Red && !isRedSpawn(index)) {
     return false; // Red cannot place a piece outside of red spawn.
@@ -26,12 +26,15 @@ export const canPlace = (
     return false; // Blue cannot place a piece outside of blue spawn.
   }
   // Simulate the placement and check for consequences.
-  const potential = new Map(pieces);
-  potential.set(index, { player, token });
-  // We need to check if ANY of the player's pieces are endangered.
-  // For example, placing a mine could endanger pieces adjacent to it.
-  for (const [index, piece] of potential.entries()) {
-    if (piece.player === player && inDanger(potential, index)) {
+  const potential = [...cells];
+  potential[index] = { player, token };
+  // We need to check if ANY of the player's cells are endangered.
+  // For example, placing a mine could endanger cells adjacent to it.
+  for (let index = 0; index < potential.length; index++) {
+    const piece = potential[index];
+    if (!piece) {
+      continue;
+    } else if (piece.player === player && inDanger(potential, index)) {
       return false; // No-suicide rule: cannot endanger your own piece.
     }
   }
@@ -40,7 +43,7 @@ export const canPlace = (
 
 /** Find all possible placements for a token. */
 export const possiblePlacements = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   hand: Hand,
   { player, token }: Piece
 ): Set<number> => {
@@ -52,7 +55,7 @@ export const possiblePlacements = (
   for (let y = 0; y < GRID_HEIGHT; y++) {
     for (let x = 0; x < GRID_WIDTH; x++) {
       const index = coordsToIndex({ x, y });
-      if (canPlace(pieces, hand, { player, token }, index)) {
+      if (canPlace(cells, hand, { player, token }, index)) {
         placements.add(index);
       }
     }

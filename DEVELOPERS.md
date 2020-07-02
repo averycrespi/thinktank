@@ -2,7 +2,7 @@
 
 ## Conventions
 
-- Parameter order: game state (e.g. pieces, hand, history), context (e.g. player, token), locations (e.g. index, coords).
+- Parameter order: game state (e.g. cells, hands), context (e.g. player, token), locations (e.g. index, coords).
 
 ## Terminology
 

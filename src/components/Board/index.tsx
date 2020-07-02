@@ -15,7 +15,7 @@ const Board = ({ G, ctx, moves }: BoardProps) => {
   return (
     <div id="board">
       <Controller
-        pieces={G.pieces}
+        cells={G.cells}
         hand={G.hands.get(player)!}
         player={player}
         moves={moves}

@@ -35,13 +35,13 @@ const reachableFrom = (token: Token, index: number): Set<number> => {
 
 /** Check if a movement is possible. */
 export const canMove = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   player: Player,
   srcIndex: number,
   destIndex: number
 ): boolean => {
-  const src = pieces.get(srcIndex);
-  const dest = pieces.get(destIndex);
+  const src = cells[srcIndex];
+  const dest = cells[destIndex];
   if (!src) {
     return false; // Cannot move from an empty cell.
   } else if (src.player !== player) {
@@ -52,27 +52,31 @@ export const canMove = (
     return false; // Must be able to reach the destination.
   }
   // Simulate the movement and check for consequences.
-  const potential = new Map(pieces);
-  potential.set(destIndex, potential.get(srcIndex)!);
-  potential.delete(srcIndex);
-  // We need to check if ANY of the player's pieces are endangered.
-  // For example, moving a blocker could endanger pieces behind it.
-  for (const [index, piece] of potential.entries()) {
-    if (piece.player === player && inDanger(potential, index)) {
+  const potential = [...cells];
+  potential[destIndex] = potential[srcIndex];
+  potential[srcIndex] = null;
+  // We need to check if ANY of the player's cells are endangered.
+  // For example, moving a blocker could endanger cells behind it.
+  for (let index = 0; index < potential.length; index++) {
+    const piece = potential[index];
+    if (!piece) {
+      continue;
+    } else if (piece.player === player && inDanger(potential, index)) {
       return false; // No-suicide rule: cannot endanger your own piece.
     }
   }
+
   return true;
 };
 
 /** Find all possible movements from an index. */
 export const possibleMovements = (
-  pieces: Map<number, Piece>,
+  cells: Array<Piece | null>,
   player: Player,
   index: number
 ): Set<number> => {
   // Optimization: check if the cell is occupied.
-  const src = pieces.get(index);
+  const src = cells[index];
   if (!src) {
     return new Set<number>();
   }
@@ -80,7 +84,7 @@ export const possibleMovements = (
   const movements = new Set<number>();
   const reachable = reachableFrom(src.token, index);
   for (const destIndex of reachable) {
-    if (canMove(pieces, player, index, destIndex)) {
+    if (canMove(cells, player, index, destIndex)) {
       movements.add(destIndex);
     }
   }
