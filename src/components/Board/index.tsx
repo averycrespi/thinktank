@@ -1,4 +1,4 @@
-import { G, Player } from "../logic";
+import { G, Player } from "../../logic";
 
 import Controller from "./Controller";
 import { Ctx } from "boardgame.io";
