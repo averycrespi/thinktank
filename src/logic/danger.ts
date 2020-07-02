@@ -3,9 +3,7 @@ import {
   GRID_WIDTH,
   adjacentTo,
   coordsToIndex,
-  diagonallyAdjacentTo,
   indexToCoords,
-  orthogonallyAdjacentTo,
 } from "./grid";
 import { Piece, Token } from ".";
 
@@ -104,14 +102,14 @@ export const canBeShot = (pieces: Map<number, Piece>, index: number): boolean =>
   canBeShotFromRight(pieces, index) ||
   canBeShotFromLeft(pieces, index);
 
-// Define which tokens can be infiltrated.
+// Defines which tokens can be infiltrated.
 const INFILTRATABLE = new Set<Token>([
   Token.Blocker,
   Token.UpTank,
   Token.DownTank,
   Token.LeftTank,
   Token.RightTank,
-]); // TODO: can bases be infiltrated?
+]);
 
 /** Check if a piece can be infiltrated. */
 export const canBeInfiltrated = (
@@ -122,24 +120,13 @@ export const canBeInfiltrated = (
   if (!dest || !INFILTRATABLE.has(dest.token)) {
     return false;
   }
-  // Check for orthogonal infiltration.
-  for (const adjIndex of orthogonallyAdjacentTo(index)) {
+  for (const adjIndex of adjacentTo(index)) {
     const src = pieces.get(adjIndex);
     if (
       src &&
       src.player !== dest.player &&
-      src.token === Token.OrthogonalInfiltrator
-    ) {
-      return true;
-    }
-  }
-  // Check for diagonal infiltration.
-  for (const adjIndex of diagonallyAdjacentTo(index)) {
-    const src = pieces.get(adjIndex);
-    if (
-      src &&
-      src.player !== dest.player &&
-      src.token === Token.DiagonalInfiltrator
+      (src.token === Token.OrthogonalInfiltrator ||
+        src.token === Token.DiagonalInfiltrator)
     ) {
       return true;
     }
@@ -147,7 +134,7 @@ export const canBeInfiltrated = (
   return false;
 };
 
-// Define which tokens can be exploded.
+// Defines which tokens can be exploded.
 const EXPLODABLE = new Set<Token>([
   Token.UpTank,
   Token.DownTank,
