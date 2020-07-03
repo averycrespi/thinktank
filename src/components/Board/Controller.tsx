@@ -23,9 +23,16 @@ interface ControllerProps {
   readonly hand: Array<Token>;
   readonly player: Player;
   readonly moves: any;
+  readonly enabled: boolean;
 }
 
-const Controller = ({ cells, hand, player, moves }: ControllerProps) => {
+const Controller = ({
+  cells,
+  hand,
+  player,
+  moves,
+  enabled,
+}: ControllerProps) => {
   const [action, setAction] = useState(DEFAULT_ACTION);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
   const [activeToken, setActiveToken] = useState(DEFAULT_TOKEN);
@@ -75,8 +82,12 @@ const Controller = ({ cells, hand, player, moves }: ControllerProps) => {
 
   return (
     <div id="interface">
-      <Grid cells={cells} highlighted={highlighted} onCellClick={onCellClick} />
-      <Selector hand={hand} onTokenSelect={onTokenSelect} />
+      <Grid
+        cells={cells}
+        highlighted={highlighted}
+        onCellClick={enabled ? onCellClick : (i) => {}}
+      />
+      {enabled && <Selector hand={hand} onTokenSelect={onTokenSelect} />}
     </div>
   );
 };

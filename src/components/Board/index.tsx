@@ -8,17 +8,19 @@ interface BoardProps {
   readonly G: G;
   readonly ctx: Ctx;
   readonly moves: any;
+  readonly playerID: string;
 }
 
-const Board = ({ G, ctx, moves }: BoardProps) => {
-  const player = ctx.currentPlayer as Player;
+const Board = ({ G, ctx, moves, playerID }: BoardProps) => {
+  const currentPlayer = ctx.currentPlayer as Player;
   return (
     <div id="board">
       <Controller
         cells={G.cells}
-        hand={G.hands[player]}
-        player={player}
+        hand={G.hands[currentPlayer]}
+        player={currentPlayer}
         moves={moves}
+        enabled={currentPlayer === playerID}
       />
     </div>
   );
