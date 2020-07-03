@@ -4,7 +4,7 @@ import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
 
 import Grid from "./Grid";
-import Selector from "./Selector";
+import TokenSelector from "./TokenSelector";
 
 enum Action {
   None,
@@ -90,7 +90,7 @@ const Controller = ({
         highlighted={highlighted}
         onCellClick={enabled ? onCellClick : (_) => {}}
       />
-      {enabled && <Selector hand={hand} onTokenSelect={onTokenSelect} />}
+      {enabled && <TokenSelector hand={hand} onTokenSelect={onTokenSelect} />}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import "../../styles/board.css";
 
-import { G, Player } from "../../logic";
+import { G, Player, Result } from "../../logic";
 
 import { BoardProps } from "boardgame.io";
 import Controller from "./Controller";
@@ -11,16 +11,14 @@ interface LocalBoardProps extends BoardProps {
 }
 
 /** Render the game board. */
-const Board = ({ G, ctx, moves, playerID }: LocalBoardProps) => {
+const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
   const player = ctx.currentPlayer as Player;
-  const turn = playerID as Player;
-  const gameover = ctx.gameover;
-  const enabled = player === turn && !gameover;
+  const gameover = ctx.gameover as Result;
 
   return (
     <div id="board">
       <Controller
-        enabled={enabled}
+        enabled={isActive}
         cells={G.cells}
         hand={G.hands[player]}
         player={player}

@@ -1,13 +1,13 @@
 import React from "react";
 import { Token } from "../../logic";
 
-interface SelectorProps {
+interface TokenSelectorProps {
   readonly hand: Array<Token>;
   onTokenSelect(token: Token): void;
 }
 
 /** Render the token selector. */
-const Selector = ({ hand, onTokenSelect }: SelectorProps) => {
+const TokenSelector = ({ hand, onTokenSelect }: TokenSelectorProps) => {
   const div = [];
   const tokens = [
     Token.Blocker,
@@ -34,4 +34,4 @@ const Selector = ({ hand, onTokenSelect }: SelectorProps) => {
   return <div>{div}</div>;
 };
 
-export default Selector;
+export default TokenSelector;
