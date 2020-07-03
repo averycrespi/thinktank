@@ -1,0 +1,34 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "description": "Represents a game room.",
+    "properties": {
+        "players": {
+            "items": {
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "id"
+                ],
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "roomID": {
+            "type": "string"
+        },
+        "setupData": {
+        }
+    },
+    "required": [
+        "players",
+        "roomID"
+    ],
+    "type": "object"
+}
+

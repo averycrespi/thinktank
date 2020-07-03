@@ -97,6 +97,7 @@ const endIf = (G: G, ctx: Ctx): Result | void => {
 
 /** Represents a game. */
 export const game: Game<G, Ctx> = {
+  name: "thinktank",
   setup: setup,
   moves: { placePiece, movePiece, rotatePiece },
   turn: { moveLimit: 1, onEnd: onTurnEnd },
