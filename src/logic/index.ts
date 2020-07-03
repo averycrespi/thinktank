@@ -1,3 +1,4 @@
+/** Represents a game entity. */
 export enum Token {
   Blocker = "O",
   UpTank = "^",
@@ -10,6 +11,7 @@ export enum Token {
   Base = "@",
 }
 
+/** Represents a player. */
 export enum Player {
   Red = "0",
   Blue = "1",
@@ -25,10 +27,16 @@ export const opponentOf = (player: Player): Player => {
   }
 };
 
+/** Represents a token owner by a player. */
 export interface Piece {
   token: Token;
   player: Player;
 }
+
+// Defines types required by the game state.
+// These should be maps, but boardgame.io requires state to be serializable.
+export type Cells = Array<Piece | null>;
+export type Hand = Array<Token>;
 
 /** Represents the game state. Must be serializable. */
 export interface G {
@@ -60,6 +68,7 @@ export const addToHand = (hand: Array<Token>, token: Token) => {
     case Token.DownTank:
     case Token.LeftTank:
     case Token.RightTank:
+      // In the context of a hand, all tanks are equivalent.
       hand.push(Token.UpTank, Token.DownTank, Token.LeftTank, Token.RightTank);
       break;
     default:
@@ -74,6 +83,7 @@ export const removeFromHand = (hand: Array<Token>, token: Token) => {
     case Token.DownTank:
     case Token.LeftTank:
     case Token.RightTank:
+      // In the context of a hand, all tanks are equivalent.
       hand.splice(hand.indexOf(Token.UpTank), 1);
       hand.splice(hand.indexOf(Token.DownTank), 1);
       hand.splice(hand.indexOf(Token.LeftTank), 1);

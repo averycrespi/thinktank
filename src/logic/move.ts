@@ -1,4 +1,4 @@
-import { Piece, Player, Token } from ".";
+import { Cells, Player, Token } from ".";
 import {
   adjacentTo,
   diagonallyAdjacentTo,
@@ -35,7 +35,7 @@ const reachableFrom = (token: Token, index: number): Set<number> => {
 
 /** Check if a movement is possible. */
 export const canMove = (
-  cells: Array<Piece | null>,
+  cells: Cells,
   player: Player,
   srcIndex: number,
   destIndex: number
@@ -52,39 +52,38 @@ export const canMove = (
     return false; // Must be able to reach the destination.
   }
   // Simulate the movement and check for consequences.
-  const potential = [...cells];
-  potential[destIndex] = potential[srcIndex];
-  potential[srcIndex] = null;
-  // We need to check if ANY of the player's cells are endangered.
-  // For example, moving a blocker could endanger cells behind it.
-  for (let index = 0; index < potential.length; index++) {
-    const piece = potential[index];
+  const simulated = [...cells];
+  simulated[destIndex] = simulated[srcIndex];
+  simulated[srcIndex] = null;
+  // We need to check if ANY of the player's pieces are endangered.
+  // For example, moving a blocker could endanger a piece behind it.
+  for (let index = 0; index < simulated.length; index++) {
+    const piece = simulated[index];
     if (!piece) {
       continue;
-    } else if (piece.player === player && inDanger(potential, index)) {
+    } else if (piece.player === player && inDanger(simulated, index)) {
       return false; // No-suicide rule: cannot endanger your own piece.
     }
   }
-
   return true;
 };
 
 /** Find all possible movements from an index. */
 export const possibleMovements = (
-  cells: Array<Piece | null>,
+  cells: Cells,
   player: Player,
-  index: number
+  srcIndex: number
 ): Set<number> => {
-  // Optimization: check if the cell is occupied.
-  const src = cells[index];
+  // Optimization: check if the source cell is occupied.
+  const src = cells[srcIndex];
   if (!src) {
     return new Set<number>();
   }
   // Optimization: reduce the search space to the reachable indices.
   const movements = new Set<number>();
-  const reachable = reachableFrom(src.token, index);
+  const reachable = reachableFrom(src.token, srcIndex);
   for (const destIndex of reachable) {
-    if (canMove(cells, player, index, destIndex)) {
+    if (canMove(cells, player, srcIndex, destIndex)) {
       movements.add(destIndex);
     }
   }

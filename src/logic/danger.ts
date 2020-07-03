@@ -1,3 +1,4 @@
+import { Cells, Token } from ".";
 import {
   GRID_HEIGHT,
   GRID_WIDTH,
@@ -5,7 +6,6 @@ import {
   coordsToIndex,
   indexToCoords,
 } from "./grid";
-import { Piece, Token } from ".";
 
 // Defines which tokens can be shot.
 const SHOOTABLE = new Set<Token>([
@@ -19,35 +19,32 @@ const SHOOTABLE = new Set<Token>([
   Token.Base,
 ]);
 
-/** Check if piece is in the line of fire. */
+/** Check if a piece is in the line of fire of an enemy tank. */
 const inLineOfFire = (
-  cells: Array<Piece | null>,
+  cells: Cells,
   destIndex: number,
   srcIndices: Array<number>,
   tank: Token.UpTank | Token.DownTank | Token.RightTank | Token.LeftTank
 ): boolean => {
   const dest = cells[destIndex];
   if (!dest || !SHOOTABLE.has(dest.token)) {
-    return false;
+    return false; // Cell is empty or piece is not shootable.
   }
   for (const srcIndex of srcIndices) {
     const src = cells[srcIndex];
     if (!src) {
       continue; // Keep looking for a tank or blocker.
     } else if (src.player !== dest.player && src.token === tank) {
-      return true; // Threatened by an opponent's tank.
+      return true; // Piece is in the line of fire of an enemy tank.
     } else if (src.player === dest.player && src.token === Token.Blocker) {
-      return false; // Protected by an ally blocker.
+      return false; // Piece is protected by a friendly blocker.
     }
   }
   return false;
 };
 
 /** Check if a piece can be shot from below. */
-const canBeShotFromBelow = (
-  cells: Array<Piece | null>,
-  index: number
-): boolean => {
+const canBeShotFromBelow = (cells: Cells, index: number): boolean => {
   const { x, y: destY } = indexToCoords(index);
   const srcIndices = new Array<number>();
   for (let y = destY + 1; y < GRID_HEIGHT; y++) {
@@ -57,10 +54,7 @@ const canBeShotFromBelow = (
 };
 
 /** Check if a piece can be shot from above. */
-const canBeShotFromAbove = (
-  cells: Array<Piece | null>,
-  index: number
-): boolean => {
+const canBeShotFromAbove = (cells: Cells, index: number): boolean => {
   const { x, y: destY } = indexToCoords(index);
   const srcIndices = new Array<number>();
   for (let y = destY - 1; y >= 0; y--) {
@@ -70,10 +64,7 @@ const canBeShotFromAbove = (
 };
 
 /** Check if a piece can be shot from the right. */
-const canBeShotFromRight = (
-  cells: Array<Piece | null>,
-  index: number
-): boolean => {
+const canBeShotFromRight = (cells: Cells, index: number): boolean => {
   const { x: destX, y } = indexToCoords(index);
   const srcIndices = new Array<number>();
   for (let x = destX + 1; x < GRID_WIDTH; x++) {
@@ -83,10 +74,7 @@ const canBeShotFromRight = (
 };
 
 /** Check if a piece can be shot from the left. */
-const canBeShotFromLeft = (
-  cells: Array<Piece | null>,
-  index: number
-): boolean => {
+const canBeShotFromLeft = (cells: Cells, index: number): boolean => {
   const { x: destX, y } = indexToCoords(index);
   const srcIndices = new Array<number>();
   for (let x = destX - 1; x >= 0; x--) {
@@ -96,7 +84,7 @@ const canBeShotFromLeft = (
 };
 
 /** Check if a piece can be shot. */
-export const canBeShot = (cells: Array<Piece | null>, index: number): boolean =>
+export const canBeShot = (cells: Cells, index: number): boolean =>
   canBeShotFromBelow(cells, index) ||
   canBeShotFromAbove(cells, index) ||
   canBeShotFromRight(cells, index) ||
@@ -112,13 +100,10 @@ const INFILTRATABLE = new Set<Token>([
 ]);
 
 /** Check if a piece can be infiltrated. */
-export const canBeInfiltrated = (
-  cells: Array<Piece | null>,
-  index: number
-): boolean => {
+export const canBeInfiltrated = (cells: Cells, index: number): boolean => {
   const dest = cells[index];
   if (!dest || !INFILTRATABLE.has(dest.token)) {
-    return false;
+    return false; // Cell is empty or piece is not infiltratable.
   }
   for (const adjIndex of adjacentTo(index)) {
     const src = cells[adjIndex];
@@ -128,7 +113,7 @@ export const canBeInfiltrated = (
       (src.token === Token.OrthogonalInfiltrator ||
         src.token === Token.DiagonalInfiltrator)
     ) {
-      return true;
+      return true; // Piece is adjacent to an enemy infiltrator.
     }
   }
   return false;
@@ -147,64 +132,57 @@ const EXPLODABLE = new Set<Token>([
 ]);
 
 /** Check if a piece can be exploded. */
-export const canBeExploded = (
-  cells: Array<Piece | null>,
-  index: number
-): boolean => {
+export const canBeExploded = (cells: Cells, index: number): boolean => {
   const dest = cells[index];
   if (!dest || !EXPLODABLE.has(dest.token)) {
-    return false;
+    return false; // Cell is empty or piece is not explodable.
   }
   for (const adjIndex of adjacentTo(index)) {
     const src = cells[adjIndex];
     if (src && src.player !== dest.player && src.token === Token.Mine) {
-      return true;
+      return true; // Piece is adjacent to an enemy mine.
     }
   }
   return false;
 };
 
-/** Check if a piece can explode itself. */
-export const canExplodeSelf = (
-  cells: Array<Piece | null>,
-  index: number
-): boolean => {
+/** Check if a piece can explode an enemy piece. */
+export const canExplodeEnemy = (cells: Cells, index: number): boolean => {
   const mine = cells[index];
   if (!mine || mine.token !== Token.Mine) {
-    return false;
+    return false; // Cell is empty or piece is not a mine.
   }
   for (const adjIndex of adjacentTo(index)) {
     const adj = cells[adjIndex];
     if (adj && adj.player !== mine.player) {
-      return true;
+      return true; // Mine is adjacent to an enemy piece.
+      // TODO: are mines triggered by enemy blockers?
     }
   }
   return false;
 };
 
-/** Check if a piece can explode an ally. */
-const canExplodeAlly = (cells: Array<Piece | null>, index: number): boolean => {
+/** Check if a piece can explode a friendly piece. */
+export const canExplodeFriendly = (cells: Cells, index: number): boolean => {
   const mine = cells[index];
-  if (!mine || !canExplodeSelf(cells, index)) {
-    return false;
+  if (!mine || !canExplodeEnemy(cells, index)) {
+    return false; // Cell is empty or piece cannot explode.
   }
   for (const adjIndex of adjacentTo(index)) {
     const adj = cells[adjIndex];
     if (adj && adj.player === mine.player && EXPLODABLE.has(adj.token)) {
-      return true;
+      return true; // Mine is adjacent to an explodable friendly piece.
     }
   }
   return false;
 };
 
-/** Check if a piece or its ally is in danger. */
-export const inDanger = (
-  cells: Array<Piece | null>,
-  index: number
-): boolean => {
+/** Check if a piece or any friendly pieces are in danger. */
+export const inDanger = (cells: Cells, index: number): boolean => {
   const piece = cells[index];
   if (piece && piece.token === Token.Mine) {
-    return canExplodeAlly(cells, index);
+    // Mines are allowed to explode themselves, but not friendly pieces.
+    return canExplodeFriendly(cells, index);
   } else {
     return (
       canBeShot(cells, index) ||

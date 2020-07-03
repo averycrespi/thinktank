@@ -1,26 +1,32 @@
+import "../../styles/board.css";
+
 import { G, Player } from "../../logic";
 
+import { BoardProps } from "boardgame.io";
 import Controller from "./Controller";
-import { Ctx } from "boardgame.io";
 import React from "react";
 
-interface BoardProps {
-  readonly G: G;
-  readonly ctx: Ctx;
-  readonly moves: any;
-  readonly playerID: string;
+interface LocalBoardProps extends BoardProps {
+  G: G;
 }
 
-const Board = ({ G, ctx, moves, playerID }: BoardProps) => {
-  const currentPlayer = ctx.currentPlayer as Player;
+/** Render the game board. */
+const Board = ({ G, ctx, moves, playerID }: LocalBoardProps) => {
+  const player = ctx.currentPlayer as Player;
+  const turn = playerID as Player;
+  const gameover = ctx.gameover;
+
+  const enabled = player === turn && !gameover;
+
   return (
     <div id="board">
       <Controller
+        enabled={enabled}
         cells={G.cells}
-        hand={G.hands[currentPlayer]}
-        player={currentPlayer}
-        moves={moves}
-        enabled={currentPlayer === playerID}
+        hand={G.hands[player]}
+        player={player}
+        placePiece={moves.placePiece}
+        movePiece={moves.movePiece}
       />
     </div>
   );

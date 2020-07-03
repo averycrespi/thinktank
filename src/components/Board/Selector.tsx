@@ -6,6 +6,7 @@ interface SelectorProps {
   onTokenSelect(token: Token): void;
 }
 
+/** Render the token selector. */
 const Selector = ({ hand, onTokenSelect }: SelectorProps) => {
   const div = [];
   const tokens = [
@@ -19,13 +20,14 @@ const Selector = ({ hand, onTokenSelect }: SelectorProps) => {
     Token.Mine,
   ];
   for (const token of tokens) {
+    const count = hand.filter((t) => t === token).length;
     div.push(
       <button
         key={token}
         disabled={!hand.includes(token)}
         onClick={() => onTokenSelect(token)}
       >
-        {token + " (" + hand.filter((t) => t === token).length + ")"}
+        {token + " (" + count + ")"}
       </button>
     );
   }

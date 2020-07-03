@@ -1,4 +1,4 @@
-import { Piece, Player, Token } from "../../logic";
+import { Cells, Player, Token } from "../../logic";
 import React, { useState } from "react";
 import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
@@ -19,19 +19,22 @@ const DEFAULT_TOKEN = Token.Blocker;
 const DEFAULT_INDEX = -1;
 
 interface ControllerProps {
-  readonly cells: Array<Piece | null>;
+  readonly enabled: boolean;
+  readonly cells: Cells;
   readonly hand: Array<Token>;
   readonly player: Player;
-  readonly moves: any;
-  readonly enabled: boolean;
+  placePiece(token: Token, index: number): void;
+  movePiece(srcIndex: number, destIndex: number): void;
 }
 
+/** Render the game controller. */
 const Controller = ({
+  enabled,
   cells,
   hand,
   player,
-  moves,
-  enabled,
+  placePiece,
+  movePiece,
 }: ControllerProps) => {
   const [action, setAction] = useState(DEFAULT_ACTION);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
@@ -69,23 +72,23 @@ const Controller = ({
       action === Action.Place &&
       canPlace(cells, hand, { player, token: activeToken }, index)
     ) {
-      moves.placePiece(activeToken, index);
+      placePiece(activeToken, index);
       transitions.toNone();
     } else if (
       action === Action.Move &&
       canMove(cells, player, activeIndex, index)
     ) {
-      moves.movePiece(activeIndex, index);
+      movePiece(activeIndex, index);
       transitions.toNone();
     }
   };
 
   return (
-    <div id="interface">
+    <div id="controller">
       <Grid
         cells={cells}
         highlighted={highlighted}
-        onCellClick={enabled ? onCellClick : (i) => {}}
+        onCellClick={enabled ? onCellClick : (_) => {}}
       />
       {enabled && <Selector hand={hand} onTokenSelect={onTokenSelect} />}
     </div>

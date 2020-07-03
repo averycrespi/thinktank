@@ -1,17 +1,11 @@
-import {
-  GRID_HEIGHT,
-  GRID_WIDTH,
-  coordsToIndex,
-  isBlueSpawn,
-  isRedSpawn,
-} from "./grid";
-import { Piece, Player, Token } from ".";
+import { Cells, Piece, Player, Token } from ".";
+import { GRID_SIZE, isBlueSpawn, isRedSpawn } from "./grid";
 
 import { inDanger } from "./danger";
 
 /** Check if a placement is possible. */
 export const canPlace = (
-  cells: Array<Piece | null>,
+  cells: Cells,
   hand: Array<Token>,
   { player, token }: Piece,
   index: number
@@ -26,15 +20,15 @@ export const canPlace = (
     return false; // Blue cannot place a piece outside of blue spawn.
   }
   // Simulate the placement and check for consequences.
-  const potential = [...cells];
-  potential[index] = { player, token };
-  // We need to check if ANY of the player's cells are endangered.
-  // For example, placing a mine could endanger cells adjacent to it.
-  for (let index = 0; index < potential.length; index++) {
-    const piece = potential[index];
+  const simulated = [...cells];
+  simulated[index] = { player, token };
+  // We need to check if ANY of the player's pieces are endangered.
+  // For example, placing a mine could endanger pieces adjacent to it.
+  for (let index = 0; index < simulated.length; index++) {
+    const piece = simulated[index];
     if (!piece) {
       continue;
-    } else if (piece.player === player && inDanger(potential, index)) {
+    } else if (piece.player === player && inDanger(simulated, index)) {
       return false; // No-suicide rule: cannot endanger your own piece.
     }
   }
@@ -43,7 +37,7 @@ export const canPlace = (
 
 /** Find all possible placements for a token. */
 export const possiblePlacements = (
-  cells: Array<Piece | null>,
+  cells: Cells,
   hand: Array<Token>,
   { player, token }: Piece
 ): Set<number> => {
@@ -51,13 +45,11 @@ export const possiblePlacements = (
   if (!hand.includes(token)) {
     return new Set<number>();
   }
+  // Check every cell in the grid.
   let placements = new Set<number>();
-  for (let y = 0; y < GRID_HEIGHT; y++) {
-    for (let x = 0; x < GRID_WIDTH; x++) {
-      const index = coordsToIndex({ x, y });
-      if (canPlace(cells, hand, { player, token }, index)) {
-        placements.add(index);
-      }
+  for (let index = 0; index < GRID_SIZE; index++) {
+    if (canPlace(cells, hand, { player, token }, index)) {
+      placements.add(index);
     }
   }
   return placements;

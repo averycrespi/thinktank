@@ -1,5 +1,3 @@
-import "../../styles/grid.css";
-
 import {
   GRID_HEIGHT,
   GRID_WIDTH,
@@ -8,17 +6,18 @@ import {
   isRedHome,
 } from "../../logic/grid";
 
-import Cell from "./Cell";
-import { Piece } from "../../logic";
+import { Cells } from "../../logic";
+import GridPiece from "./GridPiece";
 import React from "react";
 
 interface GridProps {
-  readonly cells: Array<Piece | null>;
-  readonly highlighted?: Set<number>;
+  readonly cells: Cells;
+  readonly highlighted: Set<number>;
   onCellClick(index: number): void;
 }
 
-const Grid = ({ cells, highlighted = new Set(), onCellClick }: GridProps) => {
+/** Render a 2D array of cells. */
+const Grid = ({ cells, highlighted, onCellClick }: GridProps) => {
   let tbody = [];
   for (let y = 0; y < GRID_HEIGHT; y++) {
     let tr = [];
@@ -26,8 +25,8 @@ const Grid = ({ cells, highlighted = new Set(), onCellClick }: GridProps) => {
       const index = coordsToIndex({ x, y });
       const classes = [
         "cell",
-        isRedHome(index) ? "home-red" : "",
-        isBlueHome(index) ? "home-blue" : "",
+        isRedHome(index) ? "red" : "",
+        isBlueHome(index) ? "blue" : "",
         highlighted.has(index) ? "highlighted" : "",
       ];
       tr.push(
@@ -36,7 +35,7 @@ const Grid = ({ cells, highlighted = new Set(), onCellClick }: GridProps) => {
           className={classes.join(" ")}
           onClick={() => onCellClick(index)}
         >
-          <Cell piece={cells[index]} />
+          <GridPiece piece={cells[index]} />
         </td>
       );
     }

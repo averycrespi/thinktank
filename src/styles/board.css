@@ -10,26 +10,26 @@
   background: #999;
 }
 
-.home-red {
+.cell.red {
   background: #ff000030;
 }
 
-.home-red.highlighted {
+.cell.red.highlighted {
   background: #ff000060;
 }
 
-.home-blue {
+.cell.blue {
   background: #0000ff30;
 }
 
-.home-blue.highlighted {
+.cell.blue.highlighted {
   background: #0000ff60;
 }
 
-.piece-red {
+.piece.red {
   color: #f00;
 }
 
-.piece-blue {
+.piece.blue {
   color: #00f;
 }
