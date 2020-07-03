@@ -38,15 +38,6 @@ export interface Piece {
 export type Cells = Array<Piece | null>;
 export type Hand = Array<Token>;
 
-/** Represents the game state. Must be serializable. */
-export interface G {
-  cells: Array<Piece | null>;
-  hands: {
-    [Player.Red]: Array<Token>;
-    [Player.Blue]: Array<Token>;
-  };
-}
-
 /** Create a new hand. */
 export const createHand = (): Array<Token> => {
   const hand = new Array<Token>();
@@ -94,3 +85,17 @@ export const removeFromHand = (hand: Array<Token>, token: Token) => {
       break;
   }
 };
+
+/** Represents the game state. Must be serializable. */
+export interface G {
+  cells: Array<Piece | null>;
+  hands: {
+    [Player.Red]: Array<Token>;
+    [Player.Blue]: Array<Token>;
+  };
+}
+
+/** Represents the result of a game. */
+export interface Result {
+  winner: Player;
+}

@@ -15,7 +15,6 @@ const Board = ({ G, ctx, moves, playerID }: LocalBoardProps) => {
   const player = ctx.currentPlayer as Player;
   const turn = playerID as Player;
   const gameover = ctx.gameover;
-
   const enabled = player === turn && !gameover;
 
   return (
@@ -28,6 +27,7 @@ const Board = ({ G, ctx, moves, playerID }: LocalBoardProps) => {
         placePiece={moves.placePiece}
         movePiece={moves.movePiece}
       />
+      {gameover && <p>{gameover.winner + " wins!"}</p>}
     </div>
   );
 };

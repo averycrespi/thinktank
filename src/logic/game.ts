@@ -4,6 +4,7 @@ import {
   G,
   Piece,
   Player,
+  Result,
   Token,
   addToHand,
   createHand,
@@ -21,7 +22,6 @@ import { INVALID_MOVE } from "boardgame.io/core";
 import { canMove } from "./move";
 import { canPlace } from "./place";
 
-/** Setup the game state. */
 const setup = (): G => {
   let cells = new Array<Piece>(GRID_SIZE);
   cells[RED_HOME_CENTER] = { token: Token.Base, player: Player.Red };
@@ -33,7 +33,6 @@ const setup = (): G => {
   return { cells, hands };
 };
 
-/** Try to place a piece. */
 const placePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
   const player = ctx.currentPlayer as Player;
   if (canPlace(G.cells, G.hands[player], { token, player }, index)) {
@@ -44,7 +43,6 @@ const placePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
   }
 };
 
-/** Try to move a piece. */
 const movePiece = (G: G, ctx: Ctx, srcIndex: number, destIndex: number) => {
   const player = ctx.currentPlayer as Player;
   if (canMove(G.cells, player, srcIndex, destIndex)) {
@@ -55,7 +53,6 @@ const movePiece = (G: G, ctx: Ctx, srcIndex: number, destIndex: number) => {
   }
 };
 
-/** Try to rotate a piece. */
 const rotatePiece = (G: G, ctx: Ctx, token: Token, index: number) =>
   INVALID_MOVE; // TODO: implement rotatePiece
 
@@ -88,9 +85,20 @@ const onTurnEnd = (G: G, ctx: Ctx) => {
   }
 };
 
+const endIf = (G: G, ctx: Ctx): Result | void => {
+  // A player loses if their hand contains their base.
+  const players = [Player.Red, Player.Blue];
+  for (const player of players) {
+    if (G.hands[player].some((t) => t === Token.Base)) {
+      return { winner: opponentOf(player) };
+    }
+  }
+};
+
 /** Represents a game. */
 export const game: Game<G, Ctx> = {
   setup: setup,
   moves: { placePiece, movePiece, rotatePiece },
   turn: { moveLimit: 1, onEnd: onTurnEnd },
+  endIf: endIf,
 };
