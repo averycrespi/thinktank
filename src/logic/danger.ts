@@ -198,9 +198,18 @@ const canExplodeAlly = (cells: Array<Piece | null>, index: number): boolean => {
 };
 
 /** Check if a piece or its ally is in danger. */
-export const inDanger = (cells: Array<Piece | null>, index: number): boolean =>
-  canBeShot(cells, index) ||
-  canBeInfiltrated(cells, index) ||
-  // Mines are allowed to explode themselves.
-  (!canExplodeSelf(cells, index) && canBeExploded(cells, index)) ||
-  canExplodeAlly(cells, index);
+export const inDanger = (
+  cells: Array<Piece | null>,
+  index: number
+): boolean => {
+  const piece = cells[index];
+  if (piece && piece.token === Token.Mine) {
+    return canExplodeAlly(cells, index);
+  } else {
+    return (
+      canBeShot(cells, index) ||
+      canBeInfiltrated(cells, index) ||
+      canBeExploded(cells, index)
+    );
+  }
+};

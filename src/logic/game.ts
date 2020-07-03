@@ -58,35 +58,31 @@ const rotatePiece = (G: G, ctx: Ctx, token: Token, index: number) =>
   INVALID_MOVE; // TODO: implement rotatePiece
 
 const onTurnEnd = (G: G, ctx: Ctx) => {
-  // First pass: capture infiltrated cells and mark exploding mines.
-  const exploding = new Map<number, Piece>();
+  const destroyed = new Set<number>();
+  // First pass: capture infiltrated cells.
   for (let index = 0; index < G.cells.length; index++) {
     const piece = G.cells[index];
-    if (!piece) {
-      continue;
-    } else if (canBeInfiltrated(G.cells, index)) {
+    if (piece && canBeInfiltrated(G.cells, index)) {
       piece.player = opponentOf(piece.player);
-    } else if (canExplodeSelf(G.cells, index)) {
-      exploding.set(index, piece);
     }
   }
-  // Second pass: remove shot and exploded cells.
+  // Second pass: mark shot and exploded cells.
   for (let index = 0; index < G.cells.length; index++) {
-    const piece = G.cells[index];
-    if (!piece) {
-      continue;
-    } else if (canBeShot(G.cells, index) || canBeExploded(G.cells, index)) {
-      G.cells[index] = null;
-      if (!exploding.has(index)) {
-        // Don't double-count mines that are exploding AND exploded.
-        addToHand(G.hands[piece.player], piece.token);
-      }
+    if (
+      canBeShot(G.cells, index) ||
+      canBeExploded(G.cells, index) ||
+      canExplodeSelf(G.cells, index)
+    ) {
+      destroyed.add(index);
     }
   }
-  // Third pass: remove exploding mines.
-  for (const [index, piece] of exploding.entries()) {
-    G.cells[index] = null;
-    addToHand(G.hands[piece.player], piece.token);
+  // Third pass: remove destroyed cells.
+  for (const index of destroyed) {
+    const piece = G.cells[index];
+    if (piece) {
+      addToHand(G.hands[piece.player], piece.token);
+      G.cells[index] = null;
+    }
   }
 };
 
