@@ -30,59 +30,57 @@ export interface Piece {
   player: Player;
 }
 
-export class Hand {
-  private tokens: Map<Token, number>;
-
-  /** Create a new hand. */
-  constructor() {
-    this.tokens = new Map<Token, number>();
-    this.tokens.set(Token.Blocker, 3);
-    this.tokens.set(Token.UpTank, 5);
-    this.tokens.set(Token.OrthogonalInfiltrator, 2);
-    this.tokens.set(Token.DiagonalInfiltrator, 2);
-    this.tokens.set(Token.Mine, 1);
-  }
-
-  /** Check if the hand contains a token. */
-  has = (token: Token): boolean => !!this.tokens.get(this.canonize(token));
-
-  /** Count the occurences of a token in the hand. */
-  count = (token: Token): number => this.tokens.get(this.canonize(token)) ?? 0;
-
-  /** Add a token to the hand. */
-  add = (token: Token) => {
-    const c = this.canonize(token);
-    this.tokens.set(c, (this.tokens.get(c) ?? 0) + 1);
-  };
-
-  /** Remove a token from the hand. */
-  remove = (token: Token): boolean => {
-    const c = this.canonize(token);
-    const n = this.tokens.get(c);
-    if (n) {
-      this.tokens.set(c, n - 1);
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  /** Convert a token to its canonical form. */
-  private canonize = (token: Token): Token => {
-    switch (token) {
-      case Token.UpTank:
-      case Token.DownTank:
-      case Token.LeftTank:
-      case Token.RightTank:
-        return Token.UpTank;
-      default:
-        return token;
-    }
-  };
-}
-
 /** Represents the game state. Must be serializable. */
 export interface G {
   cells: Array<Piece | null>;
-  hands: Map<Player, Hand>;
+  hands: {
+    [Player.Red]: Array<Token>;
+    [Player.Blue]: Array<Token>;
+  };
 }
+
+/** Create a new hand. */
+export const createHand = (): Array<Token> => {
+  const hand = new Array<Token>();
+  hand.push(...Array(3).fill(Token.Blocker));
+  hand.push(...Array(5).fill(Token.UpTank));
+  hand.push(...Array(5).fill(Token.DownTank));
+  hand.push(...Array(5).fill(Token.LeftTank));
+  hand.push(...Array(5).fill(Token.RightTank));
+  hand.push(...Array(2).fill(Token.OrthogonalInfiltrator));
+  hand.push(...Array(2).fill(Token.DiagonalInfiltrator));
+  hand.push(Token.Mine);
+  return hand;
+};
+
+/** Add a token to a hand. */
+export const addToHand = (hand: Array<Token>, token: Token) => {
+  switch (token) {
+    case Token.UpTank:
+    case Token.DownTank:
+    case Token.LeftTank:
+    case Token.RightTank:
+      hand.push(Token.UpTank, Token.DownTank, Token.LeftTank, Token.RightTank);
+      break;
+    default:
+      hand.push(token);
+  }
+};
+
+/** Remove a token from a hand. */
+export const removeFromHand = (hand: Array<Token>, token: Token) => {
+  switch (token) {
+    case Token.UpTank:
+    case Token.DownTank:
+    case Token.LeftTank:
+    case Token.RightTank:
+      hand.splice(hand.indexOf(Token.UpTank), 1);
+      hand.splice(hand.indexOf(Token.DownTank), 1);
+      hand.splice(hand.indexOf(Token.LeftTank), 1);
+      hand.splice(hand.indexOf(Token.RightTank), 1);
+      break;
+    default:
+      hand.splice(hand.indexOf(token), 1);
+      break;
+  }
+};

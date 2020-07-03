@@ -1,9 +1,8 @@
-import { Hand, Token } from "../../logic";
-
 import React from "react";
+import { Token } from "../../logic";
 
 interface SelectorProps {
-  readonly hand: Hand;
+  readonly hand: Array<Token>;
   onTokenSelect(token: Token): void;
 }
 
@@ -23,10 +22,10 @@ const Selector = ({ hand, onTokenSelect }: SelectorProps) => {
     div.push(
       <button
         key={token}
-        disabled={!hand.has(token)}
+        disabled={!hand.includes(token)}
         onClick={() => onTokenSelect(token)}
       >
-        {token + " (" + hand.count(token) + ")"}
+        {token + " (" + hand.filter((t) => t === token).length + ")"}
       </button>
     );
   }

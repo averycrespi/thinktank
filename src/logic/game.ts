@@ -1,6 +1,15 @@
 import { BLUE_HOME_CENTER, GRID_SIZE, RED_HOME_CENTER } from "./grid";
 import { Ctx, Game } from "boardgame.io";
-import { G, Hand, Piece, Player, Token, opponentOf } from ".";
+import {
+  G,
+  Piece,
+  Player,
+  Token,
+  addToHand,
+  createHand,
+  opponentOf,
+  removeFromHand,
+} from ".";
 import {
   canBeExploded,
   canBeInfiltrated,
@@ -16,18 +25,20 @@ const setup = (): G => {
   let cells = new Array<Piece>(GRID_SIZE);
   cells[RED_HOME_CENTER] = { token: Token.Base, player: Player.Red };
   cells[BLUE_HOME_CENTER] = { token: Token.Base, player: Player.Blue };
-  let hands = new Map<Player, Hand>();
-  hands.set(Player.Red, new Hand());
-  hands.set(Player.Blue, new Hand());
-  return { cells, hands };
+  return {
+    cells,
+    hands: {
+      [Player.Red]: createHand(),
+      [Player.Blue]: createHand(),
+    },
+  };
 };
 
 const placePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
   const player = ctx.currentPlayer as Player;
-  const hand = G.hands.get(player)!;
-  if (canPlace(G.cells, hand, { token, player }, index)) {
+  if (canPlace(G.cells, G.hands[player], { token, player }, index)) {
     G.cells[index] = { token, player };
-    hand.remove(token);
+    removeFromHand(G.hands[player], token);
   } else {
     return INVALID_MOVE;
   }
@@ -66,13 +77,16 @@ const onTurnEnd = (G: G, ctx: Ctx) => {
       continue;
     } else if (canBeShot(G.cells, index) || canBeExploded(G.cells, index)) {
       G.cells[index] = null;
-      G.hands.get(piece.player)!.add(piece.token);
+      if (!exploding.has(index)) {
+        // Don't double-count mines that are exploding AND exploded.
+        addToHand(G.hands[piece.player], piece.token);
+      }
     }
   }
   // Third pass: remove exploding mines.
   for (const [index, piece] of exploding.entries()) {
     G.cells[index] = null;
-    G.hands.get(piece.player)!.add(piece.token);
+    addToHand(G.hands[piece.player], piece.token);
   }
 };
 

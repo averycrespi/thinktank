@@ -5,18 +5,18 @@ import {
   isBlueSpawn,
   isRedSpawn,
 } from "./grid";
-import { Hand, Piece, Player } from ".";
+import { Piece, Player, Token } from ".";
 
 import { inDanger } from "./danger";
 
 /** Check if a placement is possible. */
 export const canPlace = (
   cells: Array<Piece | null>,
-  hand: Hand,
+  hand: Array<Token>,
   { player, token }: Piece,
   index: number
 ): boolean => {
-  if (!hand.has(token)) {
+  if (!hand.includes(token)) {
     return false; // Token must be in hand.
   } else if (cells[index]) {
     return false; // Cannot place a piece on top of another piece.
@@ -44,11 +44,11 @@ export const canPlace = (
 /** Find all possible placements for a token. */
 export const possiblePlacements = (
   cells: Array<Piece | null>,
-  hand: Hand,
+  hand: Array<Token>,
   { player, token }: Piece
 ): Set<number> => {
   // Optimization: check if token is in hand.
-  if (!hand.has(token)) {
+  if (!hand.includes(token)) {
     return new Set<number>();
   }
   let placements = new Set<number>();
