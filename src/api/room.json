@@ -1,34 +1,28 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "description": "Represents a game room.",
-    "properties": {
-        "players": {
-            "items": {
-                "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "id"
-                ],
-                "type": "object"
-            },
-            "type": "array"
-        },
-        "roomID": {
-            "type": "string"
-        },
-        "setupData": {
-        }
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Represents a game room.",
+  "properties": {
+    "gameID": {
+      "type": "string"
     },
-    "required": [
-        "players",
-        "roomID"
-    ],
-    "type": "object"
+    "players": {
+      "items": {
+        "properties": {
+          "id": {
+            "enum": [0, 1],
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": ["id"],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "setupData": {}
+  },
+  "required": ["gameID", "players"],
+  "type": "object"
 }
-
