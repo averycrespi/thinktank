@@ -6,11 +6,12 @@ import routes from "../../routes";
 const Welcome = () => (
   <div id="welcome">
     <ul>
-      {routes.map((r) => (
-        <li>
-          <Link to={r.path}>{r.name}</Link>
-        </li>
-      ))}
+      <li>
+        <Link to={routes.sandbox.path}>{routes.sandbox.name}</Link>
+      </li>
+      <li>
+        <Link to={routes.local.path}>{routes.local.name}</Link>
+      </li>
     </ul>
   </div>
 );

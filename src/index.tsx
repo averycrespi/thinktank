@@ -7,7 +7,7 @@ import routes from "./routes";
 const App = () => (
   <Router>
     <Switch>
-      {routes.map((r) => (
+      {Object.values(routes).map((r) => (
         <Route path={r.path}>{r.component}</Route>
       ))}
     </Switch>
