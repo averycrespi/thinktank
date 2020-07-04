@@ -10,9 +10,16 @@ yarn build  # Builds the app for production
 yarn serve  # Runs the server on localhost:8000
 ```
 
+## Environment Variables
+
+See the [Create React App docs](https://create-react-app.dev/docs/adding-custom-environment-variables/) for more information.
+
+- `REACT_APP_URL`: URL of the server. Default is `"http://localhost:8000"`.
+- `REACT_APP_PORT`: Port that the server will be hosted on. Default is `"8000"`.
+
 ## Terminology
 
-For general terminology (e.g. board, game, player), see the [boardgame.io documentation](https://boardgame.io/documentation/#/).
+For general terminology (e.g. board, game, player), see the [boardgame.io docs](https://boardgame.io/documentation/#/).
 
 - **Cell**: A location in the grid. Addressed by a 1D index or a 2D coordinate pair.
 - **Enemy (piece)**: P is an enemy of Q iff P and Q have _different_ owners.

@@ -23,6 +23,7 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
     "boardgame.io": "^0.39.14",
+    "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

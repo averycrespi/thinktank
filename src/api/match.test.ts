@@ -10,7 +10,7 @@ import {
 import { Server } from "boardgame.io/server";
 import { game } from "../logic/game";
 
-const port = 8000;
+const port = parseInt(process.env.REACT_APP_PORT ?? "8000");
 const serverURL = `http://localhost:${port}`;
 
 let commands: { run: any; kill: any };
