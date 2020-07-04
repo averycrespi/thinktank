@@ -7,7 +7,7 @@ import {
 } from "../../logic/grid";
 
 import { Cell } from "../../logic";
-import GridPiece from "./GridPiece";
+import GridCell from "./GridCell";
 import React from "react";
 
 interface GridProps {
@@ -35,7 +35,7 @@ const Grid = ({ cells, highlighted, onCellClick }: GridProps) => {
           className={classes.join(" ")}
           onClick={() => onCellClick(index)}
         >
-          <GridPiece piece={cells[index]} />
+          <GridCell cell={cells[index]} />
         </td>
       );
     }

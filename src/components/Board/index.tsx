@@ -18,7 +18,7 @@ const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
   return (
     <div id="board">
       <Controller
-        enabled={isActive}
+        isActive={isActive}
         cells={G.cells}
         hand={G.hands[player]}
         player={player}

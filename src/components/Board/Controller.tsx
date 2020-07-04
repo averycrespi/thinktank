@@ -19,7 +19,7 @@ const DEFAULT_TOKEN = Token.Blocker;
 const DEFAULT_INDEX = -1;
 
 interface ControllerProps {
-  readonly enabled: boolean;
+  readonly isActive: boolean;
   readonly cells: Array<Cell>;
   readonly hand: Array<Token>;
   readonly player: Player;
@@ -27,9 +27,9 @@ interface ControllerProps {
   movePiece(srcIndex: number, destIndex: number): void;
 }
 
-/** Render the game controller. */
+/** Render a game controller. */
 const Controller = ({
-  enabled,
+  isActive,
   cells,
   hand,
   player,
@@ -38,27 +38,27 @@ const Controller = ({
 }: ControllerProps) => {
   const [action, setAction] = useState(DEFAULT_ACTION);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
-  const [activeToken, setActiveToken] = useState(DEFAULT_TOKEN);
-  const [activeIndex, setActiveIndex] = useState(DEFAULT_INDEX);
+  const [selectedToken, setSelectedToken] = useState(DEFAULT_TOKEN);
+  const [selectedIndex, setSelectedIndex] = useState(DEFAULT_INDEX);
 
   const transitions = {
     toNone: () => {
       setAction(Action.None);
       setHighlighted(DEFAULT_HIGHLIGHTED);
-      setActiveToken(DEFAULT_TOKEN);
-      setActiveIndex(DEFAULT_INDEX);
+      setSelectedToken(DEFAULT_TOKEN);
+      setSelectedIndex(DEFAULT_INDEX);
     },
     toPlace: (token: Token) => {
       setAction(Action.Place);
       setHighlighted(possiblePlacements(cells, hand, { player, token }));
-      setActiveToken(token);
-      setActiveIndex(DEFAULT_INDEX);
+      setSelectedToken(token);
+      setSelectedIndex(DEFAULT_INDEX);
     },
     toMove: (index: number) => {
       setAction(Action.Move);
       setHighlighted(possibleMovements(cells, player, index));
-      setActiveToken(DEFAULT_TOKEN);
-      setActiveIndex(index);
+      setSelectedToken(DEFAULT_TOKEN);
+      setSelectedIndex(index);
     },
   };
 
@@ -66,19 +66,19 @@ const Controller = ({
 
   const onCellClick = (index: number) => {
     const p = cells[index];
-    if (index !== activeIndex && p && p.player === player) {
+    if (index !== selectedIndex && p && p.player === player) {
       transitions.toMove(index);
     } else if (
       action === Action.Place &&
-      canPlace(cells, hand, { player, token: activeToken }, index)
+      canPlace(cells, hand, { player, token: selectedToken }, index)
     ) {
-      placePiece(activeToken, index);
+      placePiece(selectedToken, index);
       transitions.toNone();
     } else if (
       action === Action.Move &&
-      canMove(cells, player, activeIndex, index)
+      canMove(cells, player, selectedIndex, index)
     ) {
-      movePiece(activeIndex, index);
+      movePiece(selectedIndex, index);
       transitions.toNone();
     }
   };
@@ -88,9 +88,9 @@ const Controller = ({
       <Grid
         cells={cells}
         highlighted={highlighted}
-        onCellClick={enabled ? onCellClick : (_) => {}}
+        onCellClick={isActive ? onCellClick : (_) => {}}
       />
-      {enabled && <TokenSelector hand={hand} onTokenSelect={onTokenSelect} />}
+      {isActive && <TokenSelector hand={hand} onTokenSelect={onTokenSelect} />}
     </div>
   );
 };

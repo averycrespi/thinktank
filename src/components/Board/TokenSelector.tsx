@@ -6,7 +6,7 @@ interface TokenSelectorProps {
   onTokenSelect(token: Token): void;
 }
 
-/** Render the token selector. */
+/** Render a token selector. */
 const TokenSelector = ({ hand, onTokenSelect }: TokenSelectorProps) => {
   const div = [];
   const tokens = [

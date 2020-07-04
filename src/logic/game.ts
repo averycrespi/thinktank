@@ -60,6 +60,7 @@ const onTurnEnd = (G: G, ctx: Ctx) => {
   // First pass: capture infiltrated cells.
   for (let index = 0; index < G.cells.length; index++) {
     const piece = G.cells[index];
+    // A piece can only be infiltrated once per turn.
     if (piece && canBeInfiltrated(G.cells, index)) {
       piece.player = opponentOf(piece.player);
     }
