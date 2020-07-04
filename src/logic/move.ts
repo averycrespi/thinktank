@@ -1,4 +1,4 @@
-import { Cells, Player, Token } from ".";
+import { Cell, Player, Token } from ".";
 import {
   adjacentTo,
   diagonallyAdjacentTo,
@@ -35,7 +35,7 @@ const reachableFrom = (token: Token, index: number): Set<number> => {
 
 /** Check if a movement is possible. */
 export const canMove = (
-  cells: Cells,
+  cells: Array<Cell>,
   player: Player,
   srcIndex: number,
   destIndex: number
@@ -70,7 +70,7 @@ export const canMove = (
 
 /** Find all possible movements from an index. */
 export const possibleMovements = (
-  cells: Cells,
+  cells: Array<Cell>,
   player: Player,
   srcIndex: number
 ): Set<number> => {

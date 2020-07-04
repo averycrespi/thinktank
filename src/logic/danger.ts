@@ -1,4 +1,4 @@
-import { Cells, Token } from ".";
+import { Cell, Token } from ".";
 import {
   GRID_HEIGHT,
   GRID_WIDTH,
@@ -21,7 +21,7 @@ const SHOOTABLE = new Set<Token>([
 
 /** Check if a piece is in the line of fire of an enemy tank. */
 const inLineOfFire = (
-  cells: Cells,
+  cells: Array<Cell>,
   destIndex: number,
   srcIndices: Array<number>,
   tank: Token.UpTank | Token.DownTank | Token.RightTank | Token.LeftTank
@@ -44,7 +44,7 @@ const inLineOfFire = (
 };
 
 /** Check if a piece can be shot from below. */
-const canBeShotFromBelow = (cells: Cells, index: number): boolean => {
+const canBeShotFromBelow = (cells: Array<Cell>, index: number): boolean => {
   const { x, y: destY } = indexToCoords(index);
   const srcIndices = new Array<number>();
   for (let y = destY + 1; y < GRID_HEIGHT; y++) {
@@ -54,7 +54,7 @@ const canBeShotFromBelow = (cells: Cells, index: number): boolean => {
 };
 
 /** Check if a piece can be shot from above. */
-const canBeShotFromAbove = (cells: Cells, index: number): boolean => {
+const canBeShotFromAbove = (cells: Array<Cell>, index: number): boolean => {
   const { x, y: destY } = indexToCoords(index);
   const srcIndices = new Array<number>();
   for (let y = destY - 1; y >= 0; y--) {
@@ -64,7 +64,7 @@ const canBeShotFromAbove = (cells: Cells, index: number): boolean => {
 };
 
 /** Check if a piece can be shot from the right. */
-const canBeShotFromRight = (cells: Cells, index: number): boolean => {
+const canBeShotFromRight = (cells: Array<Cell>, index: number): boolean => {
   const { x: destX, y } = indexToCoords(index);
   const srcIndices = new Array<number>();
   for (let x = destX + 1; x < GRID_WIDTH; x++) {
@@ -74,7 +74,7 @@ const canBeShotFromRight = (cells: Cells, index: number): boolean => {
 };
 
 /** Check if a piece can be shot from the left. */
-const canBeShotFromLeft = (cells: Cells, index: number): boolean => {
+const canBeShotFromLeft = (cells: Array<Cell>, index: number): boolean => {
   const { x: destX, y } = indexToCoords(index);
   const srcIndices = new Array<number>();
   for (let x = destX - 1; x >= 0; x--) {
@@ -84,7 +84,7 @@ const canBeShotFromLeft = (cells: Cells, index: number): boolean => {
 };
 
 /** Check if a piece can be shot. */
-export const canBeShot = (cells: Cells, index: number): boolean =>
+export const canBeShot = (cells: Array<Cell>, index: number): boolean =>
   canBeShotFromBelow(cells, index) ||
   canBeShotFromAbove(cells, index) ||
   canBeShotFromRight(cells, index) ||
@@ -100,7 +100,10 @@ const INFILTRATABLE = new Set<Token>([
 ]);
 
 /** Check if a piece can be infiltrated. */
-export const canBeInfiltrated = (cells: Cells, index: number): boolean => {
+export const canBeInfiltrated = (
+  cells: Array<Cell>,
+  index: number
+): boolean => {
   const dest = cells[index];
   if (!dest || !INFILTRATABLE.has(dest.token)) {
     return false; // Cell is empty or piece is not infiltratable.
@@ -132,7 +135,7 @@ const EXPLODABLE = new Set<Token>([
 ]);
 
 /** Check if a piece can be exploded. */
-export const canBeExploded = (cells: Cells, index: number): boolean => {
+export const canBeExploded = (cells: Array<Cell>, index: number): boolean => {
   const dest = cells[index];
   if (!dest || !EXPLODABLE.has(dest.token)) {
     return false; // Cell is empty or piece is not explodable.
@@ -147,7 +150,7 @@ export const canBeExploded = (cells: Cells, index: number): boolean => {
 };
 
 /** Check if a piece can explode an enemy piece. */
-export const canExplodeEnemy = (cells: Cells, index: number): boolean => {
+export const canExplodeEnemy = (cells: Array<Cell>, index: number): boolean => {
   const mine = cells[index];
   if (!mine || mine.token !== Token.Mine) {
     return false; // Cell is empty or piece is not a mine.
@@ -163,7 +166,10 @@ export const canExplodeEnemy = (cells: Cells, index: number): boolean => {
 };
 
 /** Check if a piece can explode a friendly piece. */
-export const canExplodeFriendly = (cells: Cells, index: number): boolean => {
+export const canExplodeFriendly = (
+  cells: Array<Cell>,
+  index: number
+): boolean => {
   const mine = cells[index];
   if (!mine || !canExplodeEnemy(cells, index)) {
     return false; // Cell is empty or piece cannot explode.
@@ -178,7 +184,7 @@ export const canExplodeFriendly = (cells: Cells, index: number): boolean => {
 };
 
 /** Check if a piece or any friendly pieces are in danger. */
-export const inDanger = (cells: Cells, index: number): boolean => {
+export const inDanger = (cells: Array<Cell>, index: number): boolean => {
   const piece = cells[index];
   if (piece && piece.token === Token.Mine) {
     // Mines are allowed to explode themselves, but not friendly pieces.

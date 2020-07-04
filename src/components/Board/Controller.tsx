@@ -1,4 +1,4 @@
-import { Cells, Player, Token } from "../../logic";
+import { Cell, Player, Token } from "../../logic";
 import React, { useState } from "react";
 import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
@@ -20,7 +20,7 @@ const DEFAULT_INDEX = -1;
 
 interface ControllerProps {
   readonly enabled: boolean;
-  readonly cells: Cells;
+  readonly cells: Array<Cell>;
   readonly hand: Array<Token>;
   readonly player: Player;
   placePiece(token: Token, index: number): void;

@@ -33,9 +33,10 @@ export interface Piece {
   player: Player;
 }
 
-// Defines types required by the game state.
-// These should be maps, but boardgame.io requires state to be serializable.
-export type Cells = Array<Piece | null>;
+/** Represents a cell in the grid. */
+export type Cell = Piece | null;
+
+/** Represents the hand of a player. */
 export type Hand = Array<Token>;
 
 /** Create a new hand. */
@@ -88,11 +89,8 @@ export const removeFromHand = (hand: Array<Token>, token: Token) => {
 
 /** Represents the game state. Must be serializable. */
 export interface G {
-  cells: Array<Piece | null>;
-  hands: {
-    [Player.Red]: Array<Token>;
-    [Player.Blue]: Array<Token>;
-  };
+  cells: Array<Cell>;
+  hands: { [Player.Red]: Hand; [Player.Blue]: Hand };
 }
 
 /** Represents the result of a game. */

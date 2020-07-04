@@ -1,11 +1,11 @@
-import { Cells, Piece, Player, Token } from ".";
+import { Cell, Piece, Player, Token } from ".";
 import { GRID_SIZE, isBlueSpawn, isRedSpawn } from "./grid";
 
 import { inDanger } from "./danger";
 
 /** Check if a placement is possible. */
 export const canPlace = (
-  cells: Cells,
+  cells: Array<Cell>,
   hand: Array<Token>,
   { player, token }: Piece,
   index: number
@@ -37,7 +37,7 @@ export const canPlace = (
 
 /** Find all possible placements for a token. */
 export const possiblePlacements = (
-  cells: Cells,
+  cells: Array<Cell>,
   hand: Array<Token>,
   { player, token }: Piece
 ): Set<number> => {

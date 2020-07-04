@@ -6,12 +6,12 @@ import {
   isRedHome,
 } from "../../logic/grid";
 
-import { Cells } from "../../logic";
+import { Cell } from "../../logic";
 import GridPiece from "./GridPiece";
 import React from "react";
 
 interface GridProps {
-  readonly cells: Cells;
+  readonly cells: Array<Cell>;
   readonly highlighted: Set<number>;
   onCellClick(index: number): void;
 }
