@@ -23,12 +23,10 @@
     "@types/react-dom": "^16.9.0",
     "boardgame.io": "^0.39.14",
     "esm": "^3.2.25",
-    "jsonschema": "^1.2.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
-    "typescript": "~3.7.2",
-    "typescript-json-schema": "^0.42.0"
+    "typescript": "~3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -37,8 +35,7 @@
     "build:server": "tsc -p tsconfig.server.json",
     "run:server": "node -r esm build/server/server.js",
     "serve": "yarn build:server && yarn run:server",
-    "todo": "grep -r TODO src/",
-    "schema:room": "typescript-json-schema tsconfig.json Room --include=src/api/room.ts --required --out src/api/room.json"
+    "todo": "grep -r TODO src/"
   },
   "eslintConfig": {
     "extends": "react-app"
