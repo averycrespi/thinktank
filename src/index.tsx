@@ -1,23 +1,22 @@
-import Board from "./components/Board";
-import { Client } from "boardgame.io/react";
-import { Local } from "boardgame.io/multiplayer";
+import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+
 import React from "react";
 import ReactDOM from "react-dom";
-import { game } from "./logic/game";
+import routes from "./routes";
 
-// @ts-ignore
-const App = Client({ game, board: Board, multiplayer: Local() });
+const App = () => (
+  <Router>
+    <Switch>
+      {routes.map((r) => (
+        <Route path={r.path}>{r.component}</Route>
+      ))}
+    </Switch>
+  </Router>
+);
 
 ReactDOM.render(
   <React.StrictMode>
-    <div style={{ display: "flex" }}>
-      <div style={{ flex: "0 0 50%" }}>
-        <App playerID="0" />
-      </div>
-      <div style={{ flex: "1" }}>
-        <App playerID="1" />
-      </div>
-    </div>
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
