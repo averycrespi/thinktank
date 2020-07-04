@@ -1,6 +1,6 @@
 {
   "name": "thinktank",
-  "description": "Thinktank board game",
+  "description": "A board game inspired by Conundrum",
   "keywords": [
     "thinktank",
     "board game"
@@ -31,12 +31,12 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
     "test": "react-scripts test",
+    "build": "react-scripts build",
+    "start": "react-scripts start",
     "build:server": "tsc -p tsconfig.server.json",
-    "run:server": "node -r esm build/server/server.js",
-    "serve": "yarn build:server && yarn run:server",
+    "start:server": "node -r esm build/server/server.js",
+    "serve": "yarn build:server && yarn start:server",
     "todo": "grep -r TODO src/"
   },
   "eslintConfig": {
