@@ -1,5 +1,6 @@
 import React from "react";
 import { Token } from "../../logic";
+import TokenIcon from "./TokenIcon";
 
 interface TokenSelectorProps {
   readonly hand: Array<Token>;
@@ -27,7 +28,8 @@ const TokenSelector = ({ hand, onTokenSelect }: TokenSelectorProps) => {
         disabled={!hand.includes(token)}
         onClick={() => onTokenSelect(token)}
       >
-        {token + " (" + count + ")"}
+        <TokenIcon token={token} />
+        {" (" + count + ")"}
       </button>
     );
   }
