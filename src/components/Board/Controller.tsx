@@ -1,4 +1,4 @@
-import { Cell, Player, Token } from "../../logic";
+import { Cell, Player, Token, nameOf } from "../../logic";
 import React, { useState } from "react";
 import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
@@ -85,6 +85,7 @@ const Controller = ({
 
   return (
     <div id="controller">
+      <p>{nameOf(player)}'s turn</p>
       <Grid
         cells={cells}
         highlighted={highlighted}

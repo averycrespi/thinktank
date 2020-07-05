@@ -1,17 +1,19 @@
+import CreateMatch from "../CreateMatch";
 import { Link } from "react-router-dom";
 import React from "react";
 
-const Home = () => (
+interface HomeProps {
+  serverURL: string;
+}
+
+/** Render the home page. */
+const Home = ({ serverURL }: HomeProps) => (
   <div id="welcome">
     <h1>Thinktank</h1>
-    <ul>
-      <li>
-        <Link to="/sandbox">Sandbox</Link>
-      </li>
-      <li>
-        <Link to="/create">Create private match</Link>
-      </li>
-    </ul>
+    <Link to="/sandbox">
+      <button>Sandbox mode</button>
+    </Link>
+    <CreateMatch serverURL={serverURL} />
   </div>
 );
 

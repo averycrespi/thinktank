@@ -12,6 +12,7 @@ interface MultiplayerProps {
   credentials?: string;
 }
 
+/** Render a multiplayer game. */
 const Multiplayer = ({
   serverURL,
   matchID,
@@ -22,6 +23,8 @@ const Multiplayer = ({
     game,
     board: Board,
     multiplayer: SocketIO({ server: serverURL }),
+    numPlayers: 2,
+    debug: false,
   });
   return (
     <div id="remote">

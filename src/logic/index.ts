@@ -17,6 +17,16 @@ export enum Player {
   Blue = "1",
 }
 
+/** Return the name of a player. */
+export const nameOf = (player: Player): string => {
+  switch (player) {
+    case Player.Red:
+      return "Red";
+    case Player.Blue:
+      return "Blue";
+  }
+};
+
 /** Return the opponent of a player. */
 export const opponentOf = (player: Player): Player => {
   switch (player) {

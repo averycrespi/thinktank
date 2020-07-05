@@ -1,6 +1,6 @@
 import "../../styles/board.css";
 
-import { G, Player, Result } from "../../logic";
+import { G, Player, Result, nameOf } from "../../logic";
 
 import { BoardProps } from "boardgame.io";
 import Controller from "./Controller";
@@ -25,7 +25,7 @@ const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
         placePiece={moves.placePiece}
         movePiece={moves.movePiece}
       />
-      {gameover && <p>{gameover.winner + " wins!"}</p>}
+      {gameover && <p>{nameOf(gameover.winner) + " wins!"}</p>}
     </div>
   );
 };

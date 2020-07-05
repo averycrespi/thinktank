@@ -3,8 +3,9 @@ import { Client } from "boardgame.io/react";
 import React from "react";
 import { game } from "../../logic/game";
 
-const SandboxClient = Client({ game, board: Board });
+const SandboxClient = Client({ game, board: Board, debug: true });
 
+/** Render a sanbox game. */
 const Sandbox = () => (
   <div id="sandbox">
     <SandboxClient />

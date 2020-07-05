@@ -1,4 +1,4 @@
-import { Player, opponentOf } from "../logic";
+import { Player, nameOf, opponentOf } from "../logic";
 import {
   Visibility,
   createMatch,
@@ -38,36 +38,29 @@ test("list contains match", async () => {
 });
 
 const player = Player.Red;
-const playerName = "Alice";
 let playerCredentials: string;
 test("player joins match ", async () => {
-  playerCredentials = await joinMatch(serverURL, matchID, player, playerName);
+  playerCredentials = await joinMatch(serverURL, matchID, player);
 });
 
 test("player in match", async () => {
   const match = await getMatch(serverURL, matchID);
   expect(match.matchID).toBe(matchID);
-  expect(match.players.get(player)).toBe(playerName);
-  expect(match.players.get(opponentOf(player))).toBe(null);
+  expect(match.players.get(player)).toBe(nameOf(player));
+  expect(match.players.get(opponentOf(player))).toBeNull();
 });
 
 const opponent = opponentOf(player);
-const opponentName = "Bob";
 let opponentCredentials: string;
 test("opponent joins match", async () => {
-  opponentCredentials = await joinMatch(
-    serverURL,
-    matchID,
-    opponent,
-    opponentName
-  );
+  opponentCredentials = await joinMatch(serverURL, matchID, opponent);
 });
 
 test("player and opponent in match", async () => {
   const match = await getMatch(serverURL, matchID);
   expect(match.matchID).toBe(matchID);
-  expect(match.players.get(player)).toBe(playerName);
-  expect(match.players.get(opponentOf(player))).toBe(opponentName);
+  expect(match.players.get(player)).toBe(nameOf(player));
+  expect(match.players.get(opponentOf(player))).toBe(nameOf(opponent));
 });
 
 test("player leaves match", async () => {
@@ -77,8 +70,8 @@ test("player leaves match", async () => {
 test("opponent in match", async () => {
   const match = await getMatch(serverURL, matchID);
   expect(match.matchID).toBe(matchID);
-  expect(match.players.get(player)).toBe(null);
-  expect(match.players.get(opponentOf(player))).toBe(opponentName);
+  expect(match.players.get(player)).toBeNull();
+  expect(match.players.get(opponentOf(player))).toBe(nameOf(opponent));
 });
 
 test("opponent leaves match", async () => {

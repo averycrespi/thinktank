@@ -7,13 +7,9 @@
  *  - playerID is treated as a number, not a string.
  */
 
-import { Player } from "../logic";
-import { game } from "../logic/game";
+import { Player, nameOf } from "../logic";
 
-const headers = {
-  Accept: "application/json",
-  "Content-Type": "application/json",
-};
+import { game } from "../logic/game";
 
 /** Represents a match. */
 export interface Match {
@@ -26,6 +22,12 @@ export enum Visibility {
   PRIVATE,
   PUBLIC,
 }
+
+/** Defines headers for POST requests. */
+const headers = {
+  Accept: "application/json",
+  "Content-Type": "application/json",
+};
 
 /** Create a match and return the match ID. */
 export const createMatch = async (
@@ -55,13 +57,12 @@ export const createMatch = async (
 export const joinMatch = async (
   serverURL: string,
   matchID: string,
-  player: Player,
-  name: string
+  player: Player
 ): Promise<string> => {
   const resp = await fetch(`${serverURL}/games/${game.name}/${matchID}/join`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ playerID: player, playerName: name }),
+    body: JSON.stringify({ playerID: player, playerName: nameOf(player) }),
   });
   if (!resp.ok) {
     throw new Error("failed to join match: " + (await resp.text()));
@@ -91,7 +92,7 @@ export const leaveMatch = async (
   }
 };
 
-/** List the available match IDs. */
+/** List the IDs of all public matches. */
 export const listMatchIDs = async (
   serverURL: string
 ): Promise<Array<string>> => {

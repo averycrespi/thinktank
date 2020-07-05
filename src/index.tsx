@@ -1,4 +1,9 @@
-import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
+import {
+  Redirect,
+  Route,
+  BrowserRouter as Router,
+  Switch,
+} from "react-router-dom";
 
 import CreateMatch from "./components/CreateMatch";
 import Home from "./components/Home";
@@ -18,18 +23,18 @@ const App = () => (
       <Route exact path="/create">
         <CreateMatch serverURL={serverURL} />
       </Route>
-      <Route exact path="/join/:match/:player">
+      <Route exact path="/join/:matchID/:player">
         <JoinMatch serverURL={serverURL} />
       </Route>
       <Route exact path="/">
-        <Home />
+        <Home serverURL={serverURL} />
       </Route>
       <Route path="*">
-        <p>Not found</p>
+        <Redirect to="/" />
       </Route>
     </Switch>
   </Router>
-); // TODO: add 404 page
+);
 
 ReactDOM.render(
   <React.StrictMode>
