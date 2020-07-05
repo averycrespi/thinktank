@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Visibility, createMatch } from "../../api/match";
 
-// TODO: deduplicate serverURL
-const serverURL = process.env.REACT_APP_URL ?? "http://localhost:8000";
+interface CreateMatchProps {
+  serverURL: string;
+}
 
-/** Render the create match page. */
-const CreateMatch = () => {
+const CreateMatch = ({ serverURL }: CreateMatchProps) => {
   const [matchID, setMatchID] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     createMatch(serverURL, Visibility.PRIVATE)
       .then((id) => setMatchID(id))
-      .catch((err) => setMatchID(err.toString()));
-  }, []);
+      .catch((err) => setError(err.toString()));
+  }, [serverURL]);
 
-  return <p>{matchID || "Creating match..."}</p>;
+  return <p>{matchID || error || "Creating match..."}</p>;
 };
 
 export default CreateMatch;

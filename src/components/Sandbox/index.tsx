@@ -5,7 +5,6 @@ import { game } from "../../logic/game";
 
 const SandboxClient = Client({ game, board: Board });
 
-/** Render a sandbox game. */
 const Sandbox = () => (
   <div id="sandbox">
     <SandboxClient />
