@@ -21,15 +21,24 @@ export interface Match {
   players: Map<Player, string | null>;
 }
 
+/** Represents the visibility of a match. */
+export enum Visibility {
+  PRIVATE,
+  PUBLIC,
+}
+
 /** Create a match and return the match ID. */
 export const createMatch = async (
   serverURL: string,
-  unlisted: boolean = false
+  visibility: Visibility
 ): Promise<string> => {
   const resp = await fetch(`${serverURL}/games/${game.name}/create`, {
     method: "POST",
     headers,
-    body: JSON.stringify({ numPlayers: 2, unlisted }),
+    body: JSON.stringify({
+      numPlayers: 2,
+      unlisted: visibility === Visibility.PRIVATE,
+    }),
   });
   if (!resp.ok) {
     throw new Error("failed to create match: " + (await resp.text()));

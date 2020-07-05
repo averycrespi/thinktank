@@ -1,5 +1,6 @@
 import { Player, opponentOf } from "../logic";
 import {
+  Visibility,
   createMatch,
   getMatch,
   joinMatch,
@@ -27,8 +28,8 @@ test("list is empty", async () => {
 });
 
 let matchID: string;
-test("create match", async () => {
-  matchID = await createMatch(serverURL);
+test("create public match", async () => {
+  matchID = await createMatch(serverURL, Visibility.PUBLIC);
 });
 
 test("list contains match", async () => {

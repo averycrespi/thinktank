@@ -14,7 +14,7 @@ const LocalMultiplayerClient = Client({
 
 /** Render a local multiplayer game. */
 const LocalMultiplayer = () => (
-  <div id="local-multiplayer" style={{ display: "flex" }}>
+  <div id="local" style={{ display: "flex" }}>
     <div style={{ flex: "0 0 50%" }}>
       <LocalMultiplayerClient playerID={Player.Red} />
     </div>
