@@ -1,5 +1,5 @@
 # Redirect all pages to SPA root.
 [[redirects]]
-    from = "/*"
-    to = "/index.html
-    status = 200
+from = "/*"
+status = 200
+to = "/index.html"
