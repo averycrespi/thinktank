@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import Home from "./components/Home";
+import HowToPlay from "./components/HowToPlay";
 import JoinMatch from "./components/JoinMatch";
 import React from "react";
 import ReactDOM from "react-dom";
@@ -19,6 +20,9 @@ const serverURL = process.env.REACT_APP_URL ?? "http://localhost:8000";
 const App = () => (
   <Router>
     <Switch>
+      <Route exact path="/help">
+        <HowToPlay />
+      </Route>
       <Route exact path="/sandbox">
         <Sandbox />
       </Route>

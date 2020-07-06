@@ -4,7 +4,7 @@ import React from "react";
 /** Takes the user back to the home page. */
 const BackToHome = () => (
   <div className="row flex-center">
-    <div className="col">
+    <div className="col no-padding">
       <Link to="/" className="no-underline">
         <button>Back to home</button>
       </Link>
