@@ -1,0 +1,39 @@
+/* Colours */
+
+.red {
+  color: #f00;
+}
+
+.bg-light-red {
+  background: #ff000060;
+}
+
+.bg-lighter-red {
+  background: #ff000030;
+}
+
+.blue {
+  color: #00f;
+}
+
+.bg-light-blue {
+  background: #0000ff60;
+}
+
+.bg-lighter-blue {
+  background: #0000ff30;
+}
+
+.bg-light-gray {
+  background: #bbb;
+}
+
+/* Specific */
+
+.cell {
+  border: 1px solid #777;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  text-align: center;
+}

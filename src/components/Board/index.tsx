@@ -1,5 +1,3 @@
-import "../../styles/board.css";
-
 import { G, Player, Result, nameOf } from "../../logic";
 
 import { BoardProps } from "boardgame.io";
@@ -16,7 +14,7 @@ const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
   const gameover = ctx.gameover as Result;
 
   return (
-    <div id="board">
+    <div>
       <Controller
         isActive={isActive}
         cells={G.cells}

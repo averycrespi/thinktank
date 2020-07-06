@@ -27,14 +27,12 @@ const Multiplayer = ({
     debug: false,
   });
   return (
-    <div id="remote">
-      <MultiplayerClient
-        gameID={matchID}
-        playerID={player}
-        credentials={credentials}
-        debug={false}
-      />
-    </div>
+    <MultiplayerClient
+      gameID={matchID}
+      playerID={player}
+      credentials={credentials}
+      debug={false}
+    />
   ); // TODO: add loading component
 };
 

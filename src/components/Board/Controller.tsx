@@ -84,7 +84,7 @@ const Controller = ({
   };
 
   return (
-    <div id="controller">
+    <div>
       <p>{nameOf(player)}'s turn</p>
       <Grid
         cells={cells}

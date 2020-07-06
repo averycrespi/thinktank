@@ -24,7 +24,7 @@ const CreateMatch = ({ serverURL }: CreateMatchProps) => {
   };
 
   return (
-    <div id="create">
+    <div>
       <button disabled={clicked} onClick={onClick}>
         Create private match
       </button>

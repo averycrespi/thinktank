@@ -23,16 +23,27 @@ const Grid = ({ cells, highlighted, onCellClick }: GridProps) => {
     let tr = [];
     for (let x = 0; x < GRID_WIDTH; x++) {
       const index = coordsToIndex({ x, y });
-      const classes = [
-        "cell",
-        isRedHome(index) ? "red" : "",
-        isBlueHome(index) ? "blue" : "",
-        highlighted.has(index) ? "highlighted" : "",
-      ];
+
+      let bgColor = "";
+      const isRed = isRedHome(index);
+      const isBlue = isBlueHome(index);
+      const isHighlighted = highlighted.has(index);
+      if (isRed && isHighlighted) {
+        bgColor = "bg-light-red";
+      } else if (isRed) {
+        bgColor = "bg-lighter-red";
+      } else if (isBlue && isHighlighted) {
+        bgColor = "bg-light-blue";
+      } else if (isBlue) {
+        bgColor = "bg-lighter-blue";
+      } else if (isHighlighted) {
+        bgColor = "bg-light-gray";
+      }
+
       tr.push(
         <td
           key={index}
-          className={classes.join(" ")}
+          className={`cell ${bgColor}`}
           onClick={() => onCellClick(index)}
         >
           <GridCell cell={cells[index]} />
@@ -42,7 +53,7 @@ const Grid = ({ cells, highlighted, onCellClick }: GridProps) => {
     tbody.push(<tr key={y}>{tr}</tr>);
   }
   return (
-    <table id="grid">
+    <table>
       <tbody>{tbody}</tbody>
     </table>
   );

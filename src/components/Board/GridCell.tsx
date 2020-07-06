@@ -12,13 +12,14 @@ const GridCell = ({ cell }: GridCellProps) => {
   if (!cell) {
     return null;
   }
-  const classes = [
-    "piece",
-    cell.player === Player.Red ? "red" : "",
-    cell.player === Player.Blue ? "blue" : "",
-  ];
+  let color = "";
+  if (cell.player === Player.Red) {
+    color = "red";
+  } else if (cell.player === Player.Blue) {
+    color = "blue";
+  }
   return (
-    <span className={classes.join(" ")}>
+    <span className={color}>
       <TokenIcon token={cell.token} />
     </span>
   );

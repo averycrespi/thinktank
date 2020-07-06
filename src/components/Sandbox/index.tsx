@@ -7,7 +7,7 @@ const SandboxClient = Client({ game, board: Board, debug: true });
 
 /** Render a sanbox game. */
 const Sandbox = () => (
-  <div id="sandbox">
+  <div>
     <SandboxClient />
   </div>
 );

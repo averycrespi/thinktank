@@ -8,7 +8,7 @@ interface HomeProps {
 
 /** Render the home page. */
 const Home = ({ serverURL }: HomeProps) => (
-  <div id="welcome">
+  <div>
     <h1>Thinktank</h1>
     <Link to="/sandbox">
       <button>Sandbox mode</button>

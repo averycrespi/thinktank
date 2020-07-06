@@ -31,7 +31,7 @@ const JoinMatch = ({ serverURL }: JoinMatchProps) => {
   )}`;
 
   return (
-    <div id="join">
+    <div>
       {credentials && (
         <Multiplayer
           serverURL={serverURL}

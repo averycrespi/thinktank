@@ -1,3 +1,5 @@
+import "./styles/thinktank.css";
+
 import {
   Redirect,
   Route,

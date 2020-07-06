@@ -6,13 +6,13 @@ import {
   faCaretUp,
   faHome,
   faPlus,
+  faShieldAlt,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Token } from "../../logic";
-import { faCircle } from "@fortawesome/free-regular-svg-icons";
 
 interface TokenIconProps {
   token: Token;
@@ -22,7 +22,7 @@ interface TokenIconProps {
 const TokenIcon = ({ token }: TokenIconProps) => {
   switch (token) {
     case Token.Blocker:
-      return <FontAwesomeIcon icon={faCircle} />;
+      return <FontAwesomeIcon icon={faShieldAlt} />;
     case Token.UpTank:
       return <FontAwesomeIcon icon={faCaretUp} />;
     case Token.DownTank:
