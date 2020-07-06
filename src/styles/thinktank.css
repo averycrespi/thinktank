@@ -1,5 +1,3 @@
-/* Colours */
-
 .red {
   color: #f00;
 }
@@ -28,12 +26,12 @@
   background: #bbb;
 }
 
-/* Specific */
+/* Disable the underline for a React Router link. */
+a.no-underline {
+  background-image: none;
+}
 
-.cell {
-  border: 1px solid #777;
-  width: 2em;
-  height: 2em;
-  line-height: 2em;
-  text-align: center;
+/* Disable padding for a Paper CSS column. */
+.col.no-padding {
+  padding: 0;
 }

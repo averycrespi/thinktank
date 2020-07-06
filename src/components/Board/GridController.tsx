@@ -1,4 +1,4 @@
-import { Cell, Player, Token, nameOf } from "../../logic";
+import { Cell, Player, Token } from "../../logic";
 import React, { useState } from "react";
 import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
@@ -18,7 +18,7 @@ const DEFAULT_HIGHLIGHTED = new Set<number>();
 const DEFAULT_TOKEN = Token.Blocker;
 const DEFAULT_INDEX = -1;
 
-interface ControllerProps {
+interface GridControllerProps {
   readonly isActive: boolean;
   readonly cells: Array<Cell>;
   readonly hand: Array<Token>;
@@ -27,15 +27,15 @@ interface ControllerProps {
   movePiece(srcIndex: number, destIndex: number): void;
 }
 
-/** Render a game controller. */
-const Controller = ({
+/** Render a grid controller. */
+const GridController = ({
   isActive,
   cells,
   hand,
   player,
   placePiece,
   movePiece,
-}: ControllerProps) => {
+}: GridControllerProps) => {
   const [action, setAction] = useState(DEFAULT_ACTION);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
   const [selectedToken, setSelectedToken] = useState(DEFAULT_TOKEN);
@@ -85,15 +85,24 @@ const Controller = ({
 
   return (
     <div>
-      <p>{nameOf(player)}'s turn</p>
-      <Grid
-        cells={cells}
-        highlighted={highlighted}
-        onCellClick={isActive ? onCellClick : (_) => {}}
-      />
-      {isActive && <TokenSelector hand={hand} onTokenSelect={onTokenSelect} />}
+      <div className="row flex-center">
+        <div className="col no-padding">
+          <Grid
+            cells={cells}
+            highlighted={highlighted}
+            onCellClick={isActive ? onCellClick : (_) => {}}
+          />
+        </div>
+      </div>
+      <div className="row flex-center">
+        <div className="col no-padding">
+          {isActive && (
+            <TokenSelector hand={hand} onTokenSelect={onTokenSelect} />
+          )}
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Controller;
+export default GridController;

@@ -1,9 +1,11 @@
-import { Link, useParams } from "react-router-dom";
-import { Player, nameOf, opponentOf } from "../../logic";
 import React, { useEffect, useState } from "react";
 
+import BackToHome from "../BackToHome";
 import Multiplayer from "../Multiplayer";
+import { Player } from "../../logic";
+import ShareLink from "./ShareLink";
 import { joinMatch } from "../../api/match";
+import { useParams } from "react-router-dom";
 
 interface JoinMatchProps {
   serverURL: string;
@@ -26,28 +28,20 @@ const JoinMatch = ({ serverURL }: JoinMatchProps) => {
       .catch((err) => setError(err.toString()));
   }, [serverURL, matchID, player]);
 
-  const shareURL = `${window.location.origin}/join/${matchID}/${opponentOf(
-    player
-  )}`;
-
   return (
-    <div>
-      {credentials && (
-        <Multiplayer
-          serverURL={serverURL}
-          matchID={matchID}
-          player={player}
-          credentials={credentials}
-        />
-      )}
-      {error && <p>{error}</p>}
-      <div>
-        {credentials && !error && (
-          <a href={shareURL}>Click to play as {nameOf(opponentOf(player))}</a>
+    <div className="row flex-center">
+      <div className="col no-padding">
+        {credentials && (
+          <Multiplayer
+            serverURL={serverURL}
+            matchID={matchID}
+            player={player}
+            credentials={credentials}
+          />
         )}
-      </div>
-      <div>
-        <Link to="/">Back to home</Link>
+        {error && <div className="alert alert-danger margin-top">{error}</div>}
+        {credentials && <ShareLink matchID={matchID} player={player} />}
+        {(credentials || error) && <BackToHome />}
       </div>
     </div>
   );

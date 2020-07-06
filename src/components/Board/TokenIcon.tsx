@@ -1,9 +1,9 @@
 import {
+  faArrowDown,
+  faArrowLeft,
+  faArrowRight,
+  faArrowUp,
   faBomb,
-  faCaretDown,
-  faCaretLeft,
-  faCaretRight,
-  faCaretUp,
   faHome,
   faPlus,
   faShieldAlt,
@@ -24,13 +24,13 @@ const TokenIcon = ({ token }: TokenIconProps) => {
     case Token.Blocker:
       return <FontAwesomeIcon icon={faShieldAlt} />;
     case Token.UpTank:
-      return <FontAwesomeIcon icon={faCaretUp} />;
+      return <FontAwesomeIcon icon={faArrowUp} />;
     case Token.DownTank:
-      return <FontAwesomeIcon icon={faCaretDown} />;
+      return <FontAwesomeIcon icon={faArrowDown} />;
     case Token.LeftTank:
-      return <FontAwesomeIcon icon={faCaretLeft} />;
+      return <FontAwesomeIcon icon={faArrowLeft} />;
     case Token.RightTank:
-      return <FontAwesomeIcon icon={faCaretRight} />;
+      return <FontAwesomeIcon icon={faArrowRight} />;
     case Token.OrthogonalInfiltrator:
       return <FontAwesomeIcon icon={faPlus} />;
     case Token.DiagonalInfiltrator:

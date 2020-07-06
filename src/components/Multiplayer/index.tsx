@@ -27,13 +27,17 @@ const Multiplayer = ({
     debug: false,
   });
   return (
-    <MultiplayerClient
-      gameID={matchID}
-      playerID={player}
-      credentials={credentials}
-      debug={false}
-    />
-  ); // TODO: add loading component
+    <div className="row flex-center">
+      <div className="col-4">
+        <MultiplayerClient
+          gameID={matchID}
+          playerID={player}
+          credentials={credentials}
+          debug={false}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default Multiplayer;

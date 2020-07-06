@@ -1,4 +1,5 @@
 import "./styles/thinktank.css";
+import "../node_modules/papercss/dist/paper.min.css";
 
 import {
   Redirect,
@@ -7,7 +8,6 @@ import {
   Switch,
 } from "react-router-dom";
 
-import CreateMatch from "./components/CreateMatch";
 import Home from "./components/Home";
 import JoinMatch from "./components/JoinMatch";
 import React from "react";
@@ -21,9 +21,6 @@ const App = () => (
     <Switch>
       <Route exact path="/sandbox">
         <Sandbox />
-      </Route>
-      <Route exact path="/create">
-        <CreateMatch serverURL={serverURL} />
       </Route>
       <Route exact path="/join/:matchID/:player">
         <JoinMatch serverURL={serverURL} />

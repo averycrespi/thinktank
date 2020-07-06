@@ -1,7 +1,7 @@
 import { G, Player, Result, nameOf } from "../../logic";
 
 import { BoardProps } from "boardgame.io";
-import Controller from "./Controller";
+import GridController from "./GridController";
 import React from "react";
 
 interface LocalBoardProps extends BoardProps {
@@ -15,15 +15,27 @@ const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
 
   return (
     <div>
-      <Controller
-        isActive={isActive}
-        cells={G.cells}
-        hand={G.hands[player]}
-        player={player}
-        placePiece={moves.placePiece}
-        movePiece={moves.movePiece}
-      />
-      {gameover && <p>{nameOf(gameover.winner) + " wins!"}</p>}
+      <div className="row flex-center">
+        <div className="col no-padding">
+          {gameover ? (
+            <h4>{nameOf(gameover.winner) + " wins!"}</h4>
+          ) : (
+            <h4>{`${nameOf(player)}'s turn`}</h4>
+          )}
+        </div>
+      </div>
+      <div className="row flex-center">
+        <div className="col no-padding">
+          <GridController
+            isActive={isActive}
+            cells={G.cells}
+            hand={G.hands[player]}
+            player={player}
+            placePiece={moves.placePiece}
+            movePiece={moves.movePiece}
+          />
+        </div>
+      </div>
     </div>
   );
 };
