@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { loadCredentials, saveCredentials } from "../../api/storage";
 
 import BackToHome from "../BackToHome";
 import Multiplayer from "../Multiplayer";
@@ -23,9 +24,17 @@ const JoinMatch = ({ serverURL }: JoinMatchProps) => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    joinMatch(serverURL, matchID, player)
-      .then((creds) => setCredentials(creds))
-      .catch((err) => setError(err.toString()));
+    const creds = loadCredentials(matchID, player);
+    if (creds) {
+      setCredentials(creds);
+    } else {
+      joinMatch(serverURL, matchID, player)
+        .then((creds) => {
+          saveCredentials(matchID, player, creds);
+          setCredentials(creds);
+        })
+        .catch((err) => setError(err.toString()));
+    }
   }, [serverURL, matchID, player]);
 
   return (
