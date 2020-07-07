@@ -1,4 +1,5 @@
 import CreateMatch from "./CreateMatch";
+import Credits from "./Credits";
 import OpenHowToPlay from "./OpenHowToPlay";
 import OpenSandbox from "./OpenSandbox";
 import React from "react";
@@ -17,6 +18,7 @@ const Home = ({ serverURL }: HomeProps) => (
       <OpenHowToPlay />
       <OpenSandbox />
       <CreateMatch serverURL={serverURL} />
+      <Credits />
     </div>
   </div>
 );
