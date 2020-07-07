@@ -6,10 +6,11 @@ Requires [Node](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/).
 
 ```sh
 git clone https://github.com/averycrespi/thinktank.git && cd thinktank
-yarn start  # Runs the client in development mode on localhost:3000
-yarn test   # Launches the interactive test runner
-yarn build  # Builds the client for production
-yarn serve  # Runs the server on localhost:8000
+yarn        # Install dependencies
+yarn start  # Run the client in development mode on localhost:3000
+yarn test   # Launch the interactive test runner
+yarn build  # Build the client for production
+yarn serve  # Run the server on localhost:8000
 ```
 
 **Warning**: When running on `localhost`, you may experience errors related to [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
@@ -50,7 +51,6 @@ thinktank-server.example.com {
     }
 }
 ```
-
 
 ## Terminology
 
