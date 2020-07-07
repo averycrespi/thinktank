@@ -1,5 +1,6 @@
+import { Token, isTank } from "../../logic";
+
 import React from "react";
-import { Token } from "../../logic";
 import TokenIcon from "./TokenIcon";
 
 interface TokenSelectorProps {
@@ -26,12 +27,14 @@ const TokenSelector = ({
     Token.Mine,
   ];
   for (const token of tokens) {
+    // Tanks can be rotated, so never disable their buttons.
+    const disabled = !hand.includes(token) && !isTank(token);
     const count = hand.filter((t) => t === token).length;
     div.push(
       <button
         key={token}
+        disabled={disabled}
         className={selected === token ? "btn-primary" : ""}
-        disabled={!hand.includes(token)}
         onClick={() => onTokenSelect(token)}
       >
         <TokenIcon token={token} />

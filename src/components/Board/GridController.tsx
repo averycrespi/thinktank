@@ -2,15 +2,15 @@ import { Cell, Player, Token } from "../../logic";
 import React, { useState } from "react";
 import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
+import { canRotate, possibleRotations } from "../../logic/rotate";
 
 import Grid from "./Grid";
 import TokenSelector from "./TokenSelector";
 
 enum Action {
   None,
-  Place,
+  PlaceOrRotate,
   Move,
-  Rotate,
 }
 
 const DEFAULT_ACTION = Action.None;
@@ -25,6 +25,7 @@ interface GridControllerProps {
   readonly player: Player;
   placePiece(token: Token, index: number): void;
   movePiece(srcIndex: number, destIndex: number): void;
+  rotatePiece(token: Token, index: number): void;
 }
 
 /** Render a grid controller. */
@@ -35,6 +36,7 @@ const GridController = ({
   player,
   placePiece,
   movePiece,
+  rotatePiece,
 }: GridControllerProps) => {
   const [action, setAction] = useState(DEFAULT_ACTION);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
@@ -48,9 +50,14 @@ const GridController = ({
       setSelectedToken(DEFAULT_TOKEN);
       setSelectedIndex(DEFAULT_INDEX);
     },
-    toPlace: (token: Token) => {
-      setAction(Action.Place);
-      setHighlighted(possiblePlacements(cells, hand, { player, token }));
+    toPlaceOrRotate: (token: Token) => {
+      setAction(Action.PlaceOrRotate);
+      setHighlighted(
+        new Set([
+          ...possiblePlacements(cells, hand, { player, token }),
+          ...possibleRotations(cells, { player, token }),
+        ])
+      );
       setSelectedToken(token);
       setSelectedIndex(DEFAULT_INDEX);
     },
@@ -62,14 +69,20 @@ const GridController = ({
     },
   };
 
-  const onTokenSelect = (token: Token) => transitions.toPlace(token);
+  const onTokenSelect = (token: Token) => transitions.toPlaceOrRotate(token);
 
   const onCellClick = (index: number) => {
     const p = cells[index];
-    if (index !== selectedIndex && p && p.player === player) {
+    if (
+      action === Action.PlaceOrRotate &&
+      canRotate(cells, { player, token: selectedToken }, index)
+    ) {
+      rotatePiece(selectedToken, index);
+      transitions.toNone();
+    } else if (index !== selectedIndex && p && p.player === player) {
       transitions.toMove(index);
     } else if (
-      action === Action.Place &&
+      action === Action.PlaceOrRotate &&
       canPlace(cells, hand, { player, token: selectedToken }, index)
     ) {
       placePiece(selectedToken, index);

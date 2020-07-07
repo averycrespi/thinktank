@@ -33,6 +33,7 @@ const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
             player={player}
             placePiece={moves.placePiece}
             movePiece={moves.movePiece}
+            rotatePiece={moves.rotatePiece}
           />
         </div>
       </div>

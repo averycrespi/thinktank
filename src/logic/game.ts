@@ -21,6 +21,7 @@ import {
 import { INVALID_MOVE } from "boardgame.io/core";
 import { canMove } from "./move";
 import { canPlace } from "./place";
+import { canRotate } from "./rotate";
 
 const setup = (): G => {
   let cells = new Array<Piece>(GRID_SIZE);
@@ -53,8 +54,14 @@ const movePiece = (G: G, ctx: Ctx, srcIndex: number, destIndex: number) => {
   }
 };
 
-const rotatePiece = (G: G, ctx: Ctx, token: Token, index: number) =>
-  INVALID_MOVE; // TODO: implement rotatePiece
+const rotatePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
+  const player = ctx.currentPlayer as Player;
+  if (canRotate(G.cells, { player, token }, index)) {
+    G.cells[index] = { player, token };
+  } else {
+    return INVALID_MOVE;
+  }
+};
 
 const onTurnEnd = (G: G, ctx: Ctx) => {
   // First pass: capture infiltrated cells.

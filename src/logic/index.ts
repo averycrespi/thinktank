@@ -11,6 +11,19 @@ export enum Token {
   Base = "@",
 }
 
+/** Check if a token is a tank. */
+export const isTank = (token: Token): boolean => {
+  switch (token) {
+    case Token.UpTank:
+    case Token.DownTank:
+    case Token.LeftTank:
+    case Token.RightTank:
+      return true;
+    default:
+      return false;
+  }
+};
+
 /** Represents a player. */
 export enum Player {
   Red = "0",
@@ -65,35 +78,24 @@ export const createHand = (): Array<Token> => {
 
 /** Add a token to a hand. */
 export const addToHand = (hand: Array<Token>, token: Token) => {
-  switch (token) {
-    case Token.UpTank:
-    case Token.DownTank:
-    case Token.LeftTank:
-    case Token.RightTank:
-      // In the context of a hand, all tanks are equivalent.
-      hand.push(Token.UpTank, Token.DownTank, Token.LeftTank, Token.RightTank);
-      break;
-    default:
-      hand.push(token);
+  if (isTank(token)) {
+    // In the context of a hand, all tanks are equivalent.
+    hand.push(Token.UpTank, Token.DownTank, Token.LeftTank, Token.RightTank);
+  } else {
+    hand.push(token);
   }
 };
 
 /** Remove a token from a hand. */
 export const removeFromHand = (hand: Array<Token>, token: Token) => {
-  switch (token) {
-    case Token.UpTank:
-    case Token.DownTank:
-    case Token.LeftTank:
-    case Token.RightTank:
-      // In the context of a hand, all tanks are equivalent.
-      hand.splice(hand.indexOf(Token.UpTank), 1);
-      hand.splice(hand.indexOf(Token.DownTank), 1);
-      hand.splice(hand.indexOf(Token.LeftTank), 1);
-      hand.splice(hand.indexOf(Token.RightTank), 1);
-      break;
-    default:
-      hand.splice(hand.indexOf(token), 1);
-      break;
+  if (isTank(token)) {
+    // In the context of a hand, all tanks are equivalent.
+    hand.splice(hand.indexOf(Token.UpTank), 1);
+    hand.splice(hand.indexOf(Token.DownTank), 1);
+    hand.splice(hand.indexOf(Token.LeftTank), 1);
+    hand.splice(hand.indexOf(Token.RightTank), 1);
+  } else {
+    hand.splice(hand.indexOf(token), 1);
   }
 };
 
