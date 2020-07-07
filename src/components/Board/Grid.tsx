@@ -64,7 +64,14 @@ const Grid = ({ cells, highlighted, onCellClick }: GridProps) => {
     }
   }
   return (
-    <div style={{ display: "grid", width: `${GRID_WIDTH * CELL_SCALE}em` }}>
+    <div
+      className="shadow"
+      style={{
+        display: "grid",
+        width: `${GRID_WIDTH * CELL_SCALE}em`,
+        border: "2px solid #000",
+      }}
+    >
       {grid}
     </div>
   );
