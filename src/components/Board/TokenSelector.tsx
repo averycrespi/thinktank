@@ -4,11 +4,16 @@ import TokenIcon from "./TokenIcon";
 
 interface TokenSelectorProps {
   readonly hand: Array<Token>;
+  readonly selected?: Token;
   onTokenSelect(token: Token): void;
 }
 
 /** Render a token selector. */
-const TokenSelector = ({ hand, onTokenSelect }: TokenSelectorProps) => {
+const TokenSelector = ({
+  hand,
+  selected,
+  onTokenSelect,
+}: TokenSelectorProps) => {
   const div = [];
   const tokens = [
     Token.Blocker,
@@ -25,6 +30,7 @@ const TokenSelector = ({ hand, onTokenSelect }: TokenSelectorProps) => {
     div.push(
       <button
         key={token}
+        className={selected === token ? "btn-primary" : ""}
         disabled={!hand.includes(token)}
         onClick={() => onTokenSelect(token)}
       >

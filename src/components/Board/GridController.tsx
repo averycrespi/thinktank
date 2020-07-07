@@ -15,7 +15,7 @@ enum Action {
 
 const DEFAULT_ACTION = Action.None;
 const DEFAULT_HIGHLIGHTED = new Set<number>();
-const DEFAULT_TOKEN = Token.Blocker;
+const DEFAULT_TOKEN = Token.Base;
 const DEFAULT_INDEX = -1;
 
 interface GridControllerProps {
@@ -97,7 +97,11 @@ const GridController = ({
       <div className="row flex-center">
         <div className="col no-padding">
           {isActive && (
-            <TokenSelector hand={hand} onTokenSelect={onTokenSelect} />
+            <TokenSelector
+              hand={hand}
+              selected={selectedToken}
+              onTokenSelect={onTokenSelect}
+            />
           )}
         </div>
       </div>
