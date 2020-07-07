@@ -3,6 +3,7 @@ import { G, Player, Result, nameOf } from "../../logic";
 import { BoardProps } from "boardgame.io";
 import GridController from "./GridController";
 import React from "react";
+import { colorOf } from "../../utils/colorOf";
 
 interface LocalBoardProps extends BoardProps {
   G: G;
@@ -18,9 +19,16 @@ const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
       <div className="row flex-center">
         <div className="col no-padding">
           {gameover ? (
-            <h4>{nameOf(gameover.winner) + " wins!"}</h4>
+            <h4>
+              <span className={colorOf(gameover.winner)}>
+                {nameOf(gameover.winner)}
+              </span>{" "}
+              wins!
+            </h4>
           ) : (
-            <h4>{`${nameOf(player)}'s turn`}</h4>
+            <h4>
+              <span className={colorOf(player)}>{nameOf(player)}</span>'s turn
+            </h4>
           )}
         </div>
       </div>

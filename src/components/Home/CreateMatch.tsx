@@ -2,6 +2,7 @@ import { Player, nameOf } from "../../logic";
 import React, { useState } from "react";
 import { Visibility, createMatch } from "../../api/match";
 
+import { colorOf } from "../../utils/colorOf";
 import { useHistory } from "react-router-dom";
 
 interface CreateMatchProps {
@@ -39,7 +40,12 @@ const CreateMatch = ({ serverURL }: CreateMatchProps) => {
               checked={player === Player.Red}
               onChange={() => setPlayer(Player.Red)}
             />
-            <span>{`as ${nameOf(Player.Red)}`}</span>
+            <span>
+              as
+              <span className={colorOf(Player.Red)}>
+                {" " + nameOf(Player.Red)}
+              </span>
+            </span>
           </label>
           <label className="paper-radio">
             <input
@@ -48,7 +54,12 @@ const CreateMatch = ({ serverURL }: CreateMatchProps) => {
               checked={player === Player.Blue}
               onChange={() => setPlayer(Player.Blue)}
             />
-            <span>{`as ${nameOf(Player.Blue)}`}</span>
+            <span>
+              as
+              <span className={colorOf(Player.Blue)}>
+                {" " + nameOf(Player.Blue)}
+              </span>
+            </span>
           </label>
         </fieldset>
       </div>

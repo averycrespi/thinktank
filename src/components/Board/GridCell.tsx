@@ -1,7 +1,7 @@
-import { Cell, Player } from "../../logic";
-
+import { Cell } from "../../logic";
 import React from "react";
 import TokenIcon from "./TokenIcon";
+import { colorOf } from "../../utils/colorOf";
 
 interface GridCellProps {
   readonly cell: Cell;
@@ -12,14 +12,8 @@ const GridCell = ({ cell }: GridCellProps) => {
   if (!cell) {
     return null;
   }
-  let color = "";
-  if (cell.player === Player.Red) {
-    color = "red";
-  } else if (cell.player === Player.Blue) {
-    color = "blue";
-  }
   return (
-    <span className={color}>
+    <span className={colorOf(cell.player)}>
       <TokenIcon token={cell.token} />
     </span>
   );
