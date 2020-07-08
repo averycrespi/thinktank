@@ -2,8 +2,8 @@ import { Player, nameOf } from "../../logic";
 import React, { useState } from "react";
 import { Visibility, createMatch } from "../../api/match";
 
+import { Redirect } from "react-router-dom";
 import { colorOf } from "../../utils/colorOf";
-import { useHistory } from "react-router-dom";
 
 interface CreateMatchProps {
   serverURL: string;
@@ -11,7 +11,6 @@ interface CreateMatchProps {
 
 /** Create a private match. */
 const CreateMatch = ({ serverURL }: CreateMatchProps) => {
-  const history = useHistory();
   const [player, setPlayer] = useState(Player.Red);
   const [clicked, setClicked] = useState(false);
   const [matchID, setMatchID] = useState("");
@@ -25,47 +24,54 @@ const CreateMatch = ({ serverURL }: CreateMatchProps) => {
   };
 
   return (
-    <div className="row flex-center">
-      <div className="col">
-        <button disabled={clicked} onClick={onClick}>
-          Create private match
-        </button>
-      </div>
-      <div className="col">
-        <fieldset className="form-group">
-          <label className="paper-radio">
-            <input
-              type="radio"
-              value={Player.Red}
-              checked={player === Player.Red}
-              onChange={() => setPlayer(Player.Red)}
-            />
-            <span>
-              as
-              <span className={colorOf(Player.Red)}>
-                {" " + nameOf(Player.Red)}
+    <div>
+      <div className="row flex-center">
+        <div className="col">
+          <button disabled={clicked} onClick={onClick}>
+            Create private match
+          </button>
+        </div>
+        <div className="col">
+          <fieldset className="form-group">
+            <label className="paper-radio">
+              <input
+                type="radio"
+                value={Player.Red}
+                checked={player === Player.Red}
+                onChange={() => setPlayer(Player.Red)}
+              />
+              <span>
+                as
+                <span className={colorOf(Player.Red)}>
+                  {" " + nameOf(Player.Red)}
+                </span>
               </span>
-            </span>
-          </label>
-          <label className="paper-radio">
-            <input
-              type="radio"
-              value={Player.Blue}
-              checked={player === Player.Blue}
-              onChange={() => setPlayer(Player.Blue)}
-            />
-            <span>
-              as
-              <span className={colorOf(Player.Blue)}>
-                {" " + nameOf(Player.Blue)}
+            </label>
+            <label className="paper-radio">
+              <input
+                type="radio"
+                value={Player.Blue}
+                checked={player === Player.Blue}
+                onChange={() => setPlayer(Player.Blue)}
+              />
+              <span>
+                as
+                <span className={colorOf(Player.Blue)}>
+                  {" " + nameOf(Player.Blue)}
+                </span>
               </span>
-            </span>
-          </label>
-        </fieldset>
+            </label>
+          </fieldset>
+        </div>
+        {matchID && <Redirect to={`/join/${matchID}/${player}`} />}
       </div>
-
-      {matchID && history.push(`/join/${matchID}/${player}`)}
-      {error && <p>{error}</p>}
+      {error && (
+        <div className="row flex-center">
+          <div className="col no-padding">
+            <div className="alert alert-danger">{error}</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
