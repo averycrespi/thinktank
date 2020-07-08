@@ -6,9 +6,6 @@ interface GameHistoryProps {
   scale: number;
 }
 
-/** Chosen to minimize the wasted space. */
-const WIDTH_FACTOR = 2.5;
-
 /** Render the history of a game. */
 const GameHistory = ({ history, scale }: GameHistoryProps) => {
   useEffect(() => {
@@ -25,7 +22,7 @@ const GameHistory = ({ history, scale }: GameHistoryProps) => {
       style={{
         border: "2px solid #000",
         height: `${GRID_HEIGHT * scale}em`,
-        width: `${Math.floor((GRID_WIDTH * scale) / WIDTH_FACTOR)}em`,
+        width: `${Math.floor((GRID_WIDTH * scale) / 2)}em`,
         overflow: "hidden",
         overflowY: "scroll",
       }}
