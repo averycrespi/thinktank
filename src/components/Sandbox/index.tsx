@@ -10,7 +10,7 @@ const SandboxClient = Client({ game, board: Board, debug: false });
 const Sandbox = () => (
   <div>
     <div className="row flex-center">
-      <div className="col-4">
+      <div className="col no-padding">
         <SandboxClient />
       </div>
     </div>

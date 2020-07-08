@@ -38,6 +38,7 @@ const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
             isActive={isActive}
             cells={G.cells}
             hand={G.hands[player]}
+            history={G.history}
             player={player}
             placePiece={moves.placePiece}
             movePiece={moves.movePiece}

@@ -1,14 +1,14 @@
 /** Represents a game entity. */
 export enum Token {
-  Blocker = "O",
-  UpTank = "^",
-  DownTank = "v",
-  LeftTank = "<",
-  RightTank = ">",
-  OrthogonalInfiltrator = "+",
-  DiagonalInfiltrator = "X",
-  Mine = "*",
-  Base = "@",
+  Blocker = "Blocker",
+  UpTank = "Upwards Tank",
+  DownTank = "Downwards Tank",
+  LeftTank = "Leftwards Tank",
+  RightTank = "Rightwards Tank",
+  OrthogonalInfiltrator = "Infiltrator (+)",
+  DiagonalInfiltrator = "Infiltrator (X)",
+  Mine = "Mine",
+  Base = "Base",
 }
 
 /** Check if a token is a tank. */
@@ -24,7 +24,7 @@ export const isTank = (token: Token): boolean => {
   }
 };
 
-/** Represents a player. */
+/** Represents a player. Must be 0 or 1. */
 export enum Player {
   Red = "0",
   Blue = "1",
@@ -103,6 +103,7 @@ export const removeFromHand = (hand: Array<Token>, token: Token) => {
 export interface G {
   cells: Array<Cell>;
   hands: { [Player.Red]: Hand; [Player.Blue]: Hand };
+  history: Array<string>;
 }
 
 /** Represents the result of a game. */

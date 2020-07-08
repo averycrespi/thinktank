@@ -4,8 +4,11 @@ import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
 import { canRotate, possibleRotations } from "../../logic/rotate";
 
+import GameHistory from "./GameHistory";
 import Grid from "./Grid";
 import TokenSelector from "./TokenSelector";
+
+const CELL_SCALE = 2;
 
 enum Action {
   None,
@@ -22,6 +25,7 @@ interface GridControllerProps {
   readonly isActive: boolean;
   readonly cells: Array<Cell>;
   readonly hand: Array<Token>;
+  readonly history: Array<string>;
   readonly player: Player;
   placePiece(token: Token, index: number): void;
   movePiece(srcIndex: number, destIndex: number): void;
@@ -33,6 +37,7 @@ const GridController = ({
   isActive,
   cells,
   hand,
+  history,
   player,
   placePiece,
   movePiece,
@@ -103,8 +108,14 @@ const GridController = ({
           <Grid
             cells={cells}
             highlighted={highlighted}
+            scale={CELL_SCALE}
             onCellClick={isActive ? onCellClick : (_) => {}}
           />
+        </div>
+        <div className="col no-padding">
+          <div className="padding-left">
+            <GameHistory history={history} scale={CELL_SCALE} />
+          </div>
         </div>
       </div>
       <div className="row flex-center">

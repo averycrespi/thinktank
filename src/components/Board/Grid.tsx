@@ -10,16 +10,15 @@ import { Cell } from "../../logic";
 import GridCell from "./GridCell";
 import React from "react";
 
-const CELL_SCALE = 2;
-
 interface GridProps {
   readonly cells: Array<Cell>;
   readonly highlighted: Set<number>;
+  readonly scale: number;
   onCellClick(index: number): void;
 }
 
 /** Render a 2D array of cells. */
-const Grid = ({ cells, highlighted, onCellClick }: GridProps) => {
+const Grid = ({ cells, highlighted, scale, onCellClick }: GridProps) => {
   let grid = [];
   for (let y = 0; y < GRID_HEIGHT; y++) {
     for (let x = 0; x < GRID_WIDTH; x++) {
@@ -49,9 +48,9 @@ const Grid = ({ cells, highlighted, onCellClick }: GridProps) => {
           style={{
             border: "1px solid #777",
             textAlign: "center",
-            width: `${CELL_SCALE}em`,
-            height: `${CELL_SCALE}em`,
-            lineHeight: `${CELL_SCALE}em`,
+            width: `${scale}em`,
+            height: `${scale}em`,
+            lineHeight: `${scale}em`,
             gridColumnStart: x + 1,
             gridColumnEnd: "span 1",
             gridRowStart: y + 1,
@@ -68,7 +67,7 @@ const Grid = ({ cells, highlighted, onCellClick }: GridProps) => {
       className="shadow"
       style={{
         display: "grid",
-        width: `${GRID_WIDTH * CELL_SCALE}em`,
+        width: `${GRID_WIDTH * scale}em`,
         border: "2px solid #000",
       }}
     >

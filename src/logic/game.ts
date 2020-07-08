@@ -8,6 +8,7 @@ import {
   Token,
   addToHand,
   createHand,
+  nameOf,
   opponentOf,
   removeFromHand,
 } from ".";
@@ -31,7 +32,8 @@ const setup = (): G => {
     [Player.Red]: createHand(),
     [Player.Blue]: createHand(),
   };
-  return { cells, hands };
+  const history = new Array<string>();
+  return { cells, hands, history };
 };
 
 const placePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
@@ -39,6 +41,7 @@ const placePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
   if (canPlace(G.cells, G.hands[player], { token, player }, index)) {
     G.cells[index] = { token, player };
     removeFromHand(G.hands[player], token);
+    G.history.push(`${nameOf(player)} placed ${token}`);
   } else {
     return INVALID_MOVE;
   }
@@ -49,6 +52,7 @@ const movePiece = (G: G, ctx: Ctx, srcIndex: number, destIndex: number) => {
   if (canMove(G.cells, player, srcIndex, destIndex)) {
     G.cells[destIndex] = G.cells[srcIndex];
     G.cells[srcIndex] = null;
+    G.history.push(`${nameOf(player)} moved ${G.cells[destIndex]?.token}`);
   } else {
     return INVALID_MOVE;
   }
@@ -58,28 +62,33 @@ const rotatePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
   const player = ctx.currentPlayer as Player;
   if (canRotate(G.cells, { player, token }, index)) {
     G.cells[index] = { player, token };
+    G.history.push(`${nameOf(player)} rotated Tank`);
   } else {
     return INVALID_MOVE;
   }
 };
 
 const onTurnEnd = (G: G, ctx: Ctx) => {
+  const player = ctx.currentPlayer as Player;
   // First pass: capture infiltrated cells.
   for (let index = 0; index < G.cells.length; index++) {
     const piece = G.cells[index];
     // A piece can only be infiltrated once per turn.
     if (piece && canBeInfiltrated(G.cells, index)) {
       piece.player = opponentOf(piece.player);
+      G.history.push(`${nameOf(player)} captured ${piece.token}`);
     }
   }
   // Second pass: mark shot and exploded cells as destroyed.
   const destroyed = new Set<number>();
   for (let index = 0; index < G.cells.length; index++) {
-    if (
-      canBeShot(G.cells, index) ||
-      canBeExploded(G.cells, index) ||
-      canExplodeEnemy(G.cells, index)
-    ) {
+    if (canBeShot(G.cells, index)) {
+      destroyed.add(index);
+      G.history.push(`${nameOf(player)} shot ${G.cells[index]?.token}`);
+    } else if (canBeExploded(G.cells, index)) {
+      destroyed.add(index);
+      G.history.push(`${nameOf(player)} exploded ${G.cells[index]?.token}`);
+    } else if (canExplodeEnemy(G.cells, index)) {
       destroyed.add(index);
     }
   }

@@ -28,7 +28,7 @@ const Multiplayer = ({
   });
   return (
     <div className="row flex-center">
-      <div className="col-4">
+      <div className="col no-padding">
         <MultiplayerClient
           gameID={matchID}
           playerID={player}
