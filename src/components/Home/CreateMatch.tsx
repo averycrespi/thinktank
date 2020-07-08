@@ -2,8 +2,8 @@ import { Player, nameOf } from "../../logic";
 import React, { useState } from "react";
 import { Visibility, createMatch } from "../../api/match";
 
-import { Redirect } from "react-router-dom";
 import { colorOf } from "../../utils/colorOf";
+import { useHistory } from "react-router-dom";
 
 interface CreateMatchProps {
   serverURL: string;
@@ -11,6 +11,7 @@ interface CreateMatchProps {
 
 /** Create a private match. */
 const CreateMatch = ({ serverURL }: CreateMatchProps) => {
+  const history = useHistory();
   const [player, setPlayer] = useState(Player.Red);
   const [clicked, setClicked] = useState(false);
   const [matchID, setMatchID] = useState("");
@@ -63,7 +64,8 @@ const CreateMatch = ({ serverURL }: CreateMatchProps) => {
             </label>
           </fieldset>
         </div>
-        {matchID && <Redirect to={`/join/${matchID}/${player}`} />}
+        {/* Push history so that the back button works. */}
+        {matchID && history.push(`/join/${matchID}/${player}`)}
       </div>
       {error && (
         <div className="row flex-center">
