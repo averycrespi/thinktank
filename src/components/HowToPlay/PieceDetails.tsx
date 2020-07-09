@@ -134,7 +134,7 @@ const PieceDetails = () => (
               <h4 className="card-title">Base</h4>
               <h5 className="card-subtitle">Description</h5>
               <p className="card-text">
-                The game ends when a either player's base is destroyed.
+                The game ends when either player's base is destroyed.
               </p>
               <h5 className="card-subtitle">Movement</h5>
               <p className="card-text">

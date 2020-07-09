@@ -165,10 +165,7 @@ export const canExplodeEnemy = (cells: Array<Cell>, index: number): boolean => {
 };
 
 /** Check if a piece can explode a friendly piece. */
-export const canExplodeFriendly = (
-  cells: Array<Cell>,
-  index: number
-): boolean => {
+const canExplodeFriendly = (cells: Array<Cell>, index: number): boolean => {
   const mine = cells[index];
   if (!mine || !canExplodeEnemy(cells, index)) {
     return false; // Cell is empty or piece cannot explode.
