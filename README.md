@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>Thinktank</h1>
+    <img src="assets/thinktank.png" alt="Thinktank">
 </div>
 
 <div align="center">
@@ -8,13 +8,13 @@
 
 <div align="center">
     <a href="https://app.netlify.com/sites/averycrespi-thinktank/deploys">
-        <img src="https://api.netlify.com/api/v1/badges/3cc311f0-f960-46c4-aa0a-db4ef0fef441/deploy-status" alt="Deploy status">
+        <img src="https://api.netlify.com/api/v1/badges/3cc311f0-f960-46c4-aa0a-db4ef0fef441/deploy-status" alt="Deploy status badge">
     </a>
     <a href="https://github.com/averycrespi/thinktank/releases">
-        <img src="https://img.shields.io/github/package-json/v/averycrespi/thinktank" alt="Version">
+        <img src="https://img.shields.io/github/package-json/v/averycrespi/thinktank" alt="Version badge">
     </a>
     <a href="https://github.com/averycrespi/thinktank/commits/master">
-        <img src="https://img.shields.io/github/last-commit/averycrespi/thinktank" alt="Last commit">
+        <img src="https://img.shields.io/github/last-commit/averycrespi/thinktank" alt="Last commit badge">
     </a>
 </div>
 
@@ -25,6 +25,8 @@
     <a href="#credits">Credits</a> •
     <a href="#license">License</a>
 </div>
+
+![Screenshot](assets/screenshot.png)
 
 ## About
 
