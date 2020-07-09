@@ -33,6 +33,7 @@ const TokenSelector = ({
     div.push(
       <button
         key={token}
+        title={token}
         disabled={disabled}
         className={selected === token ? "btn-primary" : ""}
         onClick={() => onTokenSelect(token)}

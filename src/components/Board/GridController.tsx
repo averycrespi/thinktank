@@ -113,7 +113,7 @@ const GridController = ({
           />
         </div>
         <div className="col no-padding">
-          <div className="padding-left">
+          <div className="padding-left-large">
             <GameHistory history={history} scale={CELL_SCALE} />
           </div>
         </div>

@@ -18,7 +18,7 @@ yarn serve  # Run the server on localhost:8000
 To fix these errors, you can:
 
 1. Disable CORS in your browser (not recommended), or
-2. Run the server on an domain with the appropriate CORS headers.
+2. Run the server on a domain with the appropriate CORS headers.
 
 ## Environment variables
 

@@ -157,9 +157,8 @@ export const canExplodeEnemy = (cells: Array<Cell>, index: number): boolean => {
   }
   for (const adjIndex of adjacentTo(index)) {
     const adj = cells[adjIndex];
-    if (adj && adj.player !== mine.player) {
-      return true; // Mine is adjacent to an enemy piece.
-      // TODO: are mines triggered by enemy blockers?
+    if (adj && adj.player !== mine.player && adj.token !== Token.Blocker) {
+      return true; // Mine is adjacent to a vulnerable enemy piece.
     }
   }
   return false;
