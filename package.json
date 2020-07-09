@@ -1,18 +1,17 @@
 {
   "name": "thinktank",
-  "description": "A board game inspired by Conundrum",
+  "description": "A 2-player strategy game inspired by Conundrum",
   "keywords": [
-    "thinktank",
-    "board game"
+    "game",
+    "strategy"
   ],
-  "homepage": "https://thinktank.crespi.dev/",
+  "homepage": "https://github.com/averycrespi/thinktank",
   "author": {
     "name": "Avery Crespi",
     "email": "averycrespi@gmail.com"
   },
   "license": "MIT",
   "version": "0.1.0",
-  "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "@fortawesome/free-brands-svg-icons": "^5.13.1",
@@ -43,8 +42,7 @@
     "start": "react-scripts start",
     "build:server": "tsc -p tsconfig.server.json",
     "start:server": "node -r esm build/server/server.js",
-    "serve": "yarn build:server && yarn start:server",
-    "todo": "grep -r TODO src/"
+    "serve": "yarn build:server && yarn start:server"
   },
   "eslintConfig": {
     "extends": "react-app"
