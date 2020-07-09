@@ -69,26 +69,32 @@ const rotatePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
 };
 
 const onTurnEnd = (G: G, ctx: Ctx) => {
-  const player = ctx.currentPlayer as Player;
   // First pass: capture infiltrated cells.
   for (let index = 0; index < G.cells.length; index++) {
     const piece = G.cells[index];
+    // Can the piece be infiltrated?
     // A piece can only be infiltrated once per turn.
     if (piece && canBeInfiltrated(G.cells, index)) {
       piece.player = opponentOf(piece.player);
-      G.history.push(`${nameOf(player)} captured ${piece.token}`);
+      G.history.push(`${nameOf(piece.player)} captured ${piece.token}`);
     }
   }
   // Second pass: mark shot and exploded cells as destroyed.
   const destroyed = new Set<number>();
   for (let index = 0; index < G.cells.length; index++) {
-    if (canBeShot(G.cells, index)) {
+    const piece = G.cells[index];
+    // Can the piece by shot?
+    if (piece && canBeShot(G.cells, index)) {
       destroyed.add(index);
-      G.history.push(`${nameOf(player)} shot ${G.cells[index]?.token}`);
-    } else if (canBeExploded(G.cells, index)) {
+      G.history.push(`${nameOf(opponentOf(piece.player))} shot ${piece.token}`);
+      // Can the piece be exploded?
+    } else if (piece && canBeExploded(G.cells, index)) {
       destroyed.add(index);
-      G.history.push(`${nameOf(player)} exploded ${G.cells[index]?.token}`);
-    } else if (canExplodeEnemy(G.cells, index)) {
+      G.history.push(
+        `${nameOf(opponentOf(piece.player))} exploded ${piece.token}`
+      );
+      // Will the piece explode itself?
+    } else if (piece && canExplodeEnemy(G.cells, index)) {
       destroyed.add(index);
     }
   }
