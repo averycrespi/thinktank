@@ -6,7 +6,6 @@ interface ShareLinkProps {
   player: Player;
 }
 
-/** Share a link to join the game. */
 const ShareLink = ({ matchID, player }: ShareLinkProps) => {
   const [copied, setCopied] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);

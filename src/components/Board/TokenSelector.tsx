@@ -10,7 +10,6 @@ interface TokenSelectorProps {
   onTokenSelect(token: Token): void;
 }
 
-/** Render a token selector. */
 const TokenSelector = ({
   isActive,
   hand,
@@ -29,7 +28,7 @@ const TokenSelector = ({
     Token.Mine,
   ];
   for (const token of tokens) {
-    // Tanks can be rotated, so never disable their buttons.
+    // Always show tanks when the selector is active.
     const disabled = !isActive || (!hand.includes(token) && !isTank(token));
     const count = hand.filter((t) => t === token).length;
     div.push(

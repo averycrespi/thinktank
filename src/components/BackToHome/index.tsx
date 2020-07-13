@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-/** Takes the user back to the home page. */
 const BackToHome = () => (
   <div className="row flex-center">
     <div className="col no-padding">

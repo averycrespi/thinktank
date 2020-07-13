@@ -2,7 +2,6 @@ import React from "react";
 import { Token } from "../../logic";
 import TokenIcon from "../Board/TokenIcon";
 
-/** Render the cheatsheet. */
 const Cheatsheet = () => (
   <div className="row flex-center">
     <div

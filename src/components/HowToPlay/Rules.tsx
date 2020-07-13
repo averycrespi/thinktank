@@ -1,6 +1,5 @@
 import React from "react";
 
-/** Render the rules. */
 const Rules = () => (
   <div className="row flex-center">
     <div

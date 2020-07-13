@@ -18,7 +18,6 @@ interface Params {
   player: Player;
 }
 
-/** Join a match when the page is loaded. */
 const JoinMatch = ({ serverURL }: JoinMatchProps) => {
   const { matchID, player }: Params = useParams();
   const [credentials, setCredentials] = useState("");
@@ -57,8 +56,6 @@ const JoinMatch = ({ serverURL }: JoinMatchProps) => {
           <div className="row flex-center">
             <div className="col no-padding">
               <ShowHelp />
-            </div>
-            <div className="col no-padding">
               <BackToHome />
             </div>
           </div>

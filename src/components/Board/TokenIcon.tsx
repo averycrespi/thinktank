@@ -18,7 +18,6 @@ interface TokenIconProps {
   token: Token;
 }
 
-/** Render a token as an icon. */
 const TokenIcon = ({ token }: TokenIconProps) => {
   switch (token) {
     case Token.Blocker:

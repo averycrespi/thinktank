@@ -1,6 +1,5 @@
 import React from "react";
 
-/** Render the controls. */
 const Controls = () => (
   <div className="row flex-center">
     <div

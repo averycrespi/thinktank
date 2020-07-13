@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-/** Open the sandbox. */
 const OpenSandbox = () => (
   <div className="row flex-center">
     <div className="col">

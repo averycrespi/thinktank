@@ -6,12 +6,11 @@ interface GameHistoryProps {
   scale: number;
 }
 
-/** Render the history of a game. */
 const GameHistory = ({ history, scale }: GameHistoryProps) => {
   useEffect(() => {
     const div = document.getElementById("history");
     if (div) {
-      // Scroll to the bottom when the history is updated.
+      // Scroll to the bottom on update.
       div.scrollTop = div.scrollHeight;
     }
   });

@@ -8,7 +8,6 @@ interface HomeProps {
   serverURL: string;
 }
 
-/** Render the home page. */
 const Home = ({ serverURL }: HomeProps) => (
   <div className="row flex-center">
     <div className="col no-padding">

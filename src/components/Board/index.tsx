@@ -9,7 +9,6 @@ interface LocalBoardProps extends BoardProps {
   G: G;
 }
 
-/** Render the game board. */
 const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
   const player = ctx.currentPlayer as Player;
   const gameover = ctx.gameover as Result;

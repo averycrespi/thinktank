@@ -1,7 +1,5 @@
 import React from "react";
 
-/** Render details about pieces. */
-
 const PieceDetails = () => (
   <div className="row flex-center">
     <div

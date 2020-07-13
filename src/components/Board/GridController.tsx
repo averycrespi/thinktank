@@ -32,7 +32,6 @@ interface GridControllerProps {
   rotatePiece(token: Token, index: number): void;
 }
 
-/** Render a grid controller. */
 const GridController = ({
   isActive,
   cells,

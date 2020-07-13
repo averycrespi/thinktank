@@ -1,6 +1,5 @@
 import React from "react";
 
-/** Render the basics. */
 const Basics = () => (
   <div className="row flex-center">
     <div

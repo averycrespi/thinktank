@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-/** Opens the How to Play page in a new tab. */
 const ShowHelp = () => (
   <div className="row flex-center">
     <div className="col no-padding">

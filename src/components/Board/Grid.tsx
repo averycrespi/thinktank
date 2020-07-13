@@ -17,7 +17,6 @@ interface GridProps {
   onCellClick(index: number): void;
 }
 
-/** Render a 2D array of cells. */
 const Grid = ({ cells, highlighted, scale, onCellClick }: GridProps) => {
   let grid = [];
   for (let y = 0; y < GRID_HEIGHT; y++) {
