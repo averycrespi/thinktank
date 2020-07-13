@@ -120,13 +120,12 @@ const GridController = ({
       </div>
       <div className="row flex-center">
         <div className="col no-padding">
-          {isActive && (
-            <TokenSelector
-              hand={hand}
-              selected={selectedToken}
-              onTokenSelect={onTokenSelect}
-            />
-          )}
+          <TokenSelector
+            isActive={isActive}
+            hand={hand}
+            selected={selectedToken}
+            onTokenSelect={onTokenSelect}
+          />
         </div>
       </div>
     </div>

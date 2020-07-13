@@ -4,6 +4,7 @@ import React from "react";
 import TokenIcon from "./TokenIcon";
 
 interface TokenSelectorProps {
+  readonly isActive: boolean;
   readonly hand: Array<Token>;
   readonly selected?: Token;
   onTokenSelect(token: Token): void;
@@ -11,6 +12,7 @@ interface TokenSelectorProps {
 
 /** Render a token selector. */
 const TokenSelector = ({
+  isActive,
   hand,
   selected,
   onTokenSelect,
@@ -28,7 +30,7 @@ const TokenSelector = ({
   ];
   for (const token of tokens) {
     // Tanks can be rotated, so never disable their buttons.
-    const disabled = !hand.includes(token) && !isTank(token);
+    const disabled = !isActive || (!hand.includes(token) && !isTank(token));
     const count = hand.filter((t) => t === token).length;
     div.push(
       <button
