@@ -9,7 +9,6 @@ interface CreateMatchProps {
   serverURL: string;
 }
 
-/** Create a private match. */
 const CreateMatch = ({ serverURL }: CreateMatchProps) => {
   const history = useHistory();
   const [player, setPlayer] = useState(Player.Red);

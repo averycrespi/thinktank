@@ -7,7 +7,6 @@ interface GridCellProps {
   readonly cell: Cell;
 }
 
-/** Render a cell in the grid. */
 const GridCell = ({ cell }: GridCellProps) => {
   if (!cell) {
     return null;

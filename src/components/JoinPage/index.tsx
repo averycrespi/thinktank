@@ -2,14 +2,14 @@ import { Prompt, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { loadCredentials, saveCredentials } from "../../api/storage";
 
-import BackToHome from "../BackToHome";
-import Multiplayer from "../Multiplayer";
+import HelpButton from "../HelpButton";
+import HomeButton from "../HomeButton";
+import Multiplayer from "./Multiplayer";
 import { Player } from "../../logic";
 import ShareLink from "./ShareLink";
-import ShowHelp from "../ShowHelp";
 import { joinMatch } from "../../api/match";
 
-interface JoinMatchProps {
+interface JoinPageProps {
   serverURL: string;
 }
 
@@ -18,8 +18,7 @@ interface Params {
   player: Player;
 }
 
-/** Join a match when the page is loaded. */
-const JoinMatch = ({ serverURL }: JoinMatchProps) => {
+const JoinPage = ({ serverURL }: JoinPageProps) => {
   const { matchID, player }: Params = useParams();
   const [credentials, setCredentials] = useState("");
   const [error, setError] = useState("");
@@ -56,10 +55,8 @@ const JoinMatch = ({ serverURL }: JoinMatchProps) => {
           {credentials && <ShareLink matchID={matchID} player={player} />}
           <div className="row flex-center">
             <div className="col no-padding">
-              <ShowHelp />
-            </div>
-            <div className="col no-padding">
-              <BackToHome />
+              <HelpButton />
+              <HomeButton />
             </div>
           </div>
         </div>
@@ -69,4 +66,4 @@ const JoinMatch = ({ serverURL }: JoinMatchProps) => {
   );
 };
 
-export default JoinMatch;
+export default JoinPage;

@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-/** Opens the How to Play page in a new tab. */
-const ShowHelp = () => (
+const HelpButton = () => (
   <div className="row flex-center">
     <div className="col no-padding">
       <Link
@@ -17,4 +16,4 @@ const ShowHelp = () => (
   </div>
 );
 
-export default ShowHelp;
+export default HelpButton;

@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-/** Open the sandbox. */
-const OpenSandbox = () => (
+const SandboxLink = () => (
   <div className="row flex-center">
     <div className="col">
       <Link to="/sandbox" className="no-underline">
@@ -15,4 +14,4 @@ const OpenSandbox = () => (
   </div>
 );
 
-export default OpenSandbox;
+export default SandboxLink;

@@ -12,7 +12,6 @@ interface MultiplayerProps {
   credentials?: string;
 }
 
-/** Render a multiplayer game. */
 const Multiplayer = ({
   serverURL,
   matchID,

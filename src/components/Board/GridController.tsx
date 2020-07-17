@@ -4,7 +4,7 @@ import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
 import { canRotate, possibleRotations } from "../../logic/rotate";
 
-import GameHistory from "./GameHistory";
+import Events from "./Events";
 import Grid from "./Grid";
 import TokenSelector from "./TokenSelector";
 
@@ -25,19 +25,18 @@ interface GridControllerProps {
   readonly isActive: boolean;
   readonly cells: Array<Cell>;
   readonly hand: Array<Token>;
-  readonly history: Array<string>;
+  readonly events: Array<string>;
   readonly player: Player;
   placePiece(token: Token, index: number): void;
   movePiece(srcIndex: number, destIndex: number): void;
   rotatePiece(token: Token, index: number): void;
 }
 
-/** Render a grid controller. */
 const GridController = ({
   isActive,
   cells,
   hand,
-  history,
+  events,
   player,
   placePiece,
   movePiece,
@@ -114,19 +113,18 @@ const GridController = ({
         </div>
         <div className="col no-padding">
           <div className="padding-left-large">
-            <GameHistory history={history} scale={CELL_SCALE} />
+            <Events events={events} scale={CELL_SCALE} />
           </div>
         </div>
       </div>
       <div className="row flex-center">
         <div className="col no-padding">
-          {isActive && (
-            <TokenSelector
-              hand={hand}
-              selected={selectedToken}
-              onTokenSelect={onTokenSelect}
-            />
-          )}
+          <TokenSelector
+            isActive={isActive}
+            hand={hand}
+            selected={selectedToken}
+            onTokenSelect={onTokenSelect}
+          />
         </div>
       </div>
     </div>

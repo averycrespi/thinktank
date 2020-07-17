@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-/** Takes the user back to the home page. */
-const BackToHome = () => (
+const HomeButton = () => (
   <div className="row flex-center">
     <div className="col no-padding">
       <Link to="/" className="no-underline">
@@ -12,4 +11,4 @@ const BackToHome = () => (
   </div>
 );
 
-export default BackToHome;
+export default HomeButton;

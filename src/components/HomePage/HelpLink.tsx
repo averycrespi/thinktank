@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-/** Open the how-to-play page. */
-const OpenHowToPlay = () => (
+const HelpLink = () => (
   <div className="row flex-center">
     <div className="col">
       <Link to="/help" className="no-underline">
@@ -15,4 +14,4 @@ const OpenHowToPlay = () => (
   </div>
 );
 
-export default OpenHowToPlay;
+export default HelpLink;

@@ -1,17 +1,16 @@
 import { GRID_HEIGHT, GRID_WIDTH } from "../../logic/grid";
 import React, { useEffect } from "react";
 
-interface GameHistoryProps {
-  history: Array<string>;
+interface EventsProps {
+  events: Array<string>;
   scale: number;
 }
 
-/** Render the history of a game. */
-const GameHistory = ({ history, scale }: GameHistoryProps) => {
+const Events = ({ events, scale }: EventsProps) => {
   useEffect(() => {
     const div = document.getElementById("history");
     if (div) {
-      // Scroll to the bottom when the history is updated.
+      // Scroll to the bottom on update.
       div.scrollTop = div.scrollHeight;
     }
   });
@@ -28,18 +27,15 @@ const GameHistory = ({ history, scale }: GameHistoryProps) => {
       }}
     >
       <table>
-        <thead>
-          <th>History</th>
-        </thead>
         <tbody>
-          {history.length === 0 && (
+          {events.length === 0 && (
             <tr>
               <td>
                 <i>Events will appear here.</i>
               </td>
             </tr>
           )}
-          {history.map((e) => (
+          {events.map((e) => (
             <tr>
               <td>{e}</td>
             </tr>
@@ -50,4 +46,4 @@ const GameHistory = ({ history, scale }: GameHistoryProps) => {
   );
 };
 
-export default GameHistory;
+export default Events;

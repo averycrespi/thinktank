@@ -8,12 +8,12 @@ import {
   Switch,
 } from "react-router-dom";
 
-import Home from "./components/Home";
-import HowToPlay from "./components/HowToPlay";
-import JoinMatch from "./components/JoinMatch";
+import HelpPage from "./components/HelpPage";
+import HomePage from "./components/HomePage";
+import JoinPage from "./components/JoinPage";
 import React from "react";
 import ReactDOM from "react-dom";
-import Sandbox from "./components/Sandbox";
+import SandboxPage from "./components/SandboxPage";
 
 const serverURL = process.env.REACT_APP_URL ?? "http://localhost:8000";
 
@@ -21,16 +21,16 @@ const App = () => (
   <Router>
     <Switch>
       <Route exact path="/help">
-        <HowToPlay />
+        <HelpPage />
       </Route>
       <Route exact path="/sandbox">
-        <Sandbox />
+        <SandboxPage />
       </Route>
       <Route exact path="/join/:matchID/:player">
-        <JoinMatch serverURL={serverURL} />
+        <JoinPage serverURL={serverURL} />
       </Route>
       <Route exact path="/">
-        <Home serverURL={serverURL} />
+        <HomePage serverURL={serverURL} />
       </Route>
       <Route path="*">
         <Redirect to="/" />

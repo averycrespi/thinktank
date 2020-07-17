@@ -1,6 +1,5 @@
 import React from "react";
 
-/** Render the basics. */
 const Basics = () => (
   <div className="row flex-center">
     <div
@@ -8,6 +7,7 @@ const Basics = () => (
       style={{ textAlign: "center", wordWrap: "break-word" }}
     >
       <h2>The Basics</h2>
+
       <p>Thinktank is a 2-player strategy game inspired by Conundrum.</p>
       <p>
         On your turn, you can <b>place</b> a piece, <b>move</b> a piece, or{" "}

@@ -5,7 +5,6 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 const repository = "https://github.com/averycrespi/thinktank";
 
-/** Show the project credits. */
 const Credits = () => (
   <div className="row flex-center">
     <div className="col" style={{ textAlign: "center" }}>
