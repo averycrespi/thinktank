@@ -1,5 +1,5 @@
 import { Player, opponentOf } from "../../logic";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
 interface ShareLinkProps {
   matchID: string;
@@ -7,7 +7,6 @@ interface ShareLinkProps {
 }
 
 const ShareLink = ({ matchID, player }: ShareLinkProps) => {
-  const [copied, setCopied] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const url = `${window.location.origin}/join/${matchID}/${opponentOf(player)}`;
 
@@ -16,8 +15,6 @@ const ShareLink = ({ matchID, player }: ShareLinkProps) => {
       inputRef.current.select();
       document.execCommand("copy");
       e.target.focus();
-      setCopied(true);
-      setTimeout(() => setCopied(false), 5000);
     }
   };
 
@@ -34,11 +31,6 @@ const ShareLink = ({ matchID, player }: ShareLinkProps) => {
             ref={inputRef}
             onClick={copyToClipboard}
           />
-          {copied && (
-            <div className="alert alert-success margin-top">
-              Link copied to clipboard!
-            </div>
-          )}
         </div>
       </div>
     </div>
