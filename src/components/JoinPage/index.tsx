@@ -9,7 +9,7 @@ import { Player } from "../../logic";
 import ShareLink from "./ShareLink";
 import { joinMatch } from "../../api/match";
 
-interface JoinMatchProps {
+interface JoinPageProps {
   serverURL: string;
 }
 
@@ -18,7 +18,7 @@ interface Params {
   player: Player;
 }
 
-const JoinMatch = ({ serverURL }: JoinMatchProps) => {
+const JoinPage = ({ serverURL }: JoinPageProps) => {
   const { matchID, player }: Params = useParams();
   const [credentials, setCredentials] = useState("");
   const [error, setError] = useState("");
@@ -66,4 +66,4 @@ const JoinMatch = ({ serverURL }: JoinMatchProps) => {
   );
 };
 
-export default JoinMatch;
+export default JoinPage;

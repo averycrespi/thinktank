@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-const OpenHowToPlay = () => (
+const SandboxLink = () => (
   <div className="row flex-center">
     <div className="col">
-      <Link to="/help" className="no-underline">
-        <button>How to play</button>
+      <Link to="/sandbox" className="no-underline">
+        <button>Sandbox mode</button>
       </Link>
     </div>
     <div className="col">
-      <p>Learn the rules!</p>
+      <p>Experiment with the game!</p>
     </div>
   </div>
 );
 
-export default OpenHowToPlay;
+export default SandboxLink;
