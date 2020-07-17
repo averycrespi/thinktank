@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import React from "react";
 
-const ShowHelp = () => (
+const HelpButton = () => (
   <div className="row flex-center">
     <div className="col no-padding">
       <Link
@@ -16,4 +16,4 @@ const ShowHelp = () => (
   </div>
 );
 
-export default ShowHelp;
+export default HelpButton;

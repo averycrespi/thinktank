@@ -2,11 +2,11 @@ import { Prompt, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { loadCredentials, saveCredentials } from "../../api/storage";
 
-import BackToHome from "../BackToHome";
-import Multiplayer from "../Multiplayer";
+import HelpButton from "../HelpButton";
+import HomeButton from "../HomeButton";
+import Multiplayer from "./Multiplayer";
 import { Player } from "../../logic";
 import ShareLink from "./ShareLink";
-import ShowHelp from "../ShowHelp";
 import { joinMatch } from "../../api/match";
 
 interface JoinMatchProps {
@@ -55,8 +55,8 @@ const JoinMatch = ({ serverURL }: JoinMatchProps) => {
           {credentials && <ShareLink matchID={matchID} player={player} />}
           <div className="row flex-center">
             <div className="col no-padding">
-              <ShowHelp />
-              <BackToHome />
+              <HelpButton />
+              <HomeButton />
             </div>
           </div>
         </div>

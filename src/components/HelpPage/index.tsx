@@ -1,12 +1,12 @@
-import BackToHome from "../BackToHome";
 import Basics from "./Basics";
 import Cheatsheet from "./Cheatsheet";
 import Controls from "./Controls";
+import HomeButton from "../HomeButton";
 import PieceDetails from "./PieceDetails";
 import React from "react";
 import Rules from "./Rules";
 
-const HowToPlay = () => (
+const HelpPage = () => (
   <div className="row flex-center">
     <div className="col no-padding">
       <div style={{ textAlign: "center" }}>
@@ -17,9 +17,9 @@ const HowToPlay = () => (
       <Cheatsheet />
       <Rules />
       <PieceDetails />
-      <BackToHome />
+      <HomeButton />
     </div>
   </div>
 );
 
-export default HowToPlay;
+export default HelpPage;
