@@ -4,7 +4,7 @@ import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
 import { canRotate, possibleRotations } from "../../logic/rotate";
 
-import GameHistory from "./GameHistory";
+import Events from "./Events";
 import Grid from "./Grid";
 import TokenSelector from "./TokenSelector";
 
@@ -25,7 +25,7 @@ interface GridControllerProps {
   readonly isActive: boolean;
   readonly cells: Array<Cell>;
   readonly hand: Array<Token>;
-  readonly history: Array<string>;
+  readonly events: Array<string>;
   readonly player: Player;
   placePiece(token: Token, index: number): void;
   movePiece(srcIndex: number, destIndex: number): void;
@@ -36,7 +36,7 @@ const GridController = ({
   isActive,
   cells,
   hand,
-  history,
+  events,
   player,
   placePiece,
   movePiece,
@@ -113,7 +113,7 @@ const GridController = ({
         </div>
         <div className="col no-padding">
           <div className="padding-left-large">
-            <GameHistory history={history} scale={CELL_SCALE} />
+            <Events events={events} scale={CELL_SCALE} />
           </div>
         </div>
       </div>

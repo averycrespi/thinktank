@@ -103,7 +103,7 @@ export const removeFromHand = (hand: Array<Token>, token: Token) => {
 export interface G {
   cells: Array<Cell>;
   hands: { [Player.Red]: Hand; [Player.Blue]: Hand };
-  history: Array<string>;
+  events: Array<string>;
 }
 
 /** Represents the result of a game. */
