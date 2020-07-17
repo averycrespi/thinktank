@@ -9,9 +9,10 @@ const Cheatsheet = () => (
       style={{ textAlign: "center", wordWrap: "break-word" }}
     >
       <h2>Cheatsheet</h2>
+
       <table>
         <thead>
-          <th>Name</th>
+          <th>Piece</th>
           <th>Icon</th>
           <th>Description</th>
           <th>Movement</th>
@@ -23,7 +24,7 @@ const Cheatsheet = () => (
             <td>
               <TokenIcon token={Token.Blocker} />
             </td>
-            <td>Protects your pieces from enemy tanks.</td>
+            <td>Blocks shots from enemy tanks.</td>
             <td>1 space</td>
             <td>
               <TokenIcon token={Token.OrthogonalInfiltrator} />
@@ -38,7 +39,7 @@ const Cheatsheet = () => (
               /<TokenIcon token={Token.LeftTank} />
               /<TokenIcon token={Token.RightTank} />
             </td>
-            <td>Shoots enemy pieces (in a single direction).</td>
+            <td>Shoots enemy pieces in a single direction.</td>
             <td>1 horizontal/vertical space</td>
             <td>
               <TokenIcon token={Token.UpTank} />
@@ -48,7 +49,7 @@ const Cheatsheet = () => (
             </td>
           </tr>
           <tr>
-            <td>Infiltrator (+)</td>
+            <td>Infiltrator</td>
             <td>
               <TokenIcon token={Token.OrthogonalInfiltrator} />
             </td>
@@ -60,7 +61,7 @@ const Cheatsheet = () => (
             </td>
           </tr>
           <tr>
-            <td>Infiltrator (X)</td>
+            <td>Infiltrator</td>
             <td>
               <TokenIcon token={Token.DiagonalInfiltrator} />
             </td>
@@ -76,7 +77,7 @@ const Cheatsheet = () => (
             <td>
               <TokenIcon token={Token.Mine} />
             </td>
-            <td>Explodes adjacent enemy (and friendly) pieces.</td>
+            <td>Explodes adjacent pieces.</td>
             <td>2 spaces (can jump)</td>
             <td>
               <TokenIcon token={Token.UpTank} />
@@ -93,6 +94,36 @@ const Cheatsheet = () => (
             <td>
               <TokenIcon token={Token.UpTank} />
               /<TokenIcon token={Token.Mine} />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table className="margin-top-large">
+        <thead>
+          <th>Action</th>
+          <th>Controls</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Place a piece</td>
+            <td>
+              Click a piece in your hand, then click one of the highlighted
+              spaces.
+            </td>
+          </tr>
+          <tr>
+            <td>Move a piece</td>
+            <td>
+              Click a piece on the board, then click one of the highlighted
+              spaces.
+            </td>
+          </tr>
+          <tr>
+            <td>Rotate a tank</td>
+            <td>
+              Click a tank in your hand, then click one of the highlighted tanks
+              on the board.
             </td>
           </tr>
         </tbody>
