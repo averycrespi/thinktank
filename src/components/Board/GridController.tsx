@@ -121,6 +121,7 @@ const GridController = ({
         <div className="col no-padding">
           <TokenSelector
             isActive={isActive}
+            player={player}
             hand={hand}
             selected={selectedToken}
             onTokenSelect={onTokenSelect}
