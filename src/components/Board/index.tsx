@@ -1,6 +1,6 @@
 import { G, Player, Result, nameOf } from "../../logic";
 
-import { BoardProps } from "boardgame.io";
+import { BoardProps } from "boardgame.io/react";
 import GridController from "./GridController";
 import React from "react";
 import { colorOf } from "../../utils/colorOf";

@@ -29,7 +29,7 @@ const Multiplayer = ({
     <div className="row flex-center">
       <div className="col no-padding">
         <MultiplayerClient
-          gameID={matchID}
+          matchID={matchID}
           playerID={player}
           credentials={credentials}
           debug={false}
