@@ -1,4 +1,4 @@
-import { Cell, Player, Token } from "../../logic";
+import { Cell, Event, Player, Token } from "../../logic";
 import React, { useState } from "react";
 import { canMove, possibleMovements } from "../../logic/move";
 import { canPlace, possiblePlacements } from "../../logic/place";
@@ -25,7 +25,7 @@ interface GridControllerProps {
   readonly isActive: boolean;
   readonly cells: Array<Cell>;
   readonly hand: Array<Token>;
-  readonly events: Array<string>;
+  readonly events: Array<Event>;
   readonly player: Player;
   placePiece(token: Token, index: number): void;
   movePiece(srcIndex: number, destIndex: number): void;
