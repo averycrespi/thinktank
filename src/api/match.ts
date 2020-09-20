@@ -1,10 +1,5 @@
 /**
  * This module follows the API schema from: https://boardgame.io/documentation/#/api/Lobby
- * v0.40.0 will cause breaking changes: https://github.com/boardgameio/boardgame.io/pull/709
- *
- * Known inconsistencies:
- *  - matchID is called gameID or roomID, depending on the endpoint.
- *  - playerID is treated as a number, not a string.
  */
 
 import { Player, nameOf } from "../logic";
@@ -46,10 +41,10 @@ export const createMatch = async (
     throw new Error("failed to create match: " + (await resp.text()));
   }
   const data = await resp.json();
-  if (typeof data.gameID !== "string") {
+  if (typeof data.matchID !== "string") {
     throw new Error("invalid response data: " + JSON.stringify(data));
   } else {
-    return data.gameID as string;
+    return data.matchID as string;
   }
 };
 
@@ -102,12 +97,12 @@ export const listMatchIDs = async (
   }
   const data = await resp.json();
   if (
-    !Array.isArray(data.rooms) ||
-    data.rooms.some((r: any) => typeof r.gameID !== "string")
+    !Array.isArray(data.matches) ||
+    data.matches.some((m: any) => typeof m.matchID !== "string")
   ) {
     throw new Error("invalid response data: " + JSON.stringify(data));
   } else {
-    return data.rooms.map((r: any) => r.gameID) as Array<string>;
+    return data.matches.map((m: any) => m.matchID) as Array<string>;
   }
 };
 
@@ -122,7 +117,7 @@ export const getMatch = async (
   }
   const data = await resp.json();
   if (
-    typeof data.roomID !== "string" ||
+    typeof data.matchID !== "string" ||
     !Array.isArray(data.players) ||
     data.players.some((p: any) => typeof p.id !== "number") ||
     data.players.some((p: any) => p.name && typeof p.name !== "string")
@@ -130,7 +125,7 @@ export const getMatch = async (
     throw new Error("invalid response data: " + JSON.stringify(data));
   } else {
     return {
-      matchID: data.roomID as string,
+      matchID: data.matchID as string,
       players: new Map<Player, string | null>(
         data.players.map((p: any) => [
           p.id.toString() as Player,

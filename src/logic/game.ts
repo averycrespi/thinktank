@@ -1,6 +1,8 @@
 import { BLUE_HOME_CENTER, GRID_SIZE, RED_HOME_CENTER } from "./grid";
 import { Ctx, Game } from "boardgame.io";
 import {
+  Event,
+  EventKind,
   G,
   Piece,
   Player,
@@ -8,7 +10,6 @@ import {
   Token,
   addToHand,
   createHand,
-  nameOf,
   opponentOf,
   removeFromHand,
 } from ".";
@@ -32,16 +33,20 @@ const setup = (): G => {
     [Player.Red]: createHand(),
     [Player.Blue]: createHand(),
   };
-  const events = new Array<string>();
+  const events = new Array<Event>();
   return { cells, hands, events };
 };
 
 const placePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
   const player = ctx.currentPlayer as Player;
   if (canPlace(G.cells, G.hands[player], { token, player }, index)) {
+    G.events.push({
+      kind: EventKind.PlacePiece,
+      player,
+      piece: { token, player },
+    });
     G.cells[index] = { token, player };
     removeFromHand(G.hands[player], token);
-    G.events.push(`${nameOf(player)} placed ${token}`);
   } else {
     return INVALID_MOVE;
   }
@@ -50,9 +55,13 @@ const placePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
 const movePiece = (G: G, ctx: Ctx, srcIndex: number, destIndex: number) => {
   const player = ctx.currentPlayer as Player;
   if (canMove(G.cells, player, srcIndex, destIndex)) {
+    G.events.push({
+      kind: EventKind.MovePiece,
+      player,
+      piece: G.cells[srcIndex] as Piece,
+    });
     G.cells[destIndex] = G.cells[srcIndex];
     G.cells[srcIndex] = null;
-    G.events.push(`${nameOf(player)} moved ${G.cells[destIndex]?.token}`);
   } else {
     return INVALID_MOVE;
   }
@@ -61,8 +70,12 @@ const movePiece = (G: G, ctx: Ctx, srcIndex: number, destIndex: number) => {
 const rotatePiece = (G: G, ctx: Ctx, token: Token, index: number) => {
   const player = ctx.currentPlayer as Player;
   if (canRotate(G.cells, { player, token }, index)) {
+    G.events.push({
+      kind: EventKind.RotatePiece,
+      player,
+      piece: G.cells[index] as Piece,
+    });
     G.cells[index] = { player, token };
-    G.events.push(`${nameOf(player)} rotated Tank`);
   } else {
     return INVALID_MOVE;
   }
@@ -75,8 +88,13 @@ const onTurnEnd = (G: G, ctx: Ctx) => {
     // Can the piece be infiltrated?
     // A piece can only be infiltrated once per turn.
     if (piece && canBeInfiltrated(G.cells, index)) {
+      G.events.push({
+        kind: EventKind.CapturePiece,
+        player: opponentOf(piece.player),
+        // Copy piece to avoid mutation.
+        piece: { player: piece.player, token: piece.token },
+      });
       piece.player = opponentOf(piece.player);
-      G.events.push(`${nameOf(piece.player)} captured ${piece.token}`);
     }
   }
   // Second pass: mark shot and exploded cells as destroyed.
@@ -85,16 +103,27 @@ const onTurnEnd = (G: G, ctx: Ctx) => {
     const piece = G.cells[index];
     // Can the piece by shot?
     if (piece && canBeShot(G.cells, index)) {
+      G.events.push({
+        kind: EventKind.ShootPiece,
+        player: opponentOf(piece.player),
+        piece,
+      });
       destroyed.add(index);
-      G.events.push(`${nameOf(opponentOf(piece.player))} shot ${piece.token}`);
       // Can the piece be exploded?
     } else if (piece && canBeExploded(G.cells, index)) {
+      G.events.push({
+        kind: EventKind.ExplodePiece,
+        player: opponentOf(piece.player),
+        piece,
+      });
       destroyed.add(index);
-      G.events.push(
-        `${nameOf(opponentOf(piece.player))} exploded ${piece.token}`
-      );
       // Will the piece explode itself?
     } else if (piece && canExplodeEnemy(G.cells, index)) {
+      G.events.push({
+        kind: EventKind.ExplodePiece,
+        player: piece.player,
+        piece,
+      });
       destroyed.add(index);
     }
   }

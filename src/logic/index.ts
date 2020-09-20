@@ -99,11 +99,28 @@ export const removeFromHand = (hand: Array<Token>, token: Token) => {
   }
 };
 
+/** Represents the kind of event. */
+export enum EventKind {
+  MovePiece,
+  PlacePiece,
+  RotatePiece,
+  ShootPiece,
+  CapturePiece,
+  ExplodePiece,
+}
+
+/** Represents an event. */
+export interface Event {
+  kind: EventKind;
+  player: Player;
+  piece: Piece;
+}
+
 /** Represents the game state. Must be serializable. */
 export interface G {
   cells: Array<Cell>;
   hands: { [Player.Red]: Hand; [Player.Blue]: Hand };
-  events: Array<string>;
+  events: Array<Event>;
 }
 
 /** Represents the result of a game. */

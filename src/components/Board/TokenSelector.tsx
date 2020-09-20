@@ -1,10 +1,12 @@
-import { Token, isTank } from "../../logic";
+import { Player, Token, isTank } from "../../logic";
 
 import React from "react";
 import TokenIcon from "./TokenIcon";
+import { colorOf } from "../../utils/colorOf";
 
 interface TokenSelectorProps {
   readonly isActive: boolean;
+  readonly player: Player;
   readonly hand: Array<Token>;
   readonly selected?: Token;
   onTokenSelect(token: Token): void;
@@ -12,6 +14,7 @@ interface TokenSelectorProps {
 
 const TokenSelector = ({
   isActive,
+  player,
   hand,
   selected,
   onTokenSelect,
@@ -39,7 +42,9 @@ const TokenSelector = ({
         className={selected === token ? "btn-primary" : ""}
         onClick={() => onTokenSelect(token)}
       >
-        <TokenIcon token={token} />
+        <span className={colorOf(player)}>
+          <TokenIcon token={token} />
+        </span>
         {" (" + count + ")"}
       </button>
     );
