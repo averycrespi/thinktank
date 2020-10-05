@@ -39,3 +39,9 @@ a.no-underline {
 .col.no-padding {
   padding: 0;
 }
+
+/* Disable 'flex: 0 0 100%' for Paper CSS column
+   @media only screen and (max-width: 768px) */
+.col.flex-initial {
+    flex: initial;
+}
