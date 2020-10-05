@@ -1,5 +1,6 @@
 import Board from "../Board";
 import { Client } from "boardgame.io/react";
+import Loading from "./Loading";
 import { Player } from "../../logic";
 import React from "react";
 import { SocketIO } from "boardgame.io/multiplayer";
@@ -24,6 +25,7 @@ const Multiplayer = ({
     multiplayer: SocketIO({ server: serverURL }),
     numPlayers: 2,
     debug: false,
+    loading: Loading,
   });
   return (
     <div className="row flex-center">
