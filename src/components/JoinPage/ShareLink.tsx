@@ -22,7 +22,7 @@ const ShareLink = ({ matchID, player }: ShareLinkProps) => {
     <div className="row flex-center">
       <div className="col no-padding">
         <div className="form-group">
-          <label>Share this link with your opponent (click to copy):</label>
+          <label>Share this link with your opponent:</label>
           <input
             className="input-block"
             type="text"
