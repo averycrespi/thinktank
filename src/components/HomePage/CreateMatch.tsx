@@ -26,12 +26,12 @@ const CreateMatch = ({ serverURL }: CreateMatchProps) => {
   return (
     <div>
       <div className="row flex-center">
-        <div className="col">
+        <div className="col flex-initial">
           <button disabled={clicked} onClick={onClick}>
             Create private match
           </button>
         </div>
-        <div className="col">
+        <div className="col flex-initial">
           <fieldset className="form-group">
             <label className="paper-radio">
               <input
