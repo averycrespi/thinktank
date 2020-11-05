@@ -4,6 +4,7 @@ import { loadCredentials, saveCredentials } from "../../api/storage";
 
 import HelpButton from "../HelpButton";
 import HomeButton from "../HomeButton";
+import Modal from "./Modal";
 import Multiplayer from "./Multiplayer";
 import { Player } from "../../logic";
 import ShareLink from "./ShareLink";
@@ -53,6 +54,7 @@ const JoinPage = ({ serverURL }: JoinPageProps) => {
             <div className="alert alert-danger margin-top">{error}</div>
           )}
           {credentials && <ShareLink matchID={matchID} player={player} />}
+          {credentials && <Modal matchID={matchID} player={player} />}
           <div className="row flex-center">
             <div className="col no-padding">
               <HelpButton />
