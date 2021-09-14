@@ -1,4 +1,3 @@
-import { Player, nameOf, opponentOf } from "../logic";
 import {
   Visibility,
   createMatch,
@@ -10,6 +9,7 @@ import {
 
 import { Server } from "boardgame.io/server";
 import { game } from "../logic/game";
+import { nameOf, opponentOf, Player } from "../logic/player";
 
 const port = parseInt(process.env.REACT_APP_PORT ?? "8000");
 const serverURL = `http://localhost:${port}`;
@@ -37,7 +37,7 @@ test("list contains match", async () => {
   expect(matchIDs).toStrictEqual([matchID]);
 });
 
-const player = Player.Red;
+const player = Player.One;
 let playerCredentials: string;
 test("player joins match ", async () => {
   playerCredentials = await joinMatch(serverURL, matchID, player);

@@ -1,10 +1,10 @@
 import Board from "../Board";
 import { Client } from "boardgame.io/react";
 import Loading from "./Loading";
-import { Player } from "../../logic";
 import React from "react";
 import { SocketIO } from "boardgame.io/multiplayer";
 import { game } from "../../logic/game";
+import { Player } from "../../logic/player";
 
 interface MultiplayerProps {
   serverURL: string;

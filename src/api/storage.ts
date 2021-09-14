@@ -1,4 +1,4 @@
-import { Player } from "../logic";
+import { Player } from "../logic/player";
 
 const STORAGE_KEY = "thinktank";
 const CAPACITY = 10;

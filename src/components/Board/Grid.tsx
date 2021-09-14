@@ -1,31 +1,26 @@
-import {
-  GRID_HEIGHT,
-  GRID_WIDTH,
-  coordsToIndex,
-  isBlueHome,
-  isRedHome,
-} from "../../logic/grid";
+import { GRID_HEIGHT, GRID_WIDTH, isInHomeOf } from "../../logic/grid";
 
-import { Cell } from "../../logic";
 import GridCell from "./GridCell";
 import React from "react";
+import { PlacedToken } from "../../logic/token";
+import { Player } from "../../logic/player";
 
 interface GridProps {
-  readonly cells: Array<Cell>;
+  readonly grid: Array<PlacedToken | null>;
   readonly highlighted: Set<number>;
   readonly scale: number;
   onCellClick(index: number): void;
 }
 
-const Grid = ({ cells, highlighted, scale, onCellClick }: GridProps) => {
-  let grid = [];
+const Grid = ({ grid, highlighted, scale, onCellClick }: GridProps) => {
+  let cells = [];
   for (let y = 0; y < GRID_HEIGHT; y++) {
     for (let x = 0; x < GRID_WIDTH; x++) {
-      const index = coordsToIndex({ x, y });
+      const index = y * GRID_WIDTH + x;
 
       let background = "";
-      const isRed = isRedHome(index);
-      const isBlue = isBlueHome(index);
+      const isRed = isInHomeOf(Player.One, index);
+      const isBlue = isInHomeOf(Player.Two, index);
       const isHighlighted = highlighted.has(index);
       if (isRed && isHighlighted) {
         background = "bg-light-red";
@@ -39,7 +34,7 @@ const Grid = ({ cells, highlighted, scale, onCellClick }: GridProps) => {
         background = "bg-light-gray";
       }
 
-      grid.push(
+      cells.push(
         <div
           key={index}
           onClick={() => onCellClick(index)}
@@ -56,7 +51,7 @@ const Grid = ({ cells, highlighted, scale, onCellClick }: GridProps) => {
             gridRowEnd: "span 1",
           }}
         >
-          <GridCell cell={cells[index]} />
+          <GridCell cell={grid[index]} />
         </div>
       );
     }
@@ -70,7 +65,7 @@ const Grid = ({ cells, highlighted, scale, onCellClick }: GridProps) => {
         border: "2px solid #000",
       }}
     >
-      {grid}
+      {cells}
     </div>
   );
 };

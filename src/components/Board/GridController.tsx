@@ -1,10 +1,11 @@
-import { Cell, Event, Player, Token } from "../../logic";
 import React, { useState } from "react";
-import { canMove, possibleMovements } from "../../logic/move";
-import { canPlace, possiblePlacements } from "../../logic/place";
-import { canRotate, possibleRotations } from "../../logic/rotate";
+import { canMoveToken, possibleMovements } from "../../logic/actions/move";
+import { canPlaceToken, possiblePlacements } from "../../logic/actions/place";
+import { canRotateToken, possibleRotations } from "../../logic/actions/rotate";
+import { Player } from "../../logic/player";
+import { GameState } from "../../logic/state";
+import { Token } from "../../logic/token";
 
-import Events from "./Events";
 import Grid from "./Grid";
 import TokenSelector from "./TokenSelector";
 
@@ -23,24 +24,20 @@ const DEFAULT_INDEX = -1;
 
 interface GridControllerProps {
   readonly isActive: boolean;
-  readonly cells: Array<Cell>;
-  readonly hand: Array<Token>;
-  readonly events: Array<Event>;
+  readonly state: GameState;
   readonly player: Player;
-  placePiece(token: Token, index: number): void;
-  movePiece(srcIndex: number, destIndex: number): void;
-  rotatePiece(token: Token, index: number): void;
+  placeToken(token: Token, index: number): void;
+  moveToken(srcIndex: number, destIndex: number): void;
+  rotateToken(afterToken: Token, index: number): void;
 }
 
 const GridController = ({
   isActive,
-  cells,
-  hand,
-  events,
+  state,
   player,
-  placePiece,
-  movePiece,
-  rotatePiece,
+  placeToken,
+  moveToken,
+  rotateToken,
 }: GridControllerProps) => {
   const [action, setAction] = useState(DEFAULT_ACTION);
   const [highlighted, setHighlighted] = useState(DEFAULT_HIGHLIGHTED);
@@ -58,8 +55,8 @@ const GridController = ({
       setAction(Action.PlaceOrRotate);
       setHighlighted(
         new Set([
-          ...possiblePlacements(cells, hand, { player, token }),
-          ...possibleRotations(cells, { player, token }),
+          ...possiblePlacements(state, player, token),
+          ...possibleRotations(state, player, token),
         ])
       );
       setSelectedToken(token);
@@ -67,7 +64,7 @@ const GridController = ({
     },
     toMove: (index: number) => {
       setAction(Action.Move);
-      setHighlighted(possibleMovements(cells, player, index));
+      setHighlighted(possibleMovements(state, player, index));
       setSelectedToken(DEFAULT_TOKEN);
       setSelectedIndex(index);
     },
@@ -76,26 +73,30 @@ const GridController = ({
   const onTokenSelect = (token: Token) => transitions.toPlaceOrRotate(token);
 
   const onCellClick = (index: number) => {
-    const p = cells[index];
+    const clickedToken = state.grid[index];
     if (
       action === Action.PlaceOrRotate &&
-      canRotate(cells, { player, token: selectedToken }, index)
+      canRotateToken(state, player, selectedToken, index)
     ) {
-      rotatePiece(selectedToken, index);
+      rotateToken(selectedToken, index);
       transitions.toNone();
-    } else if (index !== selectedIndex && p && p.player === player) {
+    } else if (
+      index !== selectedIndex &&
+      clickedToken &&
+      clickedToken.owner === player
+    ) {
       transitions.toMove(index);
     } else if (
       action === Action.PlaceOrRotate &&
-      canPlace(cells, hand, { player, token: selectedToken }, index)
+      canPlaceToken(state, player, selectedToken, index)
     ) {
-      placePiece(selectedToken, index);
+      placeToken(selectedToken, index);
       transitions.toNone();
     } else if (
       action === Action.Move &&
-      canMove(cells, player, selectedIndex, index)
+      canMoveToken(state, player, selectedIndex, index)
     ) {
-      movePiece(selectedIndex, index);
+      moveToken(selectedIndex, index);
       transitions.toNone();
     }
   };
@@ -105,16 +106,11 @@ const GridController = ({
       <div className="row flex-center">
         <div className="col no-padding">
           <Grid
-            cells={cells}
+            grid={state.grid}
             highlighted={highlighted}
             scale={CELL_SCALE}
             onCellClick={isActive ? onCellClick : (_) => {}}
           />
-        </div>
-        <div className="col no-padding">
-          <div className="padding-left-large">
-            <Events events={events} scale={CELL_SCALE} />
-          </div>
         </div>
       </div>
       <div className="row flex-center">
@@ -122,7 +118,7 @@ const GridController = ({
           <TokenSelector
             isActive={isActive}
             player={player}
-            hand={hand}
+            hand={state.hands[player]}
             selected={selectedToken}
             onTokenSelect={onTokenSelect}
           />

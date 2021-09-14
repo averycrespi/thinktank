@@ -2,9 +2,8 @@
  * This module follows the API schema from: https://boardgame.io/documentation/#/api/Lobby
  */
 
-import { Player, nameOf } from "../logic";
-
 import { game } from "../logic/game";
+import { nameOf, Player } from "../logic/player";
 
 /** Represents a match. */
 export interface Match {

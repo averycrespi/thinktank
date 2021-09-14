@@ -1,9 +1,9 @@
-import { Player, nameOf } from "../../logic";
 import React, { useState } from "react";
 import { Visibility, createMatch } from "../../api/match";
 
-import { colorOf } from "../../utils/colorOf";
 import { useHistory } from "react-router-dom";
+import { nameOf, Player } from "../../logic/player";
+import { colorOf } from "../../utils/colorOf";
 
 interface CreateMatchProps {
   serverURL: string;
@@ -11,7 +11,7 @@ interface CreateMatchProps {
 
 const CreateMatch = ({ serverURL }: CreateMatchProps) => {
   const history = useHistory();
-  const [player, setPlayer] = useState(Player.Red);
+  const [player, setPlayer] = useState(Player.One);
   const [clicked, setClicked] = useState(false);
   const [matchID, setMatchID] = useState("");
   const [error, setError] = useState("");
@@ -36,28 +36,28 @@ const CreateMatch = ({ serverURL }: CreateMatchProps) => {
             <label className="paper-radio">
               <input
                 type="radio"
-                value={Player.Red}
-                checked={player === Player.Red}
-                onChange={() => setPlayer(Player.Red)}
+                value={Player.One}
+                checked={player === Player.One}
+                onChange={() => setPlayer(Player.One)}
               />
               <span>
                 as
-                <span className={colorOf(Player.Red)}>
-                  {" " + nameOf(Player.Red)}
+                <span className={colorOf(Player.One)}>
+                  {" " + nameOf(Player.One)}
                 </span>
               </span>
             </label>
             <label className="paper-radio">
               <input
                 type="radio"
-                value={Player.Blue}
-                checked={player === Player.Blue}
-                onChange={() => setPlayer(Player.Blue)}
+                value={Player.Two}
+                checked={player === Player.Two}
+                onChange={() => setPlayer(Player.Two)}
               />
               <span>
                 as
-                <span className={colorOf(Player.Blue)}>
-                  {" " + nameOf(Player.Blue)}
+                <span className={colorOf(Player.Two)}>
+                  {" " + nameOf(Player.Two)}
                 </span>
               </span>
             </label>

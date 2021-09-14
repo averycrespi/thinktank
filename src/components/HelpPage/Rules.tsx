@@ -1,5 +1,5 @@
 import React from "react";
-import { Token } from "../../logic";
+import { Token } from "../../logic/token";
 import TokenIcon from "../Board/TokenIcon";
 
 const Rules = () => (
@@ -98,7 +98,7 @@ const Rules = () => (
           <div className="card">
             <div className="card-body">
               <h4 className="card-title">
-                <TokenIcon token={Token.OrthogonalInfiltrator} /> Infiltrators
+                <TokenIcon token={Token.CardinalInfiltrator} /> Infiltrators
               </h4>
               <h5 className="card-subtitle">Description</h5>
               <p className="card-text">
@@ -110,7 +110,7 @@ const Rules = () => (
               </p>
               <h5 className="card-subtitle">Movement</h5>
               <p className="card-text">
-                <TokenIcon token={Token.OrthogonalInfiltrator} /> Moves 1 space
+                <TokenIcon token={Token.CardinalInfiltrator} /> Moves 1 space
                 horizontally or vertically.
               </p>
               <p className="card-text">

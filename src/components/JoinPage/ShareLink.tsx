@@ -1,5 +1,5 @@
-import { Player, opponentOf } from "../../logic";
 import React, { useRef } from "react";
+import { opponentOf, Player } from "../../logic/player";
 
 interface ShareLinkProps {
   matchID: string;

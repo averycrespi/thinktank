@@ -12,7 +12,7 @@ import {
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Token } from "../../logic";
+import { Token } from "../../logic/token";
 
 interface TokenIconProps {
   token: Token;
@@ -30,7 +30,7 @@ const TokenIcon = ({ token }: TokenIconProps) => {
       return <FontAwesomeIcon icon={faArrowLeft} />;
     case Token.RightTank:
       return <FontAwesomeIcon icon={faArrowRight} />;
-    case Token.OrthogonalInfiltrator:
+    case Token.CardinalInfiltrator:
       return <FontAwesomeIcon icon={faPlus} />;
     case Token.DiagonalInfiltrator:
       return <FontAwesomeIcon icon={faTimes} />;

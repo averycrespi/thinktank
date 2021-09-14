@@ -1,11 +1,11 @@
-import { Player } from "../logic";
+import { Player } from "../logic/player";
 
 /** Return the CSS color class of a player. */
 export const colorOf = (player: Player): string => {
   switch (player) {
-    case Player.Red:
+    case Player.One:
       return "red";
-    case Player.Blue:
+    case Player.Two:
       return "blue";
   }
 };

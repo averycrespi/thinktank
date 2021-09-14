@@ -1,5 +1,5 @@
 import React from "react";
-import { Token } from "../../logic";
+import { Token } from "../../logic/token";
 import TokenIcon from "../Board/TokenIcon";
 
 const Cheatsheet = () => (
@@ -27,7 +27,7 @@ const Cheatsheet = () => (
             <td>Blocks shots from enemy tanks.</td>
             <td>1 space</td>
             <td>
-              <TokenIcon token={Token.OrthogonalInfiltrator} />
+              <TokenIcon token={Token.CardinalInfiltrator} />
               /<TokenIcon token={Token.DiagonalInfiltrator} />
             </td>
           </tr>
@@ -43,7 +43,7 @@ const Cheatsheet = () => (
             <td>1 horizontal/vertical space</td>
             <td>
               <TokenIcon token={Token.UpTank} />
-              /<TokenIcon token={Token.OrthogonalInfiltrator} />
+              /<TokenIcon token={Token.CardinalInfiltrator} />
               /<TokenIcon token={Token.DiagonalInfiltrator} />
               /<TokenIcon token={Token.Mine} />
             </td>
@@ -51,7 +51,7 @@ const Cheatsheet = () => (
           <tr>
             <td>Infiltrator</td>
             <td>
-              <TokenIcon token={Token.OrthogonalInfiltrator} />
+              <TokenIcon token={Token.CardinalInfiltrator} />
             </td>
             <td>Captures adjacent enemy pieces.</td>
             <td>1 horizontal/vertical space</td>

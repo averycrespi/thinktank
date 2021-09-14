@@ -1,8 +1,7 @@
-import { Player, nameOf } from "../../logic";
-
 import React from "react";
-import ShareLink from "./ShareLink";
+import { nameOf, Player } from "../../logic/player";
 import { colorOf } from "../../utils/colorOf";
+import ShareLink from "./ShareLink";
 
 interface ModalProps {
   matchID: string;

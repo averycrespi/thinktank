@@ -6,9 +6,9 @@ import HelpButton from "../HelpButton";
 import HomeButton from "../HomeButton";
 import Modal from "./Modal";
 import Multiplayer from "./Multiplayer";
-import { Player } from "../../logic";
 import ShareLink from "./ShareLink";
 import { joinMatch } from "../../api/match";
+import { Player } from "../../logic/player";
 
 interface JoinPageProps {
   serverURL: string;
