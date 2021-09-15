@@ -1,5 +1,5 @@
 import { adjacentTo, isInGrid } from "../grid";
-import { PlacedToken, Token } from "../token";
+import { isInfiltrator, PlacedToken, Token } from "../token";
 
 // Defines which tokens can be captured by infiltrators.
 const CAPTURABLE = new Set<Token>([
@@ -8,9 +8,17 @@ const CAPTURABLE = new Set<Token>([
   Token.DownTank,
   Token.LeftTank,
   Token.RightTank,
+  Token.Base,
 ]);
 
-/** Check if a token can be captured by an enemy infiltrator. */
+/**
+ * Check if a token can be captured by an enemy infiltrator.
+ *
+ * A token can be captured iff:
+ * - The token is capturable
+ * - The token is not adjacent to a friendly infiltrator
+ * - The token is adjacent to an enemy infiltrator
+ */
 export const canBeCaptured = (
   grid: Array<PlacedToken | null>,
   index: number
@@ -20,18 +28,16 @@ export const canBeCaptured = (
   }
   const target = grid[index];
   if (!target || !CAPTURABLE.has(target.token)) {
-    return false; // Cell is empty or piece is not capturable.
+    return false; // Cell is empty or token is not capturable.
   }
-  for (const adjIndex of adjacentTo(index)) {
-    const adj = grid[adjIndex];
-    if (
-      adj &&
-      adj.owner !== target.owner &&
-      (adj.token === Token.CardinalInfiltrator ||
-        adj.token === Token.DiagonalInfiltrator)
-    ) {
-      return true; // Token is adjacent to an enemy infiltrator.
-    }
+  const adjacentInfiltrators = Array.from(adjacentTo(index))
+    .map((i) => grid[i])
+    .filter((t) => t && isInfiltrator(t.token));
+  if (adjacentInfiltrators.some((t) => t && t.owner === target.owner)) {
+    return false; // Token is protected by friendly infiltrator.
+  } else if (adjacentInfiltrators.some((t) => t && t.owner !== target.owner)) {
+    return true; // Token is adjacent to enemy infiltrator.
+  } else {
+    return false;
   }
-  return false;
 };

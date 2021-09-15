@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Visibility, createMatch } from "../../api/match";
 
 import { useHistory } from "react-router-dom";
-import { nameOf, Player } from "../../logic/player";
+import { Player } from "../../logic/player";
 import { colorOf } from "../../utils/colorOf";
+import { nameOf } from "../../utils/nameOf";
 
 interface CreateMatchProps {
   serverURL: string;

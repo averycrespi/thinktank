@@ -1,6 +1,7 @@
 import React from "react";
-import { nameOf, Player } from "../../logic/player";
+import { Player } from "../../logic/player";
 import { colorOf } from "../../utils/colorOf";
+import { nameOf } from "../../utils/nameOf";
 import ShareLink from "./ShareLink";
 
 interface ModalProps {

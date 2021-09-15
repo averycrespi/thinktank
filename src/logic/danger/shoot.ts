@@ -20,17 +20,11 @@ const canBeShotFrom = (
   targetIndex: number,
   tank: Token.UpTank | Token.DownTank | Token.RightTank | Token.LeftTank
 ): boolean => {
-  if (!isInGrid(targetIndex)) {
-    return false; // Out of bounds.
-  }
   const target = grid[targetIndex];
   if (!target || !SHOOTABLE.has(target.token)) {
     return false; // Cell is empty or token is not shootable.
   }
   for (const srcIndex of srcIndices) {
-    if (!isInGrid(srcIndex)) {
-      return false; // Out of bounds.
-    }
     const src = grid[srcIndex];
     if (!src) {
       continue; // Keep looking for a tank or blocker.
@@ -48,12 +42,18 @@ export const canBeShot = (
   grid: Array<PlacedToken | null>,
   index: number
 ): boolean =>
-  canBeShotFrom(grid, lineFrom(index, Direction.Up), index, Token.DownTank) ||
-  canBeShotFrom(grid, lineFrom(index, Direction.Down), index, Token.UpTank) ||
-  canBeShotFrom(
-    grid,
-    lineFrom(index, Direction.Left),
-    index,
-    Token.RightTank
-  ) ||
-  canBeShotFrom(grid, lineFrom(index, Direction.Right), index, Token.LeftTank);
+  isInGrid(index) &&
+  (canBeShotFrom(grid, lineFrom(index, Direction.Up), index, Token.DownTank) ||
+    canBeShotFrom(grid, lineFrom(index, Direction.Down), index, Token.UpTank) ||
+    canBeShotFrom(
+      grid,
+      lineFrom(index, Direction.Left),
+      index,
+      Token.RightTank
+    ) ||
+    canBeShotFrom(
+      grid,
+      lineFrom(index, Direction.Right),
+      index,
+      Token.LeftTank
+    ));

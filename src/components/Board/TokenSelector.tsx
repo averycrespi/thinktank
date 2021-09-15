@@ -1,6 +1,6 @@
 import React from "react";
 import { Player } from "../../logic/player";
-import { HeldToken, toHeld, Token, toTitle } from "../../logic/token";
+import { HeldToken, toHeld, Token } from "../../logic/token";
 import { colorOf } from "../../utils/colorOf";
 import TokenIcon from "./TokenIcon";
 
@@ -39,7 +39,6 @@ const TokenSelector = ({
     div.push(
       <button
         key={token}
-        title={toTitle(token)}
         disabled={disabled}
         className={selected === token ? "btn-primary" : ""}
         onClick={() => onTokenSelect(token)}

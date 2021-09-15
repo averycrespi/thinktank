@@ -1,10 +1,14 @@
-/** Return a new set with elements that satisfy a predicate. */
-export const filter = <T>(s: Set<T>, f: (v: T) => boolean): Set<T> => {
-  var filtered = new Set<T>();
-  for (const v of s) {
-    if (f(v)) {
-      filtered.add(v);
-    }
+declare global {
+  interface Set<T> {
+    filter(f: (v: T) => boolean): Set<T>;
   }
-  return filtered;
+}
+
+// eslint-disable-next-line no-extend-native
+Set.prototype.filter = function filter(f) {
+  var newSet = new Set();
+  for (var v of this) if (f(v)) newSet.add(v);
+  return newSet;
 };
+
+export {};

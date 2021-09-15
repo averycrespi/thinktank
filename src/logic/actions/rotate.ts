@@ -1,13 +1,14 @@
 import { deepCopy } from "../../utils/deepCopy";
-import { GRID_HEIGHT, GRID_WIDTH, isInGrid } from "../grid";
+import { advanceState } from "../advance";
+import { GRID_SIZE, isInGrid } from "../grid";
 import { Player } from "../player";
-import { advanceState, GameState } from "../state";
-import { HeldToken, PlacedToken, toHeld, Token } from "../token";
+import { GameState } from "../state";
+import { isTank, PlacedToken, Token } from "../token";
 
 /**
- * Check if a rotation is legal.
- *
- * Does NOT validate that the rotation is safe.
+ * A rotation is considered legal iff:
+ * - The index contains a tank that is owned by the player
+ * - The replacement token is a tank and is different than the original token
  */
 const isLegalRotation = (
   grid: Array<PlacedToken | null>,
@@ -23,12 +24,10 @@ const isLegalRotation = (
     return false; // Cannot rotate an empty space.
   } else if (src.owner !== player) {
     return false; // Cannot rotate an opponent's token.
-  } else if (toHeld(src.token) !== HeldToken.Tank) {
-    return false; // The original token must be a tank.
-  } else if (toHeld(afterToken) !== HeldToken.Tank) {
-    return false; // The replacement token must be a tank.
+  } else if (!isTank(src.token) || !isTank(afterToken)) {
+    return false; // The original and replacment tokens must be tanks.
   } else if (src.token === afterToken) {
-    return false; // Cannot rotate a tank to itself.
+    return false; // The original and replacement tokens must be different.
   } else {
     return true;
   }
@@ -44,7 +43,7 @@ export const rotateToken = (
   if (!isLegalRotation(state.grid, player, afterToken, index)) {
     return null;
   }
-  const newState = deepCopy(state);
+  const newState: GameState = deepCopy(state);
   newState.grid[index] = { owner: player, token: afterToken };
   return advanceState(newState, player);
 };
@@ -63,14 +62,13 @@ export const possibleRotations = (
   player: Player,
   afterToken: Token
 ): Set<number> => {
-  const rotations = new Set<number>();
-  if (toHeld(afterToken) !== HeldToken.Tank) {
-    return rotations; // Optimization: The replacement token must be a tank.
+  if (!isTank(afterToken)) {
+    return new Set(); // Optimization: The replacement token must be a tank.
   }
-  for (let index = 0; index < GRID_WIDTH * GRID_HEIGHT; index++) {
-    if (canRotateToken(state, player, afterToken, index)) {
-      rotations.add(index);
-    }
-  }
-  return rotations;
+  const allIndices = [...Array(GRID_SIZE).keys()];
+  return new Set(
+    allIndices.filter((index) =>
+      canRotateToken(state, player, afterToken, index)
+    )
+  );
 };

@@ -1,13 +1,15 @@
 import { deepCopy } from "../../utils/deepCopy";
-import { GRID_HEIGHT, GRID_WIDTH, isInGrid, isInSpawnOf } from "../grid";
+import { advanceState } from "../advance";
+import { GRID_SIZE, isInGrid, isInSpawnOf } from "../grid";
 import { Player } from "../player";
-import { advanceState, GameState } from "../state";
+import { GameState } from "../state";
 import { HeldToken, PlacedToken, toHeld, Token } from "../token";
 
 /**
- * Check if a placement is legal.
- *
- * Does NOT validate that the token placement is safe.
+ * A placement is considered legal iff:
+ * - The player has at least one of the token in their hand
+ * - The index does not contain a token
+ * - The index lies within the player's spawn region
  */
 const isLegalPlacement = (
   grid: Array<PlacedToken | null>,
@@ -21,9 +23,9 @@ const isLegalPlacement = (
   } else if (!isInGrid(index)) {
     return false; // Out of bounds.
   } else if (grid[index]) {
-    return false; // Cannot place a token on top of another piece.
+    return false; // Cannot place a token in an occupied cell.
   } else if (!isInSpawnOf(player, index)) {
-    return false; // Cannot place a token outside of spawn.
+    return false; // Cannot place a token outside of the spawn region.
   } else {
     return true;
   }
@@ -36,13 +38,12 @@ export const placeToken = (
   token: Token,
   index: number
 ): GameState | null => {
-  if (
-    !isLegalPlacement(state.grid, state.hands[player], player, token, index)
-  ) {
+  const hand = state.hands[player];
+  if (!isLegalPlacement(state.grid, hand, player, token, index)) {
     return null;
   }
-  const newState = deepCopy(state);
-  const handIndex = newState.hands[player].indexOf(toHeld(token));
+  const newState: GameState = deepCopy(state);
+  const handIndex = hand.indexOf(toHeld(token));
   newState.hands[player].splice(handIndex, 1); // Remove from hand.
   newState.grid[index] = { owner: player, token };
   return advanceState(newState, player);
@@ -62,14 +63,11 @@ export const possiblePlacements = (
   player: Player,
   token: Token
 ): Set<number> => {
-  const placements = new Set<number>();
   if (!state.hands[player].includes(toHeld(token))) {
-    return placements; // Optimization: Token must be in hand.
+    return new Set(); // Optimization: Token must be in hand.
   }
-  for (let index = 0; index < GRID_WIDTH * GRID_HEIGHT; index++) {
-    if (canPlaceToken(state, player, token, index)) {
-      placements.add(index);
-    }
-  }
-  return placements;
+  const allIndices = [...Array(GRID_SIZE).keys()];
+  return new Set(
+    allIndices.filter((index) => canPlaceToken(state, player, token, index))
+  );
 };

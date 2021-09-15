@@ -1,5 +1,5 @@
 import { deepCopy } from "../../utils/deepCopy";
-import { filter } from "../../utils/setOps";
+import { advanceState } from "../advance";
 import {
   adjacentTo,
   cardinallyAdjacentTo,
@@ -9,38 +9,41 @@ import {
   isInHome,
 } from "../grid";
 import { Player } from "../player";
-import { advanceState, GameState } from "../state";
+import { GameState } from "../state";
 import { PlacedToken, Token } from "../token";
 
-/**
- * Find all indices that are reachable by a token from an index.
- *
- * Does NOT validate that the reachable indices are safe or unoccupied.
- */
+/** Find all indices that are reachable by a token from an index. */
 const reachableFrom = (token: Token, index: number): Set<number> => {
   switch (token) {
     case Token.Blocker:
-      return filter(adjacentTo(index), (i) => !isInHome(i));
+      // Blockers can move one space horizontally, vertically, or diagonally.
+      return adjacentTo(index).filter((i) => !isInHome(i));
     case Token.UpTank:
     case Token.DownTank:
     case Token.LeftTank:
     case Token.RightTank:
-      return filter(cardinallyAdjacentTo(index), (i) => !isInHome(i));
+      // Tanks can move one space horizontally.
+      return cardinallyAdjacentTo(index).filter((i) => !isInHome(i));
     case Token.CardinalInfiltrator:
-      return filter(cardinallyAdjacentTo(index), (i) => !isInHome(i));
+      // Cardinal infiltrators can move one space horizontally or vertically.
+      return cardinallyAdjacentTo(index).filter((i) => !isInHome(i));
     case Token.DiagonalInfiltrator:
-      return filter(diagonallyAdjacentTo(index), (i) => !isInHome(i));
+      // Diagonal infiltrators can move one space diagonally.
+      return diagonallyAdjacentTo(index).filter((i) => !isInHome(i));
     case Token.Mine:
-      return filter(dualAdjacentTo(index), (i) => !isInHome(i));
+      // Mines can move up to two spaces and can jump over other units.
+      return dualAdjacentTo(index).filter((i) => !isInHome(i));
     case Token.Base:
-      return filter(adjacentTo(index), (i) => isInHome(i));
+      // Bases can move one space horizontally, vertically, or diagonally.
+      return adjacentTo(index).filter((i) => isInHome(i));
   }
 };
 
 /**
- * Check if a movement is legal.
- *
- * Does NOT validate that the destination index is safe.
+ * A movement is considered legal iff:
+ * - The source index contains a token that is owned by the player
+ * - The destination index does not contain a token
+ * - The token at the source index can reach the destination index
  */
 const isLegalMovement = (
   grid: Array<PlacedToken | null>,
@@ -76,7 +79,7 @@ export const moveToken = (
   if (!isLegalMovement(state.grid, player, srcIndex, destIndex)) {
     return null;
   }
-  const newState = deepCopy(state);
+  const newState: GameState = deepCopy(state);
   newState.grid[destIndex] = newState.grid[srcIndex];
   newState.grid[srcIndex] = null;
   return advanceState(newState, player);
@@ -96,19 +99,14 @@ export const possibleMovements = (
   player: Player,
   srcIndex: number
 ): Set<number> => {
-  const destinations = new Set<number>();
   if (!isInGrid(srcIndex)) {
-    return destinations; // Optimization: Out of bounds.
+    return new Set(); // Optimization: Out of bounds.
   }
   const src = state.grid[srcIndex];
   if (!src) {
-    return destinations; // Optimization: Cannot move from an empty cell.
+    return new Set(); // Optimization: Cannot move from an empty cell.
   }
-  const reachable = reachableFrom(src.token, srcIndex);
-  for (const destIndex of reachable) {
-    if (canMoveToken(state, player, srcIndex, destIndex)) {
-      destinations.add(destIndex);
-    }
-  }
-  return destinations;
+  return reachableFrom(src.token, srcIndex).filter((destIndex) =>
+    canMoveToken(state, player, srcIndex, destIndex)
+  );
 };

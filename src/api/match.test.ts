@@ -9,7 +9,8 @@ import {
 
 import { Server } from "boardgame.io/server";
 import { game } from "../logic/game";
-import { nameOf, opponentOf, Player } from "../logic/player";
+import { opponentOf, Player } from "../logic/player";
+import { nameOf } from "../utils/nameOf";
 
 const port = parseInt(process.env.REACT_APP_PORT ?? "8000");
 const serverURL = `http://localhost:${port}`;
@@ -23,7 +24,7 @@ beforeAll(async () => {
 
 afterAll(() => commands.kill(server));
 
-test("list is empty", async () => {
+test("match list is empty", async () => {
   expect(await listMatchIDs(serverURL)).toStrictEqual([]);
 });
 
@@ -32,14 +33,14 @@ test("create public match", async () => {
   matchID = await createMatch(serverURL, Visibility.PUBLIC);
 });
 
-test("list contains match", async () => {
+test("match list contains match", async () => {
   const matchIDs = await listMatchIDs(serverURL);
   expect(matchIDs).toStrictEqual([matchID]);
 });
 
 const player = Player.One;
 let playerCredentials: string;
-test("player joins match ", async () => {
+test("player joins match", async () => {
   playerCredentials = await joinMatch(serverURL, matchID, player);
 });
 
@@ -78,6 +79,6 @@ test("opponent leaves match", async () => {
   await leaveMatch(serverURL, matchID, opponent, opponentCredentials);
 });
 
-test("list is empty", async () => {
+test("match list is empty", async () => {
   expect(await listMatchIDs(serverURL)).toStrictEqual([]);
 });

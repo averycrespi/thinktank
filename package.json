@@ -38,7 +38,8 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
-    "test": "react-scripts test",
+    "test": "react-scripts test --watchAll",
+    "test:coverage": "react-scripts test --watchAll --coverage",
     "build": "react-scripts build",
     "start": "react-scripts start",
     "build:server": "tsc -p tsconfig.server.json",
@@ -58,6 +59,11 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "!**/*.tsx"
     ]
   }
 }

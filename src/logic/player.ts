@@ -20,13 +20,3 @@ export const opponentOf = (player: Player): Player => {
       return Player.One;
   }
 };
-
-/** Returns the name of a player. */
-export const nameOf = (player: Player): string => {
-  switch (player) {
-    case Player.One:
-      return "Red";
-    case Player.Two:
-      return "Blue";
-  }
-};

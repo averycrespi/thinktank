@@ -3,6 +3,7 @@ import { Player } from "./player";
 // Defines the dimensions of the grid.
 export const GRID_WIDTH = 15;
 export const GRID_HEIGHT = 18;
+export const GRID_SIZE = GRID_WIDTH * GRID_HEIGHT;
 
 /**
  * Represents a coordinate pair.
