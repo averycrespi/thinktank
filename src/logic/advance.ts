@@ -35,6 +35,9 @@ export const advanceState = (
       if (target.owner === player) {
         return null; // Self-preservation rule: cannot cause own token to be shot.
       }
+      if (target.token === Token.Mine) {
+        exploding.add(index); // Mines explode when shot.
+      }
       shot.add(index);
     }
     if (target && canExplode(state.grid, index)) {

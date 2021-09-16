@@ -1,5 +1,5 @@
 import { deepCopy } from "../../utils/deepCopy";
-import { Player } from "../player";
+import { opponentOf, Player } from "../player";
 import { GameState, initialState } from "../state";
 import { Token } from "../token";
 import { canRotateToken, possibleRotations, rotateToken } from "./rotate";
@@ -11,42 +11,61 @@ test("rotation fails when index is out of bounds", () => {
 
 test("rotation fails when index is empty", () => {
   const state: GameState = deepCopy(initialState);
-  expect(state.grid[0]).toBe(null);
-  expect(rotateToken(state, Player.One, Token.UpTank, 0)).toBe(null);
+  const index = 0;
+  expect(state.grid[index]).toBe(null);
+  expect(rotateToken(state, Player.One, Token.UpTank, index)).toBe(null);
 });
 
 test("rotation fails when player does not own token", () => {
   const state: GameState = deepCopy(initialState);
-  state.grid[0] = { owner: Player.Two, token: Token.DownTank };
-  expect(rotateToken(state, Player.One, Token.UpTank, 0)).toBe(null);
+  const player = Player.One;
+  const index = 0;
+  state.grid[index] = { owner: opponentOf(player), token: Token.DownTank };
+  expect(rotateToken(state, player, Token.UpTank, index)).toBe(null);
 });
 
-test("rotation fails original or replacement token is not a tank", () => {
+test("rotation fails when original token is not a tank", () => {
   const state: GameState = deepCopy(initialState);
-  state.grid[0] = { owner: Player.One, token: Token.Blocker };
-  expect(rotateToken(state, Player.One, Token.UpTank, 0)).toBe(null);
+  const player = Player.One;
+  const index = 0;
+  state.grid[index] = { owner: player, token: Token.Blocker };
+  expect(rotateToken(state, player, Token.UpTank, index)).toBe(null);
+});
+
+test("rotation fails when replacement token is not a tank", () => {
+  const state: GameState = deepCopy(initialState);
+  const player = Player.One;
+  const index = 0;
+  state.grid[index] = { owner: player, token: Token.UpTank };
+  expect(rotateToken(state, player, Token.Blocker, index)).toBe(null);
 });
 
 test("rotation fails original token is same as replacement token", () => {
   const state: GameState = deepCopy(initialState);
-  state.grid[0] = { owner: Player.One, token: Token.UpTank };
-  expect(rotateToken(state, Player.One, Token.UpTank, 0)).toBe(null);
+  const player = Player.One;
+  const token = Token.UpTank;
+  const index = 0;
+  state.grid[index] = { owner: player, token };
+  expect(rotateToken(state, player, token, index)).toBe(null);
 });
 
 test("rotate tank", () => {
   const state: GameState = deepCopy(initialState);
-  state.grid[0] = { owner: Player.One, token: Token.DownTank };
+  const player = Player.One;
+  const afterToken = Token.UpTank;
+  const index = 0;
+  state.grid[index] = { owner: player, token: Token.DownTank };
   const expected: GameState = deepCopy(initialState);
-  expected.grid[0] = { owner: Player.One, token: Token.UpTank };
-  expect(rotateToken(state, Player.One, Token.UpTank, 0)).toStrictEqual(
-    expected
-  );
+  expected.grid[index] = { owner: player, token: afterToken };
+  expect(rotateToken(state, player, afterToken, index)).toStrictEqual(expected);
 });
 
 test("can rotate token", () => {
   const state: GameState = deepCopy(initialState);
-  state.grid[0] = { owner: Player.One, token: Token.DownTank };
-  expect(canRotateToken(state, Player.One, Token.UpTank, 0)).toBe(true);
+  const player = Player.One;
+  const index = 0;
+  state.grid[index] = { owner: player, token: Token.DownTank };
+  expect(canRotateToken(state, player, Token.UpTank, index)).toBe(true);
 });
 
 test("cannot rotate token", () => {
@@ -59,13 +78,14 @@ test("no possible rotations when replacement token is not a tank", () => {
   expect(possibleRotations(state, Player.One, Token.Blocker).size).toBe(0);
 });
 
-test("upwards tanks can all be rotated into downwards tanks", () => {
+test("all upwards tanks can be rotated into downwards tanks", () => {
   const state: GameState = deepCopy(initialState);
+  const player = Player.One;
   const tankIndices = new Set([0, 1, 2]);
   tankIndices.forEach(
-    (i) => (state.grid[i] = { owner: Player.One, token: Token.UpTank })
+    (i) => (state.grid[i] = { owner: player, token: Token.UpTank })
   );
-  expect(possibleRotations(state, Player.One, Token.DownTank)).toStrictEqual(
+  expect(possibleRotations(state, player, Token.DownTank)).toStrictEqual(
     tankIndices
   );
 });
