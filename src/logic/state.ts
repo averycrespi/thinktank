@@ -5,8 +5,6 @@ import { HeldToken, PlacedToken, Token } from "./token";
 /**
  * Represents the current state of a game.
  *
- * Turn information is stored within the ctx object, so it doesn't need to be in the game state.
- *
  * The state must be JSON serializable for boardgame.io to work properly.
  */
 export interface GameState {

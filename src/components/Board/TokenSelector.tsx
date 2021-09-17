@@ -1,7 +1,7 @@
 import React from "react";
 import { Player } from "../../logic/player";
 import { HeldToken, toHeld, Token } from "../../logic/token";
-import { colorOf } from "../../utils/colorOf";
+import { colorClassOf } from "../../utils/colorClassOf";
 import TokenIcon from "./TokenIcon";
 
 interface TokenSelectorProps {
@@ -43,7 +43,7 @@ const TokenSelector = ({
         className={selected === token ? "btn-primary" : ""}
         onClick={() => onTokenSelect(token)}
       >
-        <span className={colorOf(player)}>
+        <span className={colorClassOf(player)}>
           <TokenIcon token={token} />
         </span>
         {" (" + count + ")"}

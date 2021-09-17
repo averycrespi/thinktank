@@ -21,7 +21,7 @@ test("both players have the same initial hand", () => {
 });
 
 test("initial state has no winner", () => {
-  expect(winnerOf(initialState)).toBe(null);
+  expect(winnerOf(initialState)).toBeNull();
 });
 
 test("owner of the single remaining base wins", () => {
@@ -41,5 +41,5 @@ test("state has no winner when there are no bases", () => {
   const state: GameState = deepCopy(initialState);
   state.grid[baseIndexOf(Player.One)] = null;
   state.grid[baseIndexOf(Player.Two)] = null;
-  expect(winnerOf(state)).toBe(null);
+  expect(winnerOf(state)).toBeNull();
 });

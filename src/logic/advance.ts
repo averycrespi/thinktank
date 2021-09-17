@@ -1,3 +1,4 @@
+import { deepCopy } from "../utils/deepCopy";
 import { canBeCaptured } from "./danger/capture";
 import { canBeExploded, canExplode } from "./danger/explode";
 import { canBeShot } from "./danger/shoot";
@@ -7,18 +8,20 @@ import { GameState } from "./state";
 import { toHeld, Token } from "./token";
 
 /**
- * Advance the game state after a player takes an action, mutating the existing state in the process.
+ * Advance the game state after a player takes an action.
  *
- * Returns the updated game state, or null iff the self-preservation rule is violated.
+ * Returns the updated game newState, or null iff the self-preservation rule is violated.
  */
 export const advanceState = (
   state: GameState,
   player: Player
 ): GameState | null => {
+  const newState: GameState = deepCopy(state);
+
   // First pass: capture tokens.
   for (let index = 0; index < GRID_SIZE; index++) {
-    const target = state.grid[index];
-    if (target && canBeCaptured(state.grid, index)) {
+    const target = newState.grid[index];
+    if (target && canBeCaptured(newState.grid, index)) {
       if (target.owner === player) {
         return null; // Self-preservation rule: cannot cause own token to be captured.
       }
@@ -30,8 +33,8 @@ export const advanceState = (
   const shot = new Set<number>();
   const exploding = new Set<number>();
   for (let index = 0; index < GRID_SIZE; index++) {
-    const target = state.grid[index];
-    if (target && canBeShot(state.grid, index)) {
+    const target = newState.grid[index];
+    if (target && canBeShot(newState.grid, index)) {
       if (target.owner === player) {
         return null; // Self-preservation rule: cannot cause own token to be shot.
       }
@@ -40,7 +43,7 @@ export const advanceState = (
       }
       shot.add(index);
     }
-    if (target && canExplode(state.grid, index)) {
+    if (target && canExplode(newState.grid, index)) {
       exploding.add(index);
     }
   }
@@ -48,8 +51,8 @@ export const advanceState = (
   // This pass: mark exploded tokens.
   const exploded = new Set<number>();
   for (let index = 0; index < GRID_SIZE; index++) {
-    const target = state.grid[index];
-    if (target && canBeExploded(state.grid, exploding, index)) {
+    const target = newState.grid[index];
+    if (target && canBeExploded(newState.grid, exploding, index)) {
       if (target.token !== Token.Mine && target.owner === player) {
         return null; // Self-preservation rule: cannot cause own (non-mine) token to be exploded.
       }
@@ -60,12 +63,12 @@ export const advanceState = (
   // Fourth pass: return destroyed tokens to the hand of their owner.
   const destroyed = new Set([...shot, ...exploding, ...exploded]);
   for (const index of destroyed) {
-    const target = state.grid[index];
+    const target = newState.grid[index];
     if (target) {
-      state.hands[target.owner].push(toHeld(target.token));
-      state.grid[index] = null;
+      newState.hands[target.owner].push(toHeld(target.token));
+      newState.grid[index] = null;
     }
   }
 
-  return state;
+  return newState;
 };

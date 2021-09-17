@@ -50,7 +50,7 @@ const GRID_BOUNDS = {
 
 /** Check if an index is inside the grid. */
 export const isInGrid = (index: number): boolean =>
-  isInBounds(toCoords(index), GRID_BOUNDS);
+  index >= 0 && index < GRID_SIZE;
 
 // Defines the offset and dimensions of the home regions.
 const HOME_OFFSET = 2;
@@ -154,7 +154,9 @@ const withOffsets = (
   const indices = new Set<number>();
   for (const [dx, dy] of offsets) {
     const after = { x: before.x + dx, y: before.y + dy };
-    if (isInGrid(index)) {
+    // We use isInBounds instead of isInGrid because converting out-of-bounds
+    // coordinates to an index might produce an incorrect result.
+    if (isInBounds(after, GRID_BOUNDS)) {
       indices.add(toIndex(after));
     }
   }

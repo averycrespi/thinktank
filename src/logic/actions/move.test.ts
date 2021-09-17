@@ -7,19 +7,19 @@ import { canMoveToken, moveToken, possibleMovements } from "./move";
 
 test("movement fails when source index is out of bounds", () => {
   const state: GameState = deepCopy(initialState);
-  expect(moveToken(state, Player.One, -1, 0)).toBe(null);
+  expect(moveToken(state, Player.One, -1, 0)).toBeNull();
 });
 
 test("movement fails when destination index is out of bounds", () => {
   const state: GameState = deepCopy(initialState);
-  expect(moveToken(state, Player.One, 0, -1)).toBe(null);
+  expect(moveToken(state, Player.One, 0, -1)).toBeNull();
 });
 
 test("movement fails when source index is empty", () => {
   const state: GameState = deepCopy(initialState);
   const srcIndex = 0;
-  expect(state.grid[srcIndex]).toBe(null);
-  expect(moveToken(state, Player.One, srcIndex, 1)).toBe(null);
+  expect(state.grid[srcIndex]).toBeNull();
+  expect(moveToken(state, Player.One, srcIndex, 1)).toBeNull();
 });
 
 test("movement fails when player does not own token at source index", () => {
@@ -28,7 +28,7 @@ test("movement fails when player does not own token at source index", () => {
   const srcIndex = 0;
   const destIndex = srcIndex + 1;
   state.grid[srcIndex] = { owner: opponentOf(player), token: Token.Blocker };
-  expect(moveToken(state, player, srcIndex, destIndex)).toBe(null);
+  expect(moveToken(state, player, srcIndex, destIndex)).toBeNull();
 });
 
 test("movement fails when destination index is occupied", () => {
@@ -38,7 +38,7 @@ test("movement fails when destination index is occupied", () => {
   const destIndex = srcIndex + 1;
   state.grid[srcIndex] = { owner: player, token: Token.Blocker };
   state.grid[destIndex] = { owner: player, token: Token.Blocker };
-  expect(moveToken(state, player, srcIndex, destIndex)).toBe(null);
+  expect(moveToken(state, player, srcIndex, destIndex)).toBeNull();
 });
 
 test("movement fails when destination index is not reachable", () => {
@@ -47,7 +47,7 @@ test("movement fails when destination index is not reachable", () => {
   const srcIndex = 0;
   const destIndex = srcIndex + 2;
   state.grid[srcIndex] = { owner: player, token: Token.Blocker };
-  expect(moveToken(state, player, srcIndex, destIndex)).toBe(null);
+  expect(moveToken(state, player, srcIndex, destIndex)).toBeNull();
 });
 
 test("move tokens cardinally", () => {
@@ -107,12 +107,12 @@ test("can move token", () => {
   const srcIndex = 0;
   const destIndex = srcIndex + 1;
   state.grid[srcIndex] = { owner: player, token: Token.Blocker };
-  expect(canMoveToken(state, player, srcIndex, destIndex)).toBe(true);
+  expect(canMoveToken(state, player, srcIndex, destIndex)).toBeTruthy();
 });
 
 test("cannot move token", () => {
   const state: GameState = deepCopy(initialState);
-  expect(canMoveToken(state, Player.One, -1, -1)).toBe(false);
+  expect(canMoveToken(state, Player.One, -1, -1)).toBeFalsy();
 });
 
 test("no possible movements when source index is out of bounds", () => {
@@ -123,7 +123,7 @@ test("no possible movements when source index is out of bounds", () => {
 test("no possible movements when source index is empty", () => {
   const state: GameState = deepCopy(initialState);
   const srcIndex = 0;
-  expect(state.grid[srcIndex]).toBe(null);
+  expect(state.grid[srcIndex]).toBeNull();
   expect(possibleMovements(state, Player.One, srcIndex).size).toBe(0);
 });
 

@@ -3,8 +3,8 @@ import { Visibility, createMatch } from "../../api/match";
 
 import { useHistory } from "react-router-dom";
 import { Player } from "../../logic/player";
-import { colorOf } from "../../utils/colorOf";
 import { nameOf } from "../../utils/nameOf";
+import { colorClassOf } from "../../utils/colorClassOf";
 
 interface CreateMatchProps {
   serverURL: string;
@@ -43,7 +43,7 @@ const CreateMatch = ({ serverURL }: CreateMatchProps) => {
               />
               <span>
                 as
-                <span className={colorOf(Player.One)}>
+                <span className={colorClassOf(Player.One)}>
                   {" " + nameOf(Player.One)}
                 </span>
               </span>
@@ -57,7 +57,7 @@ const CreateMatch = ({ serverURL }: CreateMatchProps) => {
               />
               <span>
                 as
-                <span className={colorOf(Player.Two)}>
+                <span className={colorClassOf(Player.Two)}>
                   {" " + nameOf(Player.Two)}
                 </span>
               </span>

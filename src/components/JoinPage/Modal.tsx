@@ -1,6 +1,6 @@
 import React from "react";
 import { Player } from "../../logic/player";
-import { colorOf } from "../../utils/colorOf";
+import { colorClassOf } from "../../utils/colorClassOf";
 import { nameOf } from "../../utils/nameOf";
 import ShareLink from "./ShareLink";
 
@@ -28,7 +28,8 @@ const Modal = ({ matchID, player }: ModalProps) => (
         <div className="row flex-center">
           <div className="col no-padding">
             <h4 className="modal-title">
-              You are: <span className={colorOf(player)}>{nameOf(player)}</span>
+              You are:{" "}
+              <span className={colorClassOf(player)}>{nameOf(player)}</span>
             </h4>
           </div>
         </div>

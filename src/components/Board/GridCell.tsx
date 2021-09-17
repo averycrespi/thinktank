@@ -1,7 +1,7 @@
 import React from "react";
 import TokenIcon from "./TokenIcon";
-import { colorOf } from "../../utils/colorOf";
 import { PlacedToken } from "../../logic/token";
+import { colorClassOf } from "../../utils/colorClassOf";
 
 interface GridCellProps {
   readonly cell: PlacedToken | null;
@@ -12,7 +12,7 @@ const GridCell = ({ cell }: GridCellProps) => {
     return null;
   }
   return (
-    <span className={colorOf(cell.owner)}>
+    <span className={colorClassOf(cell.owner)}>
       <TokenIcon token={cell.token} />
     </span>
   );

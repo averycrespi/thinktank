@@ -1,2 +1,4 @@
-/** Deep-copy a JSON-serializable object. */
-export const deepCopy = (obj: any) => JSON.parse(JSON.stringify(obj));
+import * as _ from "lodash";
+
+/** Deep-copy an object. */
+export const deepCopy = (obj: unknown): any => _.cloneDeep(obj);

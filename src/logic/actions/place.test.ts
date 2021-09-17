@@ -9,12 +9,12 @@ test("placement fails when token is not in hand", () => {
   const state: GameState = deepCopy(initialState);
   const player = Player.One;
   state.hands[player] = [];
-  expect(placeToken(state, player, Token.Blocker, 0)).toBe(null);
+  expect(placeToken(state, player, Token.Blocker, 0)).toBeNull();
 });
 
 test("placement fails when index is out of bounds", () => {
   const state: GameState = deepCopy(initialState);
-  expect(placeToken(state, Player.One, Token.Blocker, -1)).toBe(null);
+  expect(placeToken(state, Player.One, Token.Blocker, -1)).toBeNull();
 });
 
 test("placement fails when index is occupied", () => {
@@ -22,7 +22,7 @@ test("placement fails when index is occupied", () => {
   const player = Player.One;
   const index = 0;
   state.grid[index] = { owner: player, token: Token.Blocker };
-  expect(placeToken(state, player, Token.Blocker, index)).toBe(null);
+  expect(placeToken(state, player, Token.Blocker, index)).toBeNull();
 });
 
 test("placement fails when token is outside of spawn region", () => {
@@ -32,7 +32,7 @@ test("placement fails when token is outside of spawn region", () => {
     (i) => !isInSpawnOf(player, i)
   );
   nonSpawnIndices.forEach((i) => {
-    expect(canPlaceToken(state, player, Token.Blocker, i)).toBe(false);
+    expect(canPlaceToken(state, player, Token.Blocker, i)).toBeFalsy();
   });
 });
 
@@ -58,13 +58,13 @@ test("can place token in all spawn indices", () => {
     isInSpawnOf(player, i)
   );
   spawnIndices.forEach((i) => {
-    expect(canPlaceToken(state, player, Token.Blocker, i)).toBe(true);
+    expect(canPlaceToken(state, player, Token.Blocker, i)).toBeTruthy();
   });
 });
 
 test("cannot place token", () => {
   const state: GameState = deepCopy(initialState);
-  expect(canPlaceToken(state, Player.One, Token.Blocker, 0)).toBe(false);
+  expect(canPlaceToken(state, Player.One, Token.Blocker, 0)).toBeFalsy();
 });
 
 test("no possible placements when token is not in hand", () => {
@@ -79,6 +79,6 @@ test("all possible placements lie within spawn region", () => {
   const player = Player.One;
   const placements = possiblePlacements(state, player, Token.Blocker);
   placements.forEach((i) => {
-    expect(isInSpawnOf(player, i)).toBe(true);
+    expect(isInSpawnOf(player, i)).toBeTruthy();
   });
 });

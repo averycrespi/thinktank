@@ -1,19 +1,19 @@
 import { HeldToken, isInfiltrator, isTank, toHeld, Token } from "./token";
 
 test("upwards tank is tank", () => {
-  expect(isTank(Token.UpTank)).toBe(true);
+  expect(isTank(Token.UpTank)).toBeTruthy();
 });
 
 test("blocker is not a tank", () => {
-  expect(isTank(Token.Blocker)).toBe(false);
+  expect(isTank(Token.Blocker)).toBeFalsy();
 });
 
 test("cardinal infiltrator is an infiltrator", () => {
-  expect(isInfiltrator(Token.CardinalInfiltrator)).toBe(true);
+  expect(isInfiltrator(Token.CardinalInfiltrator)).toBeTruthy();
 });
 
 test("blocker is not an infiltrator", () => {
-  expect(isInfiltrator(Token.Blocker)).toBe(false);
+  expect(isInfiltrator(Token.Blocker)).toBeFalsy();
 });
 
 test("blocker is converted to held blocker", () => {
