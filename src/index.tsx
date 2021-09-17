@@ -14,7 +14,6 @@ import JoinPage from "./components/JoinPage";
 import React from "react";
 import ReactDOM from "react-dom";
 import SandboxPage from "./components/SandboxPage";
-import "./utils/setOps";
 
 const serverURL = process.env.REACT_APP_URL ?? "http://localhost:8000";
 

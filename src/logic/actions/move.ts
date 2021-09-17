@@ -1,4 +1,5 @@
 import { deepCopy } from "../../utils/deepCopy";
+import { filter } from "../../utils/setOps";
 import { advanceState } from "../advance";
 import {
   adjacentTo,
@@ -17,25 +18,25 @@ const reachableFrom = (token: Token, index: number): Set<number> => {
   switch (token) {
     case Token.Blocker:
       // Blockers can move one space horizontally, vertically, or diagonally.
-      return adjacentTo(index).filter((i) => !isInHome(i));
+      return filter(adjacentTo(index), (i) => !isInHome(i));
     case Token.UpTank:
     case Token.DownTank:
     case Token.LeftTank:
     case Token.RightTank:
       // Tanks can move one space horizontally.
-      return cardinallyAdjacentTo(index).filter((i) => !isInHome(i));
+      return filter(cardinallyAdjacentTo(index), (i) => !isInHome(i));
     case Token.CardinalInfiltrator:
       // Cardinal infiltrators can move one space horizontally or vertically.
-      return cardinallyAdjacentTo(index).filter((i) => !isInHome(i));
+      return filter(cardinallyAdjacentTo(index), (i) => !isInHome(i));
     case Token.DiagonalInfiltrator:
       // Diagonal infiltrators can move one space diagonally.
-      return diagonallyAdjacentTo(index).filter((i) => !isInHome(i));
+      return filter(diagonallyAdjacentTo(index), (i) => !isInHome(i));
     case Token.Mine:
       // Mines can move up to two spaces and can jump over other units.
-      return dualAdjacentTo(index).filter((i) => !isInHome(i));
+      return filter(dualAdjacentTo(index), (i) => !isInHome(i));
     case Token.Base:
       // Bases can move one space horizontally, vertically, or diagonally.
-      return adjacentTo(index).filter((i) => isInHome(i));
+      return filter(adjacentTo(index), (i) => isInHome(i));
   }
 };
 
@@ -106,7 +107,7 @@ export const possibleMovements = (
   if (!src) {
     return new Set(); // Optimization: Cannot move from an empty cell.
   }
-  return reachableFrom(src.token, srcIndex).filter((destIndex) =>
+  return filter(reachableFrom(src.token, srcIndex), (destIndex) =>
     canMoveToken(state, player, srcIndex, destIndex)
   );
 };

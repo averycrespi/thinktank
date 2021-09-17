@@ -1,3 +1,4 @@
+import { filter } from "../../utils/setOps";
 import { adjacentTo, isInGrid } from "../grid";
 import { PlacedToken, Token } from "../token";
 
@@ -55,5 +56,5 @@ export const canBeExploded = (
   if (!target || !EXPLODABLE.has(target.token)) {
     return false; // Cell is empty of token is not explodable.
   }
-  return adjacentTo(index).filter((i) => explodingMines.has(i)).size > 0;
+  return filter(adjacentTo(index), (i) => explodingMines.has(i)).size > 0;
 };
