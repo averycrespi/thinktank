@@ -4,7 +4,7 @@
 // learn more: https://github.com/testing-library/jest-dom
 import "@testing-library/jest-dom/extend-expect";
 
-import "./utils/setOps";
+require("jest-fetch-mock").enableMocks();
 
 var localStorageMock = (function () {
   var storage: any = {};

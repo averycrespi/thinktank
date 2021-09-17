@@ -30,6 +30,7 @@
     "boardgame.io": "^0.40.0",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
+    "jest-fetch-mock": "^3.0.3",
     "lodash": "^4.17.21",
     "papercss": "^1.6.1",
     "react": "^16.13.1",
@@ -40,8 +41,8 @@
     "typescript": "~3.7.2"
   },
   "scripts": {
-    "test": "react-scripts test --watchAll",
-    "test:coverage": "react-scripts test --watchAll --coverage",
+    "test": "react-scripts test --watchAll --silent",
+    "test:coverage": "react-scripts test --watchAll --silent --coverage",
     "build": "react-scripts build",
     "start": "react-scripts start",
     "build:server": "tsc -p tsconfig.server.json",

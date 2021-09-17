@@ -7,29 +7,38 @@ import { Player } from "./player";
 import { GameState, initialState, winnerOf } from "./state";
 import { Token } from "./token";
 
-const setup = (): GameState => initialState;
+export const setup = (): GameState => initialState;
 
-const place = (G: GameState, ctx: Ctx, token: Token, index: number) => {
+export const place = (G: GameState, ctx: Ctx, token: Token, index: number) => {
   const player = ctx.currentPlayer as Player;
   const newState = placeToken(G, player, token, index);
   return newState ?? INVALID_MOVE;
 };
 
-const move = (G: GameState, ctx: Ctx, srcIndex: number, destIndex: number) => {
+export const move = (
+  G: GameState,
+  ctx: Ctx,
+  srcIndex: number,
+  destIndex: number
+) => {
   const player = ctx.currentPlayer as Player;
   const newState = moveToken(G, player, srcIndex, destIndex);
   return newState ?? INVALID_MOVE;
 };
 
-const rotate = (G: GameState, ctx: Ctx, afterToken: Token, index: number) => {
+export const rotate = (
+  G: GameState,
+  ctx: Ctx,
+  afterToken: Token,
+  index: number
+) => {
   const player = ctx.currentPlayer as Player;
   const newState = rotateToken(G, player, afterToken, index);
   return newState ?? INVALID_MOVE;
 };
 
-const endIf = (G: GameState, ctx: Ctx): Player | null => winnerOf(G);
+export const endIf = (G: GameState, ctx: Ctx): Player | null => winnerOf(G);
 
-/** Represents a game. */
 export const game: Game<GameState, Ctx> = {
   name: "thinktank",
   setup: setup,

@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { Server } from "boardgame.io/server";
 import { game } from "./logic/game";
 

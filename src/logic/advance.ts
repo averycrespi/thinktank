@@ -35,8 +35,8 @@ export const advanceState = (
   for (let index = 0; index < GRID_SIZE; index++) {
     const target = newState.grid[index];
     if (target && canBeShot(newState.grid, index)) {
-      if (target.owner === player) {
-        return null; // Self-preservation rule: cannot cause own token to be shot.
+      if (target.token !== Token.Mine && target.owner === player) {
+        return null; // Self-preservation rule: cannot cause own (non-mine) token to be shot.
       }
       if (target.token === Token.Mine) {
         exploding.add(index); // Mines explode when shot.
@@ -63,11 +63,9 @@ export const advanceState = (
   // Fourth pass: return destroyed tokens to the hand of their owner.
   const destroyed = new Set([...shot, ...exploding, ...exploded]);
   for (const index of destroyed) {
-    const target = newState.grid[index];
-    if (target) {
-      newState.hands[target.owner].push(toHeld(target.token));
-      newState.grid[index] = null;
-    }
+    const target = newState.grid[index]!; // We know the cell is non-empty.
+    newState.hands[target.owner].push(toHeld(target.token));
+    newState.grid[index] = null;
   }
 
   return newState;

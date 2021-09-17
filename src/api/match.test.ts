@@ -7,78 +7,65 @@ import {
   listMatchIDs,
 } from "./match";
 
-import { Server } from "boardgame.io/server";
-import { game } from "../logic/game";
-import { opponentOf, Player } from "../logic/player";
-import { nameOf } from "../utils/nameOf";
+import fetchMock from "jest-fetch-mock";
+import { Player } from "../logic/player";
 
-const port = parseInt(process.env.REACT_APP_PORT ?? "8000");
-const serverURL = `http://localhost:${port}`;
+const serverURL = `http://localhost:8000`;
 
-let commands: { run: any; kill: any };
-let server: { apiServer: any; appServer: any };
-beforeAll(async () => {
-  commands = Server({ games: [game] });
-  server = await commands.run({ port });
+beforeEach(() => fetchMock.resetMocks());
+
+test("fail to create match when response is not ok", async () => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponseOnce("{}", { status: 404 });
+  expect(createMatch(serverURL, Visibility.PRIVATE)).rejects.toThrowError();
 });
 
-afterAll(() => commands.kill(server));
-
-test("match list is empty", async () => {
-  expect(await listMatchIDs(serverURL)).toStrictEqual([]);
+test("fail to create match when response does not have valid match ID", async () => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponseOnce("{}", { status: 200 });
+  expect(createMatch(serverURL, Visibility.PRIVATE)).rejects.toThrowError();
 });
 
-let matchID: string;
-test("create public match", async () => {
-  matchID = await createMatch(serverURL, Visibility.PUBLIC);
+test("fail to join match when response is not ok", async () => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponseOnce("{}", { status: 404 });
+  expect(joinMatch(serverURL, "foo", Player.One)).rejects.toThrowError();
 });
 
-test("match list contains match", async () => {
-  const matchIDs = await listMatchIDs(serverURL);
-  expect(matchIDs).toStrictEqual([matchID]);
+test("fail to create match when response does not have valid player credentials", async () => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponseOnce("{}", { status: 200 });
+  expect(joinMatch(serverURL, "id", Player.One)).rejects.toThrowError();
 });
 
-const player = Player.One;
-let playerCredentials: string;
-test("player joins match", async () => {
-  playerCredentials = await joinMatch(serverURL, matchID, player);
+test("fail to leave match when response is not ok", async () => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponseOnce("{}", { status: 404 });
+  expect(
+    leaveMatch(serverURL, "id", Player.One, "creds")
+  ).rejects.toThrowError();
 });
 
-test("player in match", async () => {
-  const match = await getMatch(serverURL, matchID);
-  expect(match.matchID).toBe(matchID);
-  expect(match.players.get(player)).toBe(nameOf(player));
-  expect(match.players.get(opponentOf(player))).toBeNull();
+test("fail to list match IDs when response is not ok", async () => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponseOnce("{}", { status: 404 });
+  expect(listMatchIDs(serverURL)).rejects.toThrowError();
 });
 
-const opponent = opponentOf(player);
-let opponentCredentials: string;
-test("opponent joins match", async () => {
-  opponentCredentials = await joinMatch(serverURL, matchID, opponent);
+test("fail to list match ids when response does not have valid matches", async () => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponseOnce("{}", { status: 200 });
+  expect(listMatchIDs(serverURL)).rejects.toThrowError();
 });
 
-test("player and opponent in match", async () => {
-  const match = await getMatch(serverURL, matchID);
-  expect(match.matchID).toBe(matchID);
-  expect(match.players.get(player)).toBe(nameOf(player));
-  expect(match.players.get(opponentOf(player))).toBe(nameOf(opponent));
+test("fail to get match when response is not ok", async () => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponseOnce("{}", { status: 404 });
+  expect(getMatch(serverURL, "id")).rejects.toThrowError();
 });
 
-test("player leaves match", async () => {
-  await leaveMatch(serverURL, matchID, player, playerCredentials);
-});
-
-test("opponent in match", async () => {
-  const match = await getMatch(serverURL, matchID);
-  expect(match.matchID).toBe(matchID);
-  expect(match.players.get(player)).toBeNull();
-  expect(match.players.get(opponentOf(player))).toBe(nameOf(opponent));
-});
-
-test("opponent leaves match", async () => {
-  await leaveMatch(serverURL, matchID, opponent, opponentCredentials);
-});
-
-test("match list is empty", async () => {
-  expect(await listMatchIDs(serverURL)).toStrictEqual([]);
+test("fail to get match when response does not have valid match data", async () => {
+  fetchMock.resetMocks();
+  fetchMock.mockResponseOnce("{}", { status: 200 });
+  expect(getMatch(serverURL, "id")).rejects.toThrowError();
 });
