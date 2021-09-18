@@ -1,47 +1,17 @@
+@import url("https://fonts.googleapis.com/css?family=Patrick+Hand+SC");
+
 body {
-  background: #eee;
+  text-align: center;
+  margin-bottom: 150px; /* Prevent footer from covering content. */
 }
 
-.red {
-  color: #f00;
+@media (min-width: 576px) {
+  body {
+    margin-bottom: 75px; /* Prevent footer from covering content. */
+  }
 }
 
-.bg-light-red {
-  background: #ff000060;
-}
-
-.bg-lighter-red {
-  background: #ff000030;
-}
-
-.blue {
-  color: #00f;
-}
-
-.bg-light-blue {
-  background: #0000ff60;
-}
-
-.bg-lighter-blue {
-  background: #0000ff30;
-}
-
-.bg-light-gray {
-  background: #bbb;
-}
-
-/* Disable the underline for a React Router link. */
-a.no-underline {
-  background-image: none;
-}
-
-/* Disable padding for a Paper CSS column. */
-.col.no-padding {
-  padding: 0;
-}
-
-/* Disable 'flex: 0 0 100%' for Paper CSS column
-   @media only screen and (max-width: 768px) */
-.col.flex-initial {
-    flex: initial;
+.thinktank {
+  font-family: "Patrick Hand SC", sans-serif;
+  color: #fff;
 }

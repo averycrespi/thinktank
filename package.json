@@ -28,17 +28,18 @@
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
     "boardgame.io": "^0.40.0",
+    "bootswatch": "^5.1.1",
     "dotenv": "^8.2.0",
     "esm": "^3.2.25",
     "jest-fetch-mock": "^3.0.3",
     "lodash": "^4.17.21",
-    "papercss": "^1.6.1",
     "react": "^16.13.1",
+    "react-bootstrap": "^2.0.0-beta.6",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-spinners": "^0.9.0",
-    "typescript": "~3.7.2"
+    "typescript": "~3.8.0"
   },
   "scripts": {
     "test": "react-scripts test --watchAll --silent",
