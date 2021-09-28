@@ -1,3 +1,4 @@
+import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 import {
   faArrowDown,
   faArrowLeft,
@@ -9,7 +10,6 @@ import {
   faShieldAlt,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Token } from "../../logic/token";
@@ -18,27 +18,32 @@ interface TokenIconProps {
   token: Token;
 }
 
-const TokenIcon = ({ token }: TokenIconProps) => {
+const toIconDefinition = (token: Token): IconDefinition => {
   switch (token) {
     case Token.Blocker:
-      return <FontAwesomeIcon icon={faShieldAlt} />;
+      return faShieldAlt;
     case Token.UpTank:
-      return <FontAwesomeIcon icon={faArrowUp} />;
+      return faArrowUp;
     case Token.DownTank:
-      return <FontAwesomeIcon icon={faArrowDown} />;
+      return faArrowDown;
     case Token.LeftTank:
-      return <FontAwesomeIcon icon={faArrowLeft} />;
+      return faArrowLeft;
     case Token.RightTank:
-      return <FontAwesomeIcon icon={faArrowRight} />;
+      return faArrowRight;
     case Token.CardinalInfiltrator:
-      return <FontAwesomeIcon icon={faPlus} />;
+      return faPlus;
     case Token.DiagonalInfiltrator:
-      return <FontAwesomeIcon icon={faTimes} />;
+      return faTimes;
     case Token.Mine:
-      return <FontAwesomeIcon icon={faBomb} />;
+      return faBomb;
     case Token.Base:
-      return <FontAwesomeIcon icon={faHome} />;
+      return faHome;
   }
 };
+
+/** Renders a token as an icon. */
+const TokenIcon = ({ token }: TokenIconProps) => (
+  <FontAwesomeIcon icon={toIconDefinition(token)} />
+);
 
 export default TokenIcon;

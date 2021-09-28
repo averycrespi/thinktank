@@ -3,8 +3,7 @@
  */
 
 import { game } from "../logic/game";
-import { Player } from "../logic/player";
-import { nameOf } from "../utils/nameOf";
+import { Player, nameOf } from "../logic/player";
 
 /** Represents a match. */
 export interface Match {

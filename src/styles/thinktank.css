@@ -1,17 +1,155 @@
-@import url("https://fonts.googleapis.com/css?family=Patrick+Hand+SC");
+/*
+ * =============================================================================
+ * Global
+ * =============================================================================
+ */
+
+:root {
+  --player-one-color: white;
+  --player-one-contrast-color: black;
+  --player-two-color: black;
+  --player-two-contrast-color: white;
+  --grid-background-color: white;
+  --grid-home-color: lightgray;
+  --grid-active-color: gray;
+  --grid-border-color: gray;
+}
 
 body {
   text-align: center;
-  margin-bottom: 150px; /* Prevent footer from covering content. */
+  background-color: lightgray;
 }
 
-@media (min-width: 576px) {
-  body {
-    margin-bottom: 75px; /* Prevent footer from covering content. */
+/*
+ * =============================================================================
+ * Game Controller
+ * =============================================================================
+ */
+
+.game-controller {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.info-panel {
+  display: none;
+}
+
+.control-panel {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin: 1vmin;
+}
+
+@media (min-width: 1200px) {
+  .info-panel {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    margin: 2vmin;
+  }
+
+  .game-controller {
+    flex-flow: row nowrap;
+    justify-content: center;
+  }
+
+  .control-panel {
+    flex-flow: column nowrap;
+    margin: 2vmin;
   }
 }
 
-.thinktank {
-  font-family: "Patrick Hand SC", sans-serif;
-  color: #fff;
+/*
+ * =============================================================================
+ * Grid
+ * =============================================================================
+ */
+
+.grid {
+  margin: 0 auto;
+  border: 1vmin solid var(--grid-border-color);
+  border-radius: 1vmin;
+  border-spacing: 0;
+  background-color: var(--grid-background-color);
+}
+
+.grid-cell {
+  padding: 0;
+  border-bottom: 0;
+  box-shadow: 0 0 0 0.1vmin var(--grid-border-color) inset;
+  font-size: 2vmin;
+}
+
+.grid-cell-content,
+.token-button {
+  /* min(100vmin/GRID_WIDTH, 100vmin/GRID_HEIGHT) >= 5vmin */
+  width: 5vmin;
+  height: 5vmin;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.grid-cell.home {
+  background-color: var(--grid-home-color);
+}
+
+.grid-cell.active {
+  background-color: var(--grid-active-color);
+}
+
+.grid-cell.player-one,
+.token-button.player-one {
+  color: var(--player-one-contrast-color);
+  background-color: var(--player-one-color);
+  box-shadow: 0 0 0 0.5vmin var(--player-one-contrast-color) inset;
+}
+
+.grid-cell.player-two,
+.token-button.player-two {
+  color: var(--player-two-contrast-color);
+  background-color: var(--player-two-color);
+  box-shadow: 0 0 0 0.5vmin var(--player-two-contrast-color) inset;
+}
+
+/*
+ * =============================================================================
+ * Token Selector
+ * =============================================================================
+ */
+
+.token-selector {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  gap: 1vmin;
+  font-size: 2vmin;
+}
+
+@media (min-width: 1200px) {
+  .token-selector {
+    flex-flow: column nowrap;
+  }
+}
+
+.token-button {
+  /* Disable default styling */
+  padding: 0;
+  font-size: inherit;
+}
+
+.token-button:disabled {
+  opacity: 30%;
+}
+
+.token-button.submit {
+  color: white;
+  background-color: green;
+}
+
+.token-button.undo {
+  color: white;
+  background-color: red;
 }
