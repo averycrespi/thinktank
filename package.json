@@ -40,7 +40,6 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-spinners": "^0.9.0",
-    "skeleton-css": "^2.0.4",
     "typescript": "~3.8.0"
   },
   "scripts": {

@@ -1,17 +1,9 @@
 import { faCheck, faUndo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Player } from "../../logic/player";
-import { HeldToken, toHeld, Token } from "../../logic/token";
-import TokenIcon from "../TokenIcon";
-
-interface TokenSelectorProps {
-  player: Player;
-  hand: Array<HeldToken>;
-  handleTokenSelect(token: Token): void;
-  handleSubmit(): void;
-  handleUndo(): void;
-}
+import { Player } from "../logic/player";
+import { HeldToken, toHeld, Token } from "../logic/token";
+import TokenIcon from "./TokenIcon";
 
 const SELECTABLE = [
   Token.Blocker,
@@ -22,20 +14,33 @@ const SELECTABLE = [
   Token.CardinalInfiltrator,
   Token.DiagonalInfiltrator,
   Token.Mine,
-  Token.Base /* TODO: remove */,
 ];
 
-const buttonClasses = (player: Player): Array<String> =>
+const tokenClasses = (currentPlayer: Player): Array<String> =>
   [
-    "token-button",
-    player === Player.One ? "player-one" : "",
-    player === Player.Two ? "player-two" : "",
+    "token",
+    currentPlayer === Player.One ? "player-one" : "",
+    currentPlayer === Player.Two ? "player-two" : "",
   ].filter((c) => c.length > 0);
+
+interface TokenSelectorProps {
+  currentPlayer: Player;
+  hand: Array<HeldToken>;
+  disabled?: boolean;
+  submitDisabled?: boolean;
+  undoDisabled?: boolean;
+  handleTokenSelect(token: Token): void;
+  handleSubmit(): void;
+  handleUndo(): void;
+}
 
 /** Renders a token selector. */
 const TokenSelector = ({
-  player,
+  currentPlayer,
   hand,
+  disabled,
+  submitDisabled,
+  undoDisabled,
   handleTokenSelect,
   handleSubmit,
   handleUndo,
@@ -43,8 +48,8 @@ const TokenSelector = ({
   <div className="token-selector">
     {SELECTABLE.map((token, i) => (
       <button
-        className={buttonClasses(player).join(" ")}
-        disabled={!hand.includes(toHeld(token))}
+        className={tokenClasses(currentPlayer).join(" ")}
+        disabled={disabled || !hand.includes(toHeld(token))}
         key={i}
         onClick={() => handleTokenSelect(token)}
         onKeyDown={() => handleTokenSelect(token)}
@@ -53,7 +58,8 @@ const TokenSelector = ({
       </button>
     ))}
     <button
-      className="token-button submit"
+      className="token submit"
+      disabled={disabled || submitDisabled}
       onClick={() => handleSubmit()}
       onKeyDown={() => handleSubmit()}
       title="Submit"
@@ -61,7 +67,8 @@ const TokenSelector = ({
       <FontAwesomeIcon icon={faCheck} />
     </button>
     <button
-      className="token-button undo"
+      className="token undo"
+      disabled={disabled || undoDisabled}
       onClick={() => handleUndo()}
       onKeyDown={() => handleUndo()}
       title="Undo"

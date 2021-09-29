@@ -14,9 +14,9 @@ export enum Player {
 export const nameOf = (player: Player): string => {
   switch (player) {
     case Player.One:
-      return "One";
+      return "Player One";
     case Player.Two:
-      return "Two";
+      return "Player Two";
   }
 };
 

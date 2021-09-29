@@ -1,31 +1,35 @@
 import React from "react";
-import { GRID_HEIGHT, GRID_WIDTH, isInHome } from "../../logic/grid";
-import { Player } from "../../logic/player";
-import { PlacedToken } from "../../logic/token";
-import TokenIcon from "../TokenIcon";
+import { GRID_HEIGHT, GRID_WIDTH, isInHome } from "../logic/grid";
+import { Player } from "../logic/player";
+import { PlacedToken } from "../logic/token";
+import TokenIcon from "./TokenIcon";
 
-interface GridProps {
-  cells: Array<PlacedToken | null>;
-  activeIndices?: Set<number>;
-  handleCellClick(index: number): void;
-}
+const Y_INDICES = [...Array(GRID_HEIGHT).keys()];
+const X_INDICES = [...Array(GRID_WIDTH).keys()];
+const EMPTY_CELL = "";
 
 const cellClasses = (
   index: number,
-  cell: PlacedToken | null,
   activeIndices?: Set<number>
 ): Array<String> =>
   [
     "grid-cell",
     isInHome(index) ? "home" : "",
     activeIndices && activeIndices.has(index) ? "active" : "",
+  ].filter((c) => c.length > 0);
+
+const tokenClasses = (cell: PlacedToken | null): Array<String> =>
+  [
+    "token",
     cell && cell.owner === Player.One ? "player-one" : "",
     cell && cell.owner === Player.Two ? "player-two" : "",
   ].filter((c) => c.length > 0);
 
-const Y_INDICES = [...Array(GRID_HEIGHT).keys()];
-const X_INDICES = [...Array(GRID_WIDTH).keys()];
-const EMPTY_CELL = "·";
+interface GridProps {
+  cells: Array<PlacedToken | null>;
+  activeIndices?: Set<number>;
+  handleCellClick(index: number): void;
+}
 
 /** Renders a grid of cells. */
 const Grid = ({ cells, activeIndices, handleCellClick }: GridProps) => (
@@ -38,11 +42,11 @@ const Grid = ({ cells, activeIndices, handleCellClick }: GridProps) => (
             const cell = cells[i];
             return (
               <td
-                className={cellClasses(i, cell, activeIndices).join(" ")}
-                onClick={() => handleCellClick(i)}
+                className={cellClasses(i, activeIndices).join(" ")}
                 key={i}
+                onClick={() => handleCellClick(i)}
               >
-                <div className="grid-cell-content">
+                <div className={tokenClasses(cell).join(" ")}>
                   {cell ? <TokenIcon token={cell.token} /> : EMPTY_CELL}
                 </div>
               </td>

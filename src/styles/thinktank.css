@@ -4,6 +4,8 @@
  * =============================================================================
  */
 
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap");
+
 :root {
   --player-one-color: white;
   --player-one-contrast-color: black;
@@ -16,8 +18,14 @@
 }
 
 body {
+  font-family: "Baloo 2", cursive;
   text-align: center;
   background-color: lightgray;
+}
+
+.thinktank {
+  font-family: "Baloo 2", cursive;
+  font-size: 5vmin;
 }
 
 /*
@@ -29,10 +37,18 @@ body {
 .game-controller {
   display: flex;
   flex-flow: column nowrap;
+  justify-content: center;
 }
 
 .info-panel {
-  display: none;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.grid-panel {
+  margin: 0 0 1vmin 0;
 }
 
 .control-panel {
@@ -43,22 +59,59 @@ body {
 }
 
 @media (min-width: 1200px) {
-  .info-panel {
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: center;
-    margin: 2vmin;
-  }
-
   .game-controller {
     flex-flow: row nowrap;
-    justify-content: center;
+  }
+
+  .info-panel {
+    flex-flow: column nowrap;
+    justify-content: start;
+    width: auto;
+    margin: 0;
+  }
+
+  .grid-panel {
+    margin: 2vmin;
   }
 
   .control-panel {
     flex-flow: column nowrap;
-    margin: 2vmin;
   }
+}
+
+/*
+ * =============================================================================
+ * Tokens
+ * =============================================================================
+ */
+
+.token {
+  width: 4.4vmin;
+  height: 4.4vmin;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5vmin;
+}
+
+@media (min-width: 1200px) {
+  .token {
+    width: 5vmin;
+    height: 5vmin;
+    font-size: 2vmin;
+  }
+}
+
+.token.player-one {
+  color: var(--player-one-contrast-color);
+  background-color: var(--player-one-color);
+  box-shadow: 0 0 0 0.5vmin var(--player-one-contrast-color) inset;
+}
+
+.token.player-two {
+  color: var(--player-two-contrast-color);
+  background-color: var(--player-two-color);
+  box-shadow: 0 0 0 0.5vmin var(--player-two-contrast-color) inset;
 }
 
 /*
@@ -79,17 +132,6 @@ body {
   padding: 0;
   border-bottom: 0;
   box-shadow: 0 0 0 0.1vmin var(--grid-border-color) inset;
-  font-size: 2vmin;
-}
-
-.grid-cell-content,
-.token-button {
-  /* min(100vmin/GRID_WIDTH, 100vmin/GRID_HEIGHT) >= 5vmin */
-  width: 5vmin;
-  height: 5vmin;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .grid-cell.home {
@@ -98,20 +140,6 @@ body {
 
 .grid-cell.active {
   background-color: var(--grid-active-color);
-}
-
-.grid-cell.player-one,
-.token-button.player-one {
-  color: var(--player-one-contrast-color);
-  background-color: var(--player-one-color);
-  box-shadow: 0 0 0 0.5vmin var(--player-one-contrast-color) inset;
-}
-
-.grid-cell.player-two,
-.token-button.player-two {
-  color: var(--player-two-contrast-color);
-  background-color: var(--player-two-color);
-  box-shadow: 0 0 0 0.5vmin var(--player-two-contrast-color) inset;
 }
 
 /*
@@ -125,7 +153,6 @@ body {
   flex-flow: row wrap;
   justify-content: center;
   gap: 1vmin;
-  font-size: 2vmin;
 }
 
 @media (min-width: 1200px) {
@@ -134,22 +161,25 @@ body {
   }
 }
 
-.token-button {
-  /* Disable default styling */
+button.token {
   padding: 0;
-  font-size: inherit;
 }
 
-.token-button:disabled {
+button.token:disabled {
   opacity: 30%;
 }
 
-.token-button.submit {
+button.token.submit {
   color: white;
   background-color: green;
 }
 
-.token-button.undo {
+button.token.undo {
   color: white;
   background-color: red;
+}
+
+button.token.help {
+  color: white;
+  background-color: gray;
 }
