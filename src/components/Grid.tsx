@@ -10,12 +10,12 @@ const EMPTY_CELL = "";
 
 const cellClasses = (
   index: number,
-  activeIndices?: Set<number>
+  highlightedIndices?: Set<number>
 ): Array<String> =>
   [
     "grid-cell",
     isInHome(index) ? "home" : "",
-    activeIndices && activeIndices.has(index) ? "active" : "",
+    highlightedIndices && highlightedIndices.has(index) ? "highlighted" : "",
   ].filter((c) => c.length > 0);
 
 const tokenClasses = (cell: PlacedToken | null): Array<String> =>
@@ -26,23 +26,23 @@ const tokenClasses = (cell: PlacedToken | null): Array<String> =>
   ].filter((c) => c.length > 0);
 
 interface GridProps {
-  cells: Array<PlacedToken | null>;
-  activeIndices?: Set<number>;
+  grid: Array<PlacedToken | null>;
+  highlightedIndices?: Set<number>;
   handleCellClick(index: number): void;
 }
 
-/** Renders a grid of cells. */
-const Grid = ({ cells, activeIndices, handleCellClick }: GridProps) => (
+/** Renders a grid of grid. */
+const Grid = ({ grid, highlightedIndices, handleCellClick }: GridProps) => (
   <table className="grid">
     <tbody>
       {Y_INDICES.map((y) => (
         <tr className="grid-row" key={y}>
           {X_INDICES.map((x) => {
             const i = y * GRID_WIDTH + x;
-            const cell = cells[i];
+            const cell = grid[i];
             return (
               <td
-                className={cellClasses(i, activeIndices).join(" ")}
+                className={cellClasses(i, highlightedIndices).join(" ")}
                 key={i}
                 onClick={() => handleCellClick(i)}
               >

@@ -1,11 +1,11 @@
 import React from "react";
-import { Player } from "../logic/player";
-import { initialState } from "../logic/state";
-import GameController from "./GameController";
+import { Client } from "boardgame.io/react";
+import { game } from "../logic/game";
+import Board from "./Board";
+
+const SandboxClient = Client({ game, board: Board, debug: false });
 
 /** Renders the home page. */
-const HomePage = () => (
-  <GameController state={initialState} currentPlayer={Player.One} />
-);
+const HomePage = () => <SandboxClient />;
 
 export default HomePage;

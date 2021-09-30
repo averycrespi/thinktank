@@ -1,4 +1,23 @@
-import { HeldToken, isInfiltrator, isTank, toHeld, Token } from "./token";
+import {
+  HeldToken,
+  isInfiltrator,
+  isTank,
+  nameOf,
+  toHeld,
+  Token,
+} from "./token";
+
+test("token names are correct", () => {
+  expect(nameOf(Token.Blocker)).toBe("Blocker");
+  expect(nameOf(Token.UpTank)).toBe("Upwards Tank");
+  expect(nameOf(Token.DownTank)).toBe("Downwards Tank");
+  expect(nameOf(Token.LeftTank)).toBe("Leftwards Tank");
+  expect(nameOf(Token.RightTank)).toBe("Rightwards Tank");
+  expect(nameOf(Token.CardinalInfiltrator)).toBe("Cardinal Infiltrator");
+  expect(nameOf(Token.DiagonalInfiltrator)).toBe("Diagonal Infiltrator");
+  expect(nameOf(Token.Mine)).toBe("Mine");
+  expect(nameOf(Token.Base)).toBe("Base");
+});
 
 test("upwards tank is tank", () => {
   expect(isTank(Token.UpTank)).toBeTruthy();

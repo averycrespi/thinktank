@@ -16,19 +16,19 @@ const SELECTABLE = [
   Token.Mine,
 ];
 
-const tokenClasses = (currentPlayer: Player): Array<String> =>
+const tokenClasses = (player: Player): Array<String> =>
   [
     "token",
-    currentPlayer === Player.One ? "player-one" : "",
-    currentPlayer === Player.Two ? "player-two" : "",
+    player === Player.One ? "player-one" : "",
+    player === Player.Two ? "player-two" : "",
   ].filter((c) => c.length > 0);
 
 interface TokenSelectorProps {
-  currentPlayer: Player;
+  player: Player;
   hand: Array<HeldToken>;
-  disabled?: boolean;
-  submitDisabled?: boolean;
-  undoDisabled?: boolean;
+  canSelect: Boolean;
+  canSubmit: boolean;
+  canUndo: boolean;
   handleTokenSelect(token: Token): void;
   handleSubmit(): void;
   handleUndo(): void;
@@ -36,11 +36,11 @@ interface TokenSelectorProps {
 
 /** Renders a token selector. */
 const TokenSelector = ({
-  currentPlayer,
+  player,
   hand,
-  disabled,
-  submitDisabled,
-  undoDisabled,
+  canSelect,
+  canSubmit,
+  canUndo,
   handleTokenSelect,
   handleSubmit,
   handleUndo,
@@ -48,8 +48,8 @@ const TokenSelector = ({
   <div className="token-selector">
     {SELECTABLE.map((token, i) => (
       <button
-        className={tokenClasses(currentPlayer).join(" ")}
-        disabled={disabled || !hand.includes(toHeld(token))}
+        className={tokenClasses(player).join(" ")}
+        disabled={!canSelect || !hand.includes(toHeld(token))}
         key={i}
         onClick={() => handleTokenSelect(token)}
         onKeyDown={() => handleTokenSelect(token)}
@@ -59,7 +59,7 @@ const TokenSelector = ({
     ))}
     <button
       className="token submit"
-      disabled={disabled || submitDisabled}
+      disabled={!canSubmit}
       onClick={() => handleSubmit()}
       onKeyDown={() => handleSubmit()}
       title="Submit"
@@ -68,7 +68,7 @@ const TokenSelector = ({
     </button>
     <button
       className="token undo"
-      disabled={disabled || undoDisabled}
+      disabled={!canUndo}
       onClick={() => handleUndo()}
       onKeyDown={() => handleUndo()}
       title="Undo"

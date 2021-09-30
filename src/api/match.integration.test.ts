@@ -9,8 +9,7 @@ import {
 
 import { Server } from "boardgame.io/server";
 import { game } from "../logic/game";
-import { opponentOf, Player } from "../logic/player";
-import { nameOf } from "../utils/nameOf";
+import { nameOf, opponentOf, Player } from "../logic/player";
 import fetchMock from "jest-fetch-mock";
 
 const port = parseInt(process.env.REACT_APP_PORT ?? "8000");

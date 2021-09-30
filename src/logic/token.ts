@@ -13,6 +13,30 @@ export enum Token {
   Base,
 }
 
+/** Returns the name of a token. */
+export const nameOf = (token: Token): string => {
+  switch (token) {
+    case Token.Blocker:
+      return "Blocker";
+    case Token.UpTank:
+      return "Upwards Tank";
+    case Token.DownTank:
+      return "Downwards Tank";
+    case Token.LeftTank:
+      return "Leftwards Tank";
+    case Token.RightTank:
+      return "Rightwards Tank";
+    case Token.CardinalInfiltrator:
+      return "Cardinal Infiltrator";
+    case Token.DiagonalInfiltrator:
+      return "Diagonal Infiltrator";
+    case Token.Mine:
+      return "Mine";
+    case Token.Base:
+      return "Base";
+  }
+};
+
 /** Check if a token is a tank. */
 export const isTank = (token: Token): boolean => {
   switch (token) {

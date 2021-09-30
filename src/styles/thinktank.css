@@ -13,28 +13,27 @@
   --player-two-contrast-color: white;
   --grid-background-color: white;
   --grid-home-color: lightgray;
-  --grid-active-color: gray;
+  --grid-highlighted-color: plum;
   --grid-border-color: gray;
 }
 
 body {
-  font-family: "Baloo 2", cursive;
   text-align: center;
   background-color: lightgray;
 }
 
-.thinktank {
+.title {
   font-family: "Baloo 2", cursive;
   font-size: 5vmin;
 }
 
 /*
  * =============================================================================
- * Game Controller
+ * Match View
  * =============================================================================
  */
 
-.game-controller {
+.match-view {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
@@ -51,7 +50,7 @@ body {
   margin: 0 0 1vmin 0;
 }
 
-.control-panel {
+.selector-panel {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -59,7 +58,7 @@ body {
 }
 
 @media (min-width: 1200px) {
-  .game-controller {
+  .match-view {
     flex-flow: row nowrap;
   }
 
@@ -74,14 +73,14 @@ body {
     margin: 2vmin;
   }
 
-  .control-panel {
+  .selector-panel {
     flex-flow: column nowrap;
   }
 }
 
 /*
  * =============================================================================
- * Tokens
+ * Token
  * =============================================================================
  */
 
@@ -138,8 +137,8 @@ body {
   background-color: var(--grid-home-color);
 }
 
-.grid-cell.active {
-  background-color: var(--grid-active-color);
+.grid-cell.highlighted {
+  background-color: var(--grid-highlighted-color);
 }
 
 /*
@@ -177,9 +176,4 @@ button.token.submit {
 button.token.undo {
   color: white;
   background-color: red;
-}
-
-button.token.help {
-  color: white;
-  background-color: gray;
 }
