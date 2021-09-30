@@ -141,6 +141,10 @@ body {
   background-color: var(--grid-highlighted-color);
 }
 
+.grid-cell.highlighted > .token {
+  background-color: var(--grid-highlighted-color);
+}
+
 /*
  * =============================================================================
  * Token Selector

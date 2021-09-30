@@ -27,8 +27,7 @@ interface TokenSelectorProps {
   player: Player;
   hand: Array<HeldToken>;
   canSelect: Boolean;
-  canSubmit: boolean;
-  canUndo: boolean;
+  canSubmitOrUndo: boolean;
   handleTokenSelect(token: Token): void;
   handleSubmit(): void;
   handleUndo(): void;
@@ -39,8 +38,7 @@ const TokenSelector = ({
   player,
   hand,
   canSelect,
-  canSubmit,
-  canUndo,
+  canSubmitOrUndo,
   handleTokenSelect,
   handleSubmit,
   handleUndo,
@@ -59,7 +57,7 @@ const TokenSelector = ({
     ))}
     <button
       className="token submit"
-      disabled={!canSubmit}
+      disabled={!canSubmitOrUndo}
       onClick={() => handleSubmit()}
       onKeyDown={() => handleSubmit()}
       title="Submit"
@@ -68,7 +66,7 @@ const TokenSelector = ({
     </button>
     <button
       className="token undo"
-      disabled={!canUndo}
+      disabled={!canSubmitOrUndo}
       onClick={() => handleUndo()}
       onKeyDown={() => handleUndo()}
       title="Undo"

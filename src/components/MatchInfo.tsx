@@ -1,17 +1,17 @@
 import React from "react";
-import { nameOf, Player } from "../logic/player";
+import { nameOf, opponentOf, Player } from "../logic/player";
 
 interface MatchInfo {
   player: Player;
-  activePlayer: Player;
+  isActive: boolean;
 }
 
 /* Renders information about a match. */
-const MatchInfo = ({ player, activePlayer }: MatchInfo) => (
+const MatchInfo = ({ player, isActive }: MatchInfo) => (
   <div className="match-info">
     <h1 className="title">thinktank</h1>
     <p>You are: {nameOf(player)}</p>
-    <p>Turn of: {nameOf(activePlayer)}</p>
+    <p>Turn of: {isActive ? nameOf(player) : nameOf(opponentOf(player))}</p>
   </div>
 );
 

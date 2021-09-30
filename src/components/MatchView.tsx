@@ -9,11 +9,10 @@ import { GameState } from "../logic/state";
 interface MatchViewProps {
   state: GameState;
   player: Player;
-  activePlayer: Player;
+  isActive: boolean;
   highlightedIndices: Set<number>;
   canSelect: boolean;
-  canSubmit: boolean;
-  canUndo: boolean;
+  canSubmitOrUndo: boolean;
   handleCellClick(index: number): void;
   handleTokenSelect(token: Token): void;
   handleSubmit(): void;
@@ -24,11 +23,10 @@ interface MatchViewProps {
 const MatchView = ({
   state,
   player,
-  activePlayer,
+  isActive,
   highlightedIndices,
   canSelect,
-  canSubmit,
-  canUndo,
+  canSubmitOrUndo,
   handleCellClick,
   handleTokenSelect,
   handleSubmit,
@@ -36,7 +34,7 @@ const MatchView = ({
 }: MatchViewProps) => (
   <div className="match-view">
     <div className="info-panel">
-      <MatchInfo player={player} activePlayer={activePlayer} />
+      <MatchInfo player={player} isActive={isActive} />
     </div>
     <div className="grid-panel">
       <Grid
@@ -49,9 +47,8 @@ const MatchView = ({
       <TokenSelector
         player={player}
         hand={state.hands[player]}
-        canSelect={canSelect}
-        canSubmit={canSubmit}
-        canUndo={canUndo}
+        canSelect={isActive && canSelect}
+        canSubmitOrUndo={isActive && canSubmitOrUndo}
         handleTokenSelect={(t) => handleTokenSelect(t)}
         handleSubmit={() => handleSubmit()}
         handleUndo={() => handleUndo()}

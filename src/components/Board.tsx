@@ -10,14 +10,15 @@ interface LocalBoardProps extends BoardProps {
 
 /** Wraps a board. */
 const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
-  const player = ctx.currentPlayer as Player;
-  const activePlayer = isActive ? player : opponentOf(player);
+  // TODO: fix this hack
+  const currentPlayer = ctx.currentPlayer as Player;
+  const player = isActive ? currentPlayer : opponentOf(currentPlayer);
 
   return (
     <MatchController
       state={G}
       player={player}
-      activePlayer={activePlayer}
+      isActive={isActive}
       place={moves.place}
       move={moves.move}
       rotate={moves.rotate}

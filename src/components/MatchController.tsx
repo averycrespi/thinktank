@@ -1,40 +1,62 @@
 import React, { useState, useEffect } from "react";
-import { Action, applyAction } from "../logic/actions";
-import { canMoveToken, possibleMovements } from "../logic/actions/move";
-import { canPlaceToken, possiblePlacements } from "../logic/actions/place";
-import { canRotateToken, possibleRotations } from "../logic/actions/rotate";
+import { moveToken, possibleMovements } from "../logic/actions/move";
+import { placeToken, possiblePlacements } from "../logic/actions/place";
+import { possibleRotations, rotateToken } from "../logic/actions/rotate";
+import { advanceState } from "../logic/advance";
 import { Player } from "../logic/player";
 import { GameState } from "../logic/state";
-import { nameOf, Token } from "../logic/token";
+import { Token } from "../logic/token";
 import MatchView from "./MatchView";
 
-/**
- * Description of the controller state machine:
- *
- * Ready:
- *  Select token from hand -> PlaceOrRotateToken
- *  Click cell on grid -> MoveToken
- * PlaceOrRotateToken:
- *  Select token from hand -> PlaceOrRotateToken
- *  Click cell on grid -> SubmitOrUndo
- * MoveToken:
- *  Select token from hand -> PlaceOrRotateToken
- *  Click cell on grid -> SubmitOrUndo
- * SubmitOrUndo:
- *  Submit action -> Ready
- *  Undo action -> Ready
- */
-enum ControllerState {
-  Ready, // Player is ready to place, move, or rotate a token
-  PlaceOrRotateToken, // Player has selected a token to place or rotate
-  MoveToken, // Player has selected a token to move
-  SubmitOrUndo, // Player has taken an action, awaiting submit or undo
+interface Start {
+  kind: "start";
 }
+
+/** Player has selected a token; awaiting placement or rotation. */
+interface TokenSelected {
+  kind: "token_selected";
+  token: Token;
+}
+
+/** Player has clicked a cell; awaiting movement. */
+interface CellClicked {
+  kind: "cell_clicked";
+  index: number;
+}
+
+/** Player has placed a token; awaiting submit or undo. */
+interface TokenPlaced {
+  kind: "token_placed";
+  token: Token;
+  index: number;
+}
+
+/** Player has rotated a token; awaiting submit or undo. */
+interface TokenRotated {
+  kind: "token_rotated";
+  afterToken: Token;
+  index: number;
+}
+
+/** Player has moved a token; awaiting submit or undo. */
+interface TokenMoved {
+  kind: "token_moved";
+  srcIndex: number;
+  destIndex: number;
+}
+
+type ControllerState =
+  | Start
+  | TokenSelected
+  | CellClicked
+  | TokenPlaced
+  | TokenRotated
+  | TokenMoved;
 
 interface MatchControllerProps {
   state: GameState;
   player: Player;
-  activePlayer: Player;
+  isActive: boolean;
   place(token: Token, index: number): void;
   move(srcIndex: number, destIndex: number): void;
   rotate(afterToken: Token, index: number): void;
@@ -44,181 +66,112 @@ interface MatchControllerProps {
 const MatchController = ({
   state,
   player,
-  activePlayer,
+  isActive,
   place,
   move,
   rotate,
 }: MatchControllerProps) => {
-  const [controllerState, setControllerState] = useState(ControllerState.Ready);
-  const [visibleState, setVisibleState] = useState(state);
-  const [highlightedIndices, setHighlightedIndices] =
-    useState<Set<number> | null>();
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [selectedToken, setSelectedToken] = useState<Token | null>(null);
-  const [action, setAction] = useState<Action | null>();
+  const [controllerState, setControllerState] = useState<ControllerState>({
+    kind: "start",
+  });
+  const [highlightedIndices, setHighlightedIndices] = useState<Set<number>>(
+    new Set()
+  );
+  const [visibleState, setVisibleState] = useState<GameState>(state);
 
-  /** Defines transitions between the controller states. */
-  const transitions = {
-    toReady: () => {
-      console.log("Transitioning to state: Ready");
-      setControllerState(ControllerState.Ready);
-      setVisibleState(state);
-      setHighlightedIndices(null);
-      setSelectedIndex(null);
-      setSelectedToken(null);
-      setAction(null);
-    },
-
-    toPlaceOrRotateToken: (token: Token) => {
-      console.log(
-        `Transitioning to state: PlaceOrRotateToken with token: ${nameOf(
-          token
-        )}`
-      );
-      setControllerState(ControllerState.PlaceOrRotateToken);
-      setVisibleState(state);
-      setHighlightedIndices(
-        new Set([
-          ...possiblePlacements(state, player, token),
-          ...possibleRotations(state, player, token),
-        ])
-      );
-      setSelectedIndex(null);
-      setSelectedToken(token);
-      setAction(null);
-    },
-
-    toMoveToken: (index: number) => {
-      console.log(`Transitioning to state: MoveToken with index: ${index}`);
-      setControllerState(ControllerState.MoveToken);
-      setVisibleState(state);
-      setHighlightedIndices(possibleMovements(state, player, index));
-      setSelectedIndex(index);
-      setSelectedToken(null);
-      setAction(null);
-    },
-
-    toSubmitOrUndo: (action: Action) => {
-      console.log(
-        `Transitioning to state: SubmitOrUndo with action: ${JSON.stringify(
-          action
-        )}`
-      );
-      const newState = applyAction(state, player, action);
-      if (newState) {
-        setControllerState(ControllerState.SubmitOrUndo);
-        setVisibleState(newState);
-        setHighlightedIndices(null);
-        setSelectedIndex(null);
-        setSelectedToken(null);
-        setAction(action);
-      } else {
-        console.warn("Failed to apply action");
-        transitions.toReady();
-      }
-    },
-  };
-
-  // Reset to the Ready controller state when game state is updated
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => transitions.toReady(), [state]);
+  useEffect(() => {
+    setControllerState({ kind: "start" });
+    setHighlightedIndices(new Set());
+    setVisibleState(state);
+  }, [state, player, isActive]);
 
   const handleCellClick = (index: number) => {
     const cell = state.grid[index];
-    switch (controllerState) {
-      case ControllerState.Ready:
+    let newState: GameState | null;
+    switch (controllerState.kind) {
+      case "start":
         if (cell && cell.owner === player) {
-          transitions.toMoveToken(index);
+          setControllerState({ kind: "cell_clicked", index });
+          setHighlightedIndices(possibleMovements(state, player, index));
+          setVisibleState(state);
         }
         break;
-      case ControllerState.PlaceOrRotateToken:
-        if (selectedToken !== null) {
-          if (canPlaceToken(state, player, selectedToken, index)) {
-            transitions.toSubmitOrUndo({
-              kind: "place",
-              token: selectedToken,
-              index,
-            });
-          } else if (canRotateToken(state, player, selectedToken, index)) {
-            transitions.toSubmitOrUndo({
-              kind: "rotate",
-              afterToken: selectedToken,
-              index,
-            });
-          } else if (cell && cell.owner === player) {
-            transitions.toMoveToken(index);
-          }
-        } else {
-          console.warn("Invariant broken: selectedToken was not set");
-          transitions.toReady();
+      case "token_selected":
+        const { token } = controllerState;
+        if ((newState = placeToken(state, player, token, index))) {
+          setControllerState({ kind: "token_placed", token, index });
+          setHighlightedIndices(new Set());
+          setVisibleState(advanceState(newState, player) || state);
+        } else if ((newState = rotateToken(state, player, token, index))) {
+          const afterToken = token;
+          setControllerState({ kind: "token_rotated", afterToken, index });
+          setHighlightedIndices(new Set());
+          setVisibleState(advanceState(newState, player) || state);
+        } else if (cell && cell.owner === player) {
+          setControllerState({ kind: "cell_clicked", index });
+          setHighlightedIndices(new Set());
+          setVisibleState(state);
         }
         break;
-      case ControllerState.MoveToken:
-        if (selectedIndex !== null) {
-          if (canMoveToken(state, player, selectedIndex, index)) {
-            transitions.toSubmitOrUndo({
-              kind: "move",
-              srcIndex: selectedIndex,
-              destIndex: index,
-            });
-          }
-        } else {
-          console.warn("Invariant broken: selectedIndex was not set");
-          transitions.toReady();
+      case "cell_clicked":
+        const { index: srcIndex } = controllerState;
+        if ((newState = moveToken(state, player, srcIndex, index))) {
+          const destIndex = index;
+          setControllerState({ kind: "token_moved", srcIndex, destIndex });
+          setHighlightedIndices(new Set());
+          setVisibleState(advanceState(newState, player) || state);
         }
         break;
-      case ControllerState.SubmitOrUndo:
+      default:
         break;
     }
   };
 
   const handleTokenSelect = (token: Token) => {
-    switch (controllerState) {
-      case ControllerState.Ready:
-      case ControllerState.PlaceOrRotateToken:
-      case ControllerState.MoveToken:
-        transitions.toPlaceOrRotateToken(token);
+    switch (controllerState.kind) {
+      case "start":
+      case "token_selected":
+      case "cell_clicked":
+        setControllerState({ kind: "token_selected", token });
+        setHighlightedIndices(
+          new Set([
+            ...possiblePlacements(state, player, token),
+            ...possibleRotations(state, player, token),
+          ])
+        );
+        setVisibleState(state);
         break;
-      case ControllerState.SubmitOrUndo:
+      default:
         break;
     }
   };
 
   const handleSubmit = () => {
-    switch (controllerState) {
-      case ControllerState.Ready:
-      case ControllerState.PlaceOrRotateToken:
-      case ControllerState.MoveToken:
+    switch (controllerState.kind) {
+      case "token_placed":
+        place(controllerState.token, controllerState.index);
         break;
-      case ControllerState.SubmitOrUndo:
-        if (action) {
-          switch (action.kind) {
-            case "place":
-              place(action.token, action.index);
-              break;
-            case "rotate":
-              rotate(action.afterToken, action.index);
-              break;
-            case "move":
-              move(action.srcIndex, action.destIndex);
-              break;
-          }
-        } else {
-          console.warn("Invariant broken: action was not set");
-          transitions.toReady();
-        }
+      case "token_rotated":
+        rotate(controllerState.afterToken, controllerState.index);
+        break;
+      case "token_moved":
+        move(controllerState.srcIndex, controllerState.destIndex);
+        break;
+      default:
         break;
     }
   };
 
   const handleUndo = () => {
-    switch (controllerState) {
-      case ControllerState.Ready:
-      case ControllerState.PlaceOrRotateToken:
-      case ControllerState.MoveToken:
+    switch (controllerState.kind) {
+      case "token_placed":
+      case "token_rotated":
+      case "token_moved":
+        setControllerState({ kind: "start" });
+        setHighlightedIndices(new Set());
+        setVisibleState(state);
         break;
-      case ControllerState.SubmitOrUndo:
-        transitions.toReady();
+      default:
         break;
     }
   };
@@ -227,11 +180,20 @@ const MatchController = ({
     <MatchView
       state={visibleState}
       player={player}
-      activePlayer={activePlayer}
-      highlightedIndices={highlightedIndices || new Set()}
-      canSelect={controllerState !== ControllerState.SubmitOrUndo}
-      canSubmit={controllerState === ControllerState.SubmitOrUndo}
-      canUndo={controllerState === ControllerState.SubmitOrUndo}
+      isActive={isActive}
+      highlightedIndices={highlightedIndices}
+      canSelect={
+        isActive &&
+        ["start", "token_selected", "cell_clicked"].includes(
+          controllerState.kind
+        )
+      }
+      canSubmitOrUndo={
+        isActive &&
+        ["token_placed", "token_rotated", "token_moved"].includes(
+          controllerState.kind
+        )
+      }
       handleCellClick={(i) => handleCellClick(i)}
       handleTokenSelect={(t) => handleTokenSelect(t)}
       handleSubmit={() => handleSubmit()}
