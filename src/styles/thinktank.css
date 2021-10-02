@@ -7,6 +7,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap");
 
 :root {
+  --background-color: lightgray;
   --player-one-color: white;
   --player-one-contrast-color: black;
   --player-two-color: black;
@@ -19,7 +20,7 @@
 
 body {
   text-align: center;
-  background-color: lightgray;
+  background-color: var(--background-color);
 }
 
 .title {
@@ -30,24 +31,62 @@ body {
 /*
  * =============================================================================
  * Match View
+ *
+ * On mobile, we render the match info in a collapsible left sidebar, the grid
+ * in the center, and the token selector below the grid.
+ *
+ * On desktop, we render the match info on the left, the grid in the center,
+ * and the token selector on the right.
  * =============================================================================
  */
 
-.match-view {
+#match-view-sidebar {
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: var(--background-color);
+  border-right: 1vmin solid var(--grid-border-color);
+  overflow-x: hidden;
+  padding-top: 60px;
+  transition: 0.5s;
+}
+
+#match-view-sidebar.open {
+  width: 33%;
+}
+
+.match-view-sidebar-toggle {
+  position: absolute;
+  top: 2vmin;
+  right: 2vmin;
+  width: 7vmin;
+  height: 7vmin;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2vmin;
+  color: var(--player-one-contrast-color);
+  background-color: var(--player-one-color);
+  box-shadow: 0 0 0 0.5vmin var(--player-one-contrast-color) inset;
+}
+
+.match-view-content {
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
 }
 
 .info-panel {
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: center;
-  margin: 0 auto;
+  display: none;
 }
 
 .grid-panel {
-  margin: 0 0 1vmin 0;
+  margin: 2vmin 0;
 }
 
 .selector-panel {
@@ -57,14 +96,20 @@ body {
   margin: 1vmin;
 }
 
+/* Desktop or larger */
 @media (min-width: 1200px) {
-  .match-view {
+  #match-view-sidebar,
+  .match-view-sidebar-toggle {
+    display: none;
+  }
+
+  .match-view-content {
     flex-flow: row nowrap;
   }
 
   .info-panel {
+    display: flex;
     flex-flow: column nowrap;
-    justify-content: start;
     width: auto;
     margin: 0;
   }
@@ -85,19 +130,20 @@ body {
  */
 
 .token {
-  width: 4.4vmin;
-  height: 4.4vmin;
+  /* Slightly smaller on mobile because token selector is below grid */
+  width: 4.7vmin;
+  height: 4.7vmin;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.5vmin;
+  font-size: 2vmin;
 }
 
+/* Desktop or larger */
 @media (min-width: 1200px) {
   .token {
     width: 5vmin;
     height: 5vmin;
-    font-size: 2vmin;
   }
 }
 
@@ -141,8 +187,9 @@ body {
   background-color: var(--grid-highlighted-color);
 }
 
-.grid-cell.highlighted > .token {
-  background-color: var(--grid-highlighted-color);
+.grid-cell.highlighted .token.player-one,
+.grid-cell.highlighted .token.player-two {
+  color: var(--grid-highlighted-color);
 }
 
 /*
@@ -158,6 +205,7 @@ body {
   gap: 1vmin;
 }
 
+/* Desktop or larger */
 @media (min-width: 1200px) {
   .token-selector {
     flex-flow: column nowrap;

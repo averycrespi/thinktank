@@ -40,6 +40,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-spinners": "^0.9.0",
+    "react-swipeable": "^6.2.0",
     "typescript": "~3.8.0"
   },
   "scripts": {

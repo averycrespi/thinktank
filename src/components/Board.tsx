@@ -8,17 +8,18 @@ interface LocalBoardProps extends BoardProps {
   G: GameState;
 }
 
-/** Wraps a board. */
+/** Forwards data from boardgame.io to a match controller. */
 const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
-  // TODO: fix this hack
   const currentPlayer = ctx.currentPlayer as Player;
   const player = isActive ? currentPlayer : opponentOf(currentPlayer);
+  const winner = ctx.gameover ? (ctx.gameover as Player) : null;
 
   return (
     <MatchController
       state={G}
       player={player}
       isActive={isActive}
+      winner={winner}
       place={moves.place}
       move={moves.move}
       rotate={moves.rotate}

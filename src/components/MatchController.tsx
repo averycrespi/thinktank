@@ -57,6 +57,7 @@ interface MatchControllerProps {
   state: GameState;
   player: Player;
   isActive: boolean;
+  winner: Player | null;
   place(token: Token, index: number): void;
   move(srcIndex: number, destIndex: number): void;
   rotate(afterToken: Token, index: number): void;
@@ -67,6 +68,7 @@ const MatchController = ({
   state,
   player,
   isActive,
+  winner,
   place,
   move,
   rotate,
@@ -79,6 +81,7 @@ const MatchController = ({
   );
   const [visibleState, setVisibleState] = useState<GameState>(state);
 
+  // Reset hooks whenever game state is updated.
   useEffect(() => {
     setControllerState({ kind: "start" });
     setHighlightedIndices(new Set());
@@ -109,7 +112,7 @@ const MatchController = ({
           setVisibleState(advanceState(newState, player) || state);
         } else if (cell && cell.owner === player) {
           setControllerState({ kind: "cell_clicked", index });
-          setHighlightedIndices(new Set());
+          setHighlightedIndices(possibleMovements(state, player, index));
           setVisibleState(state);
         }
         break;
@@ -181,6 +184,7 @@ const MatchController = ({
       state={visibleState}
       player={player}
       isActive={isActive}
+      winner={winner}
       highlightedIndices={highlightedIndices}
       canSelect={
         isActive &&
