@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  server:
+    build: .
+    command: yarn run:server
+    environment:
+      - REACT_APP_SERVER_PORT=8000
+    ports:
+      - "8000:8000"
+
+  client:
+    build: .
+    command: yarn run:client
+    environment:
+      - REACT_APP_SERVER_URL=server:8000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - server

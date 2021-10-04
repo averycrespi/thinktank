@@ -1,14 +1,6 @@
-<div align="center">
-    <a href="https://thinktank.crespi.dev">
-        <img src="assets/thinktank.png" alt="Thinktank">
-    </a>
-</div>
+# Thinktank
 
-<div align="center">
-    <h4>A 2-player strategy game inspired by Conundrum.</h4>
-</div>
-
-<div align="center">
+<div>
     <a href="https://app.netlify.com/sites/averycrespi-thinktank/deploys">
         <img src="https://api.netlify.com/api/v1/badges/3cc311f0-f960-46c4-aa0a-db4ef0fef441/deploy-status" alt="Deploy status badge">
     </a>
@@ -21,13 +13,9 @@
     </a>
 </div>
 
-![Sandbox](assets/sandbox.png)
-
-![Cheatsheet](assets/cheatsheet.png)
+A 2-player strategy game inspired by Conundum.
 
 ## About
-
-Thinktank is a 2-player strategy game inspired by Conundrum.
 
 Learn the rules and play online at [thinktank.crespi.dev](https://thinktank.crespi.dev).
 
@@ -39,4 +27,3 @@ Source code and documentation are available under the [MIT license](https://choo
 
 - Project inspired by Conundrum by [Mundy Games](https://mundygames.wixsite.com/website-4).
 - Font Awesome icons used under the [Font Awesome Free License](https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt).
-- React, PaperCSS, and other libraries used under their respective licenses.

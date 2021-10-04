@@ -1,43 +1,55 @@
 # Development
 
-## Getting started
+- [Development](#development)
+  - [Running locally](#running-locally)
+  - [Running with Docker](#running-with-docker)
+  - [Environment variables](#environment-variables)
+  - [Hosting your own instance](#hosting-your-own-instance)
+
+## Running locally
 
 Requires [Node](https://nodejs.org/en/) and [Yarn](https://yarnpkg.com/).
 
 ```sh
 git clone https://github.com/averycrespi/thinktank.git && cd thinktank
-yarn        # Install dependencies
-yarn start  # Run the client in development mode on localhost:3000
-yarn test   # Launch the interactive test runner
-yarn build  # Build the client for production
-yarn serve  # Run the server on localhost:8000
+yarn install        # Install dependencies
+yarn test           # Run tests
+yarn test:coverage  # Run tests with coverage
+yarn start          # Start the client in development mode
+yarn build:client   # Build the client for production
+yarn build:server   # Build the server for production
+yarn run:client     # Run the client in production mode
+yarn run:server     # Run the server in production mode
 ```
 
-**Warning**: When running on `localhost`, you may experience errors related to [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS).
+## Running with Docker
 
-To fix these errors, you can:
+Requires [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/).
 
-1. Disable CORS in your browser (not recommended), or
-2. Run the server on a domain with the appropriate CORS headers.
+```sh
+docker-compose build    # Build the client and server images
+docker-compose up -d    # Start the client and server containers
+```
 
 ## Environment variables
 
-See the [Create React App docs](https://create-react-app.dev/docs/adding-custom-environment-variables/) for more information.
+**Note**: All variables must be prefixed with `REACT_APP_` due to [Create React App constraints](https://create-react-app.dev/docs/adding-custom-environment-variables/).
 
-- `REACT_APP_URL`: URL of the server. Default is `"http://localhost:8000"`.
-- `REACT_APP_PORT`: Port that the server will be hosted on. Default is `"8000"`.
+The following environment variables are supported:
+
+- `REACT_APP_SERVER_URL`: URL of the server. Default is `http://localhost:8000`.
+- `REACT_APP_SERVER_PORT`: Port that the server will bind to. Default is `8000`.
 
 ## Hosting your own instance
 
 You can easily host your own instance with [Netlify](https://www.netlify.com/) and [DigitalOcean](https://www.digitalocean.com/).
 
-Make sure that you set `REACT_APP_URL` for the client.
+Make sure that you set `REACT_APP_SERVER_URL` for the client.
 
-Example configuration for proxying the server with [Caddy](https://caddyserver.com/):
+Here is an example configuration for proxying the server with [Caddy](https://caddyserver.com/):
 
 ```
 # ./Caddyfile
-
 # Note: This config was written for Caddy v1.
 
 thinktank-server.example.com {

@@ -9,8 +9,6 @@ import {
 import HomePage from "./components/HomePage";
 import "./styles/thinktank.css";
 
-const serverURL = process.env.REACT_APP_URL ?? "http://localhost:8000";
-
 const App = () => (
   <Router>
     <Switch>

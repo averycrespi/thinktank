@@ -217,7 +217,7 @@ button.token {
 }
 
 button.token:disabled {
-  opacity: 30%;
+  opacity: 0.3;
 }
 
 button.token.submit {

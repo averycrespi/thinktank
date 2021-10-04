@@ -41,16 +41,17 @@
     "react-scripts": "3.4.1",
     "react-spinners": "^0.9.0",
     "react-swipeable": "^6.2.0",
+    "serve": "^12.0.1",
     "typescript": "~3.8.0"
   },
   "scripts": {
     "test": "react-scripts test --watchAll --silent",
     "test:coverage": "react-scripts test --watchAll --silent --coverage",
-    "build": "react-scripts build",
     "start": "react-scripts start",
+    "build:client": "react-scripts build",
     "build:server": "tsc -p tsconfig.server.json",
-    "start:server": "node -r esm build/server/server.js",
-    "serve": "yarn build:server && yarn start:server"
+    "run:client": "yarn serve -s build",
+    "run:server": "node -r esm build/server/server.js"
   },
   "eslintConfig": {
     "extends": "react-app"

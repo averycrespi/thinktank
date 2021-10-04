@@ -7,5 +7,5 @@ import { game } from "./logic/game";
 require("dotenv").config();
 
 const server = Server({ games: [game] });
-const port = parseInt(process.env.REACT_APP_PORT ?? "8000");
+const port = parseInt(process.env.REACT_APP_SERVER_PORT ?? "8000");
 server.run(port);
