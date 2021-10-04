@@ -12,7 +12,8 @@ import { game } from "../logic/game";
 import { nameOf, opponentOf, Player } from "../logic/player";
 import fetchMock from "jest-fetch-mock";
 
-const port = parseInt(process.env.REACT_APP_PORT ?? "8000");
+// Use a different port to prevent port collision if server is running.
+const port = parseInt(process.env.REACT_APP_SERVER_PORT ?? "8001");
 const serverURL = `http://localhost:${port}`;
 
 let commands: { run: any; kill: any };
