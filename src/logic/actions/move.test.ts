@@ -3,7 +3,7 @@ import { adjacentTo, baseIndexOf, GRID_WIDTH } from "../grid";
 import { opponentOf, Player } from "../player";
 import { GameState, initialState } from "../state";
 import { Token } from "../token";
-import { canMoveToken, moveToken, possibleMovements } from "./move";
+import { canMoveToken, moveToken, possibleMovementsFrom } from "./move";
 
 test("movement fails when source index is out of bounds", () => {
   const state: GameState = deepCopy(initialState);
@@ -117,21 +117,21 @@ test("cannot move token", () => {
 
 test("no possible movements when source index is out of bounds", () => {
   const state: GameState = deepCopy(initialState);
-  expect(possibleMovements(state, Player.One, -1).size).toBe(0);
+  expect(possibleMovementsFrom(state, Player.One, -1).size).toBe(0);
 });
 
 test("no possible movements when source index is empty", () => {
   const state: GameState = deepCopy(initialState);
   const srcIndex = 0;
   expect(state.grid[srcIndex]).toBeNull();
-  expect(possibleMovements(state, Player.One, srcIndex).size).toBe(0);
+  expect(possibleMovementsFrom(state, Player.One, srcIndex).size).toBe(0);
 });
 
 test("base can move to all adjacent indices", () => {
   const state: GameState = deepCopy(initialState);
   const player = Player.One;
   const srcIndex = baseIndexOf(player);
-  expect(possibleMovements(state, player, srcIndex)).toStrictEqual(
+  expect(possibleMovementsFrom(state, player, srcIndex)).toStrictEqual(
     adjacentTo(srcIndex)
   );
 });

@@ -3,7 +3,7 @@ import { GRID_SIZE, isInSpawnOf } from "../grid";
 import { Player } from "../player";
 import { GameState, initialState } from "../state";
 import { HeldToken, Token } from "../token";
-import { canPlaceToken, placeToken, possiblePlacements } from "./place";
+import { canPlaceToken, placeToken, possiblePlacementFor } from "./place";
 
 test("placement fails when token is not in hand", () => {
   const state: GameState = deepCopy(initialState);
@@ -71,13 +71,13 @@ test("no possible placements when token is not in hand", () => {
   const state: GameState = deepCopy(initialState);
   const player = Player.One;
   state.hands[player] = [];
-  expect(possiblePlacements(state, player, Token.Blocker).size).toBe(0);
+  expect(possiblePlacementFor(state, player, Token.Blocker).size).toBe(0);
 });
 
 test("all possible placements lie within spawn region", () => {
   const state: GameState = deepCopy(initialState);
   const player = Player.One;
-  const placements = possiblePlacements(state, player, Token.Blocker);
+  const placements = possiblePlacementFor(state, player, Token.Blocker);
   placements.forEach((i) => {
     expect(isInSpawnOf(player, i)).toBeTruthy();
   });

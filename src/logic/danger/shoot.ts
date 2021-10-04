@@ -13,17 +13,19 @@ const SHOOTABLE = new Set<Token>([
   Token.Base,
 ]);
 
-/** Check if a token can be shot by a specific type of enemy tank from a set of indices. */
+/**
+ * Check if a token can be shot by a specific type of enemy tank from a set of indices.
+ *
+ * Optimization: we assume that the token is present and shootable.
+ * This invariant is upheld by the only caller, canBeShot.
+ */
 const canBeShotFrom = (
   grid: Array<PlacedToken | null>,
   srcIndices: Array<number>,
   targetIndex: number,
   tank: Token.UpTank | Token.DownTank | Token.RightTank | Token.LeftTank
 ): boolean => {
-  const target = grid[targetIndex];
-  if (!target || !SHOOTABLE.has(target.token)) {
-    return false; // Cell is empty or token is not shootable.
-  }
+  const target = grid[targetIndex]!;
   for (const srcIndex of srcIndices) {
     const src = grid[srcIndex];
     if (!src) {
@@ -41,9 +43,16 @@ const canBeShotFrom = (
 export const canBeShot = (
   grid: Array<PlacedToken | null>,
   index: number
-): boolean =>
-  isInGrid(index) &&
-  (canBeShotFrom(grid, lineFrom(index, Direction.Up), index, Token.DownTank) ||
+): boolean => {
+  if (!isInGrid(index)) {
+    return false; // Out of bounds.
+  }
+  const target = grid[index];
+  if (!target || !SHOOTABLE.has(target.token)) {
+    return false; // Cell is empty or token is not shootable.
+  }
+  return (
+    canBeShotFrom(grid, lineFrom(index, Direction.Up), index, Token.DownTank) ||
     canBeShotFrom(grid, lineFrom(index, Direction.Down), index, Token.UpTank) ||
     canBeShotFrom(
       grid,
@@ -51,9 +60,6 @@ export const canBeShot = (
       index,
       Token.RightTank
     ) ||
-    canBeShotFrom(
-      grid,
-      lineFrom(index, Direction.Right),
-      index,
-      Token.LeftTank
-    ));
+    canBeShotFrom(grid, lineFrom(index, Direction.Right), index, Token.LeftTank)
+  );
+};

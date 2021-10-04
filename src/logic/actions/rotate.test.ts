@@ -2,7 +2,7 @@ import { deepCopy } from "../../utils/deepCopy";
 import { opponentOf, Player } from "../player";
 import { GameState, initialState } from "../state";
 import { Token } from "../token";
-import { canRotateToken, possibleRotations, rotateToken } from "./rotate";
+import { canRotateToken, possibleRotationsInto, rotateToken } from "./rotate";
 
 test("rotation fails when index is out of bounds", () => {
   const state: GameState = deepCopy(initialState);
@@ -75,7 +75,7 @@ test("cannot rotate token", () => {
 
 test("no possible rotations when replacement token is not a tank", () => {
   const state: GameState = deepCopy(initialState);
-  expect(possibleRotations(state, Player.One, Token.Blocker).size).toBe(0);
+  expect(possibleRotationsInto(state, Player.One, Token.Blocker).size).toBe(0);
 });
 
 test("all upwards tanks can be rotated into downwards tanks", () => {
@@ -85,7 +85,7 @@ test("all upwards tanks can be rotated into downwards tanks", () => {
   tankIndices.forEach(
     (i) => (state.grid[i] = { owner: player, token: Token.UpTank })
   );
-  expect(possibleRotations(state, player, Token.DownTank)).toStrictEqual(
+  expect(possibleRotationsInto(state, player, Token.DownTank)).toStrictEqual(
     tankIndices
   );
 });

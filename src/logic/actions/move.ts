@@ -11,7 +11,7 @@ import {
 } from "../grid";
 import { Player } from "../player";
 import { GameState } from "../state";
-import { PlacedToken, Token } from "../token";
+import { Token } from "../token";
 
 /** Find all indices that are reachable by a token from an index. */
 const reachableFrom = (token: Token, index: number): Set<number> => {
@@ -23,7 +23,7 @@ const reachableFrom = (token: Token, index: number): Set<number> => {
     case Token.DownTank:
     case Token.LeftTank:
     case Token.RightTank:
-      // Tanks can move one space horizontally.
+      // Tanks can move one space horizontally or vertically.
       return filter(cardinallyAdjacentTo(index), (i) => !isInHome(i));
     case Token.CardinalInfiltrator:
       // Cardinal infiltrators can move one space horizontally or vertically.
@@ -35,50 +35,39 @@ const reachableFrom = (token: Token, index: number): Set<number> => {
       // Mines can move up to two spaces and can jump over other units.
       return filter(dualAdjacentTo(index), (i) => !isInHome(i));
     case Token.Base:
-      // Bases can move one space horizontally, vertically, or diagonally.
+      // Bases can move one space horizontally, vertically, or diagonally, but only within a home region.
       return filter(adjacentTo(index), (i) => isInHome(i));
   }
 };
 
 /**
- * A movement is considered legal iff:
+ * Move a token from a source index to a destination index, returning an updated game state iff the movement is legal.
+ *
+ * A movement is legal iff:
  * - The source index contains a token that is owned by the player
  * - The destination index does not contain a token
  * - The token at the source index can reach the destination index
+ * - The movement does not cause the self-preservation rule to be violated
  */
-const isLegalMovement = (
-  grid: Array<PlacedToken | null>,
-  player: Player,
-  srcIndex: number,
-  destIndex: number
-): boolean => {
-  if (!isInGrid(srcIndex) || !isInGrid(destIndex)) {
-    return false; // Out of bounds.
-  }
-  const src = grid[srcIndex];
-  const dest = grid[destIndex];
-  if (!src) {
-    return false; // Cannot move from an empty cell.
-  } else if (src.owner !== player) {
-    return false; // Cannot move an opponent's token.
-  } else if (dest) {
-    return false; // Cannot move to an occupied cell.
-  } else if (!reachableFrom(src.token, srcIndex).has(destIndex)) {
-    return false; // Must be able to reach the destination.
-  } else {
-    return true;
-  }
-};
-
-/** Move a token from a source index to a destination index, returning an updated game state iff the movement is valid. */
 export const moveToken = (
   state: GameState,
   player: Player,
   srcIndex: number,
   destIndex: number
 ): GameState | null => {
-  if (!isLegalMovement(state.grid, player, srcIndex, destIndex)) {
-    return null;
+  if (!isInGrid(srcIndex) || !isInGrid(destIndex)) {
+    return null; // Out of bounds.
+  }
+  const src = state.grid[srcIndex];
+  const dest = state.grid[destIndex];
+  if (!src) {
+    return null; // Cannot move from an empty cell.
+  } else if (src.owner !== player) {
+    return null; // Cannot move an opponent's token.
+  } else if (dest) {
+    return null; // Cannot move to an occupied cell.
+  } else if (!reachableFrom(src.token, srcIndex).has(destIndex)) {
+    return null; // Must be able to reach the destination.
   }
   const newState: GameState = deepCopy(state);
   newState.grid[destIndex] = newState.grid[srcIndex];
@@ -95,7 +84,7 @@ export const canMoveToken = (
 ): boolean => moveToken(state, player, srcIndex, destIndex) !== null;
 
 /** Find all possible destination indices that the token at the source index could move to. */
-export const possibleMovements = (
+export const possibleMovementsFrom = (
   state: GameState,
   player: Player,
   srcIndex: number

@@ -15,13 +15,13 @@ const EXPLODABLE = new Set<Token>([
 ]);
 
 /**
- * Check if a token can explode.
+ * Check if a token can explode due to proximity.
  *
- * A token can explode iff:
+ * A token can explode due to proximity iff:
  * - The token is a mine
  * - The token is adjacent to an explodable enemy token
  */
-export const canExplode = (
+export const canExplodeDueToProximity = (
   grid: Array<PlacedToken | null>,
   index: number
 ): boolean => {
@@ -54,7 +54,7 @@ export const canBeExploded = (
   }
   const target = grid[index];
   if (!target || !EXPLODABLE.has(target.token)) {
-    return false; // Cell is empty of token is not explodable.
+    return false; // Cell is empty or token is not explodable.
   }
   return filter(adjacentTo(index), (i) => explodingMines.has(i)).size > 0;
 };

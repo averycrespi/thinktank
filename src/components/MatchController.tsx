@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { moveToken, possibleMovements } from "../logic/actions/move";
-import { placeToken, possiblePlacements } from "../logic/actions/place";
-import { possibleRotations, rotateToken } from "../logic/actions/rotate";
+import { moveToken, possibleMovementsFrom } from "../logic/actions/move";
+import { placeToken, possiblePlacementFor } from "../logic/actions/place";
+import { possibleRotationsInto, rotateToken } from "../logic/actions/rotate";
 import { advanceState } from "../logic/advance";
 import { Player } from "../logic/player";
 import { GameState } from "../logic/state";
@@ -95,7 +95,7 @@ const MatchController = ({
       case "start":
         if (cell && cell.owner === player) {
           setControllerState({ kind: "cell_clicked", index });
-          setHighlightedIndices(possibleMovements(state, player, index));
+          setHighlightedIndices(possibleMovementsFrom(state, player, index));
           setVisibleState(state);
         }
         break;
@@ -112,7 +112,7 @@ const MatchController = ({
           setVisibleState(advanceState(newState, player) || state);
         } else if (cell && cell.owner === player) {
           setControllerState({ kind: "cell_clicked", index });
-          setHighlightedIndices(possibleMovements(state, player, index));
+          setHighlightedIndices(possibleMovementsFrom(state, player, index));
           setVisibleState(state);
         }
         break;
@@ -138,8 +138,8 @@ const MatchController = ({
         setControllerState({ kind: "token_selected", token });
         setHighlightedIndices(
           new Set([
-            ...possiblePlacements(state, player, token),
-            ...possibleRotations(state, player, token),
+            ...possiblePlacementFor(state, player, token),
+            ...possibleRotationsInto(state, player, token),
           ])
         );
         setVisibleState(state);

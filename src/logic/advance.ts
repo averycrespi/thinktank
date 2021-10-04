@@ -1,6 +1,6 @@
 import { deepCopy } from "../utils/deepCopy";
 import { canBeCaptured } from "./danger/capture";
-import { canBeExploded, canExplode } from "./danger/explode";
+import { canBeExploded, canExplodeDueToProximity } from "./danger/explode";
 import { canBeShot } from "./danger/shoot";
 import { GRID_SIZE } from "./grid";
 import { opponentOf, Player } from "./player";
@@ -10,7 +10,7 @@ import { toHeld, Token } from "./token";
 /**
  * Advance the game state after a player takes an action.
  *
- * Returns the updated game newState, or null iff the self-preservation rule is violated.
+ * Returns the updated game state, or null iff the self-preservation rule is violated.
  */
 export const advanceState = (
   state: GameState,
@@ -43,7 +43,7 @@ export const advanceState = (
       }
       shot.add(index);
     }
-    if (target && canExplode(newState.grid, index)) {
+    if (target && canExplodeDueToProximity(newState.grid, index)) {
       exploding.add(index);
     }
   }
