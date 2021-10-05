@@ -1,0 +1,11 @@
+.title {
+  font-weight: 800;
+}
+
+.title.think {
+  color: white;
+}
+
+.title.tank {
+  color: black;
+}

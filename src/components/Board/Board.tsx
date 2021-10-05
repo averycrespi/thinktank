@@ -1,8 +1,8 @@
-import React from "react";
 import { BoardProps } from "boardgame.io/react";
-import { GameState } from "../logic/state";
-import MatchController from "./MatchController";
-import { opponentOf, Player } from "../logic/player";
+import React from "react";
+import { opponentOf, Player } from "../../logic/player";
+import { GameState } from "../../logic/state";
+import MatchController from "../MatchController/MatchController";
 
 interface LocalBoardProps extends BoardProps {
   G: GameState;

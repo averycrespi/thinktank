@@ -1,0 +1,44 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --background-color: lightgray;
+
+  --player-one-color: white;
+  --player-one-contrast-color: black;
+
+  --player-two-color: black;
+  --player-two-contrast-color: white;
+
+  --grid-background-color: white;
+  --grid-home-color: lightgray;
+  --grid-highlighted-color: lightgreen;
+  --grid-border-color: gray;
+}
+
+body {
+  text-align: center;
+  background-color: var(--background-color);
+  font-family: "Baloo 2", cursive;
+}
+
+.token {
+  /* 100 / max(GRID_WIDTH, GRID_HEIGHT) ~= 5.5, minus some space for padding/borders. */
+  width: 5.1vmin;
+  height: 5.1vmin;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2vmin;
+}
+
+.token.player-one {
+  color: var(--player-one-contrast-color);
+  background-color: var(--player-one-color);
+  box-shadow: 0 0 0 0.5vmin var(--player-one-contrast-color) inset;
+}
+
+.token.player-two {
+  color: var(--player-two-contrast-color);
+  background-color: var(--player-two-color);
+  box-shadow: 0 0 0 0.5vmin var(--player-two-contrast-color) inset;
+}

@@ -1,7 +1,7 @@
-import React from "react";
 import { Client } from "boardgame.io/react";
-import { game } from "../logic/game";
-import Board from "./Board";
+import React from "react";
+import { game } from "../../logic/game";
+import Board from "../Board/Board";
 
 const SandboxClient = Client({ game, board: Board, debug: false });
 

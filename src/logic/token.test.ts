@@ -7,7 +7,7 @@ import {
   Token,
 } from "./token";
 
-test("token names are correct", () => {
+test("tokens have meaningful names", () => {
   expect(nameOf(Token.Blocker)).toBe("Blocker");
   expect(nameOf(Token.UpTank)).toBe("Upwards Tank");
   expect(nameOf(Token.DownTank)).toBe("Downwards Tank");
@@ -19,7 +19,7 @@ test("token names are correct", () => {
   expect(nameOf(Token.Base)).toBe("Base");
 });
 
-test("upwards tank is tank", () => {
+test("upwards tank is a tank", () => {
   expect(isTank(Token.UpTank)).toBeTruthy();
 });
 

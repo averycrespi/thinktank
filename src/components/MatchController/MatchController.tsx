@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { moveToken, possibleMovementsFrom } from "../logic/actions/move";
-import { placeToken, possiblePlacementFor } from "../logic/actions/place";
-import { possibleRotationsInto, rotateToken } from "../logic/actions/rotate";
-import { advanceState } from "../logic/advance";
-import { Player } from "../logic/player";
-import { GameState } from "../logic/state";
-import { Token } from "../logic/token";
-import MatchView from "./MatchView";
+import React, { useEffect, useState } from "react";
+import { moveToken, possibleMovementsFrom } from "../../logic/actions/move";
+import { placeToken, possiblePlacementFor } from "../../logic/actions/place";
+import { possibleRotationsInto, rotateToken } from "../../logic/actions/rotate";
+import { advanceState } from "../../logic/advance";
+import { Player } from "../../logic/player";
+import { GameState } from "../../logic/state";
+import { Token } from "../../logic/token";
+import MatchView from "../MatchView/MatchView";
 
 interface Start {
   kind: "start";

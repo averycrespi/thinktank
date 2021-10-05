@@ -6,8 +6,8 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import HomePage from "./components/HomePage";
-import "./styles/thinktank.css";
+import HomePage from "./components/HomePage/HomePage";
+import "./index.css";
 
 const App = () => (
   <Router>

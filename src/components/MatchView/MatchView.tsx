@@ -2,12 +2,13 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { useSwipeable } from "react-swipeable";
-import { Player } from "../logic/player";
-import { GameState } from "../logic/state";
-import { Token } from "../logic/token";
-import Grid from "./Grid";
-import MatchInfo from "./MatchInfo";
-import TokenSelector from "./TokenSelector";
+import { Player } from "../../logic/player";
+import { GameState } from "../../logic/state";
+import { Token } from "../../logic/token";
+import Grid from "../Grid/Grid";
+import MatchInfo from "../MatchInfo/MatchInfo";
+import TokenSelector from "../TokenSelector/TokenSelector";
+import "./MatchView.css";
 
 const canControlSidebar = () =>
   !window.matchMedia("(min-width: 1200px)").matches;

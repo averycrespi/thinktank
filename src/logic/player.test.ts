@@ -1,10 +1,7 @@
 import { nameOf, opponentOf, Player } from "./player";
 
-test("player one has name", () => {
+test("players have meaningful names", () => {
   expect(nameOf(Player.One)).toBe("Player One");
-});
-
-test("player two has name", () => {
   expect(nameOf(Player.Two)).toBe("Player Two");
 });
 

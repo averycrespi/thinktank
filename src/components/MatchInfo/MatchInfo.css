@@ -1,0 +1,11 @@
+.match-info-title {
+  font-size: max(5vmin, 2em);
+}
+
+.match-info-item {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2vmin;
+}

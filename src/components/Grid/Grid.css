@@ -1,0 +1,26 @@
+.grid {
+  margin: 0 auto;
+  border: 1vmin solid var(--grid-border-color);
+  border-radius: 1vmin;
+  border-spacing: 0;
+  background-color: var(--grid-background-color);
+}
+
+.grid-cell {
+  padding: 0;
+  border-bottom: 0;
+  box-shadow: 0 0 0 0.1vmin var(--grid-border-color) inset;
+}
+
+.grid-cell.home {
+  background-color: var(--grid-home-color);
+}
+
+.grid-cell.highlighted {
+  background-color: var(--grid-highlighted-color);
+}
+
+.grid-cell.highlighted .token.player-one,
+.grid-cell.highlighted .token.player-two {
+  color: var(--grid-highlighted-color);
+}

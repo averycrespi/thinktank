@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Token } from "../logic/token";
+import { Token } from "../../logic/token";
 
 const toIconDefinition = (token: Token): IconDefinition => {
   switch (token) {
@@ -43,7 +43,9 @@ interface TokenIconProps {
 
 /** Renders a token as a Font Awesome icon. */
 const TokenIcon = ({ token }: TokenIconProps) => (
-  <FontAwesomeIcon icon={toIconDefinition(token)} />
+  <span className="token-icon">
+    <FontAwesomeIcon icon={toIconDefinition(token)} />
+  </span>
 );
 
 export default TokenIcon;

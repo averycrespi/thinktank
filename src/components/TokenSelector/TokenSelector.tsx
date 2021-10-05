@@ -1,9 +1,10 @@
 import { faCheck, faUndo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Player } from "../logic/player";
-import { HeldToken, toHeld, Token } from "../logic/token";
-import TokenIcon from "./TokenIcon";
+import { Player } from "../../logic/player";
+import { HeldToken, toHeld, Token } from "../../logic/token";
+import TokenIcon from "../TokenIcon/TokenIcon";
+import "./TokenSelector.css";
 
 const SELECTABLE = [
   Token.Blocker,

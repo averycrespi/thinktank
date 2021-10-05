@@ -1,12 +1,12 @@
 import React from "react";
-import { GRID_HEIGHT, GRID_WIDTH, isInHome } from "../logic/grid";
-import { Player } from "../logic/player";
-import { PlacedToken } from "../logic/token";
-import TokenIcon from "./TokenIcon";
+import { GRID_HEIGHT, GRID_WIDTH, isInHome } from "../../logic/grid";
+import { PlacedToken } from "../../logic/token";
+import { classOf } from "../../utils/classOf";
+import TokenIcon from "../TokenIcon/TokenIcon";
+import "./Grid.css";
 
 const Y_INDICES = [...Array(GRID_HEIGHT).keys()];
 const X_INDICES = [...Array(GRID_WIDTH).keys()];
-const EMPTY_CELL = "";
 
 const cellClasses = (
   index: number,
@@ -18,20 +18,13 @@ const cellClasses = (
     highlightedIndices && highlightedIndices.has(index) ? "highlighted" : "",
   ].filter((c) => c.length > 0);
 
-const tokenClasses = (cell: PlacedToken | null): Array<String> =>
-  [
-    "token",
-    cell && cell.owner === Player.One ? "player-one" : "",
-    cell && cell.owner === Player.Two ? "player-two" : "",
-  ].filter((c) => c.length > 0);
-
 interface GridProps {
   grid: Array<PlacedToken | null>;
   highlightedIndices?: Set<number>;
   handleCellClick(index: number): void;
 }
 
-/** Renders a grid of grid. */
+/** Renders a grid of cells. */
 const Grid = ({ grid, highlightedIndices, handleCellClick }: GridProps) => (
   <table className="grid">
     <tbody>
@@ -46,9 +39,13 @@ const Grid = ({ grid, highlightedIndices, handleCellClick }: GridProps) => (
                 key={i}
                 onClick={() => handleCellClick(i)}
               >
-                <div className={tokenClasses(cell).join(" ")}>
-                  {cell ? <TokenIcon token={cell.token} /> : EMPTY_CELL}
-                </div>
+                {cell ? (
+                  <div className={["token", classOf(cell.owner)].join(" ")}>
+                    <TokenIcon token={cell.token} />
+                  </div>
+                ) : (
+                  <div className="token"></div>
+                )}
               </td>
             );
           })}

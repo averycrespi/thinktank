@@ -1,0 +1,43 @@
+.token-selector {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  gap: 1vmin;
+}
+
+/* Desktop or larger */
+@media (min-width: 1200px) {
+  .token-selector {
+    flex-flow: column nowrap;
+  }
+}
+
+button.token {
+  padding: 0;
+  width: 2em;
+  height: 2em;
+  font-size: 2em;
+}
+
+/* Desktop or larger */
+@media (min-width: 1200px) {
+  button.token {
+    width: 5vmin;
+    height: 5vmin;
+    font-size: 2vmin;
+  }
+}
+
+button.token:disabled {
+  opacity: 0.3;
+}
+
+button.token.submit {
+  color: white;
+  background-color: green;
+}
+
+button.token.undo {
+  color: white;
+  background-color: red;
+}
