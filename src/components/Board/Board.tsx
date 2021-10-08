@@ -8,7 +8,7 @@ interface LocalBoardProps extends BoardProps {
   G: GameState;
 }
 
-/** Forwards data from boardgame.io to a match controller. */
+/** Wraps a match controller into a boardgame.io board component. */
 const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
   const currentPlayer = ctx.currentPlayer as Player;
   const player = isActive ? currentPlayer : opponentOf(currentPlayer);
@@ -20,9 +20,11 @@ const Board = ({ G, ctx, moves, isActive }: LocalBoardProps) => {
       player={player}
       isActive={isActive}
       winner={winner}
-      place={moves.place}
-      move={moves.move}
-      rotate={moves.rotate}
+      moves={{
+        placeToken: moves.placeToken,
+        moveToken: moves.moveToken,
+        rotateToken: moves.rotateToken,
+      }}
     />
   );
 };

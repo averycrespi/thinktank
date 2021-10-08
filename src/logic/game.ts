@@ -7,42 +7,19 @@ import { Player } from "./player";
 import { GameState, initialState, winnerOf } from "./state";
 import { Token } from "./token";
 
-export const setup = (): GameState => initialState;
-
-export const place = (G: GameState, ctx: Ctx, token: Token, index: number) => {
-  const player = ctx.currentPlayer as Player;
-  const newState = placeToken(G, player, token, index);
-  return newState ?? INVALID_MOVE;
-};
-
-export const move = (
-  G: GameState,
-  ctx: Ctx,
-  srcIndex: number,
-  destIndex: number
-) => {
-  const player = ctx.currentPlayer as Player;
-  const newState = moveToken(G, player, srcIndex, destIndex);
-  return newState ?? INVALID_MOVE;
-};
-
-export const rotate = (
-  G: GameState,
-  ctx: Ctx,
-  afterToken: Token,
-  index: number
-) => {
-  const player = ctx.currentPlayer as Player;
-  const newState = rotateToken(G, player, afterToken, index);
-  return newState ?? INVALID_MOVE;
-};
-
-export const endIf = (G: GameState, ctx: Ctx): Player | null => winnerOf(G);
-
+/** Wraps game logic into a boardgame.io game object. */
 export const game: Game<GameState, Ctx> = {
   name: "thinktank",
-  setup: setup,
-  moves: { place, move, rotate },
+  setup: () => initialState,
+  moves: {
+    placeToken: (G: GameState, ctx: Ctx, token: Token, index: number) =>
+      placeToken(G, ctx.currentPlayer as Player, token, index) ?? INVALID_MOVE,
+    moveToken: (G: GameState, ctx: Ctx, srcIndex: number, destIndex: number) =>
+      moveToken(G, ctx.currentPlayer as Player, srcIndex, destIndex) ??
+      INVALID_MOVE,
+    rotateToken: (G: GameState, ctx: Ctx, afterToken: Token, index: number) =>
+      rotateToken(G, ctx.currentPlayer as Player, afterToken, index),
+  },
   turn: { moveLimit: 1 },
-  endIf: endIf,
+  endIf: (G: GameState, _ctx: Ctx) => winnerOf(G),
 };

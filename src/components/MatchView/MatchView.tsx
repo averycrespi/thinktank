@@ -23,10 +23,10 @@ interface MatchViewProps {
   isActive: boolean;
   winner: Player | null;
   highlightedIndices: Set<number>;
-  canSelect: boolean;
-  canSubmitOrUndo: boolean;
   handleCellClick(index: number): void;
+  canSelectToken: boolean;
   handleTokenSelect(token: Token): void;
+  canSubmitOrUndo: boolean;
   handleSubmit(): void;
   handleUndo(): void;
 }
@@ -38,10 +38,10 @@ const MatchView = ({
   isActive,
   winner,
   highlightedIndices,
-  canSelect,
-  canSubmitOrUndo,
   handleCellClick,
+  canSelectToken,
   handleTokenSelect,
+  canSubmitOrUndo,
   handleSubmit,
   handleUndo,
 }: MatchViewProps) => {
@@ -81,7 +81,7 @@ const MatchView = ({
           <TokenSelector
             player={player}
             hand={state.hands[player]}
-            canSelect={isActive && canSelect}
+            canSelectToken={isActive && canSelectToken}
             canSubmitOrUndo={isActive && canSubmitOrUndo}
             handleTokenSelect={(t) => handleTokenSelect(t)}
             handleSubmit={() => handleSubmit()}

@@ -27,9 +27,9 @@ const tokenClasses = (player: Player): Array<String> =>
 interface TokenSelectorProps {
   player: Player;
   hand: Array<HeldToken>;
-  canSelect: Boolean;
-  canSubmitOrUndo: boolean;
+  canSelectToken: Boolean;
   handleTokenSelect(token: Token): void;
+  canSubmitOrUndo: boolean;
   handleSubmit(): void;
   handleUndo(): void;
 }
@@ -38,9 +38,9 @@ interface TokenSelectorProps {
 const TokenSelector = ({
   player,
   hand,
-  canSelect,
-  canSubmitOrUndo,
+  canSelectToken,
   handleTokenSelect,
+  canSubmitOrUndo,
   handleSubmit,
   handleUndo,
 }: TokenSelectorProps) => (
@@ -48,7 +48,7 @@ const TokenSelector = ({
     {SELECTABLE.map((token, i) => (
       <button
         className={tokenClasses(player).join(" ")}
-        disabled={!canSelect || !hand.includes(toHeld(token))}
+        disabled={!canSelectToken || !hand.includes(toHeld(token))}
         key={i}
         onClick={() => handleTokenSelect(token)}
         onKeyDown={() => handleTokenSelect(token)}

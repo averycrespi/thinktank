@@ -2,65 +2,22 @@ import React, { useEffect, useState } from "react";
 import { moveToken, possibleMovementsFrom } from "../../logic/actions/move";
 import { placeToken, possiblePlacementFor } from "../../logic/actions/place";
 import { possibleRotationsInto, rotateToken } from "../../logic/actions/rotate";
-import { advanceState } from "../../logic/advance";
 import { Player } from "../../logic/player";
 import { GameState } from "../../logic/state";
 import { Token } from "../../logic/token";
 import MatchView from "../MatchView/MatchView";
-
-interface Start {
-  kind: "start";
-}
-
-/** Player has selected a token; awaiting placement or rotation. */
-interface TokenSelected {
-  kind: "token_selected";
-  token: Token;
-}
-
-/** Player has clicked a cell; awaiting movement. */
-interface CellClicked {
-  kind: "cell_clicked";
-  index: number;
-}
-
-/** Player has placed a token; awaiting submit or undo. */
-interface TokenPlaced {
-  kind: "token_placed";
-  token: Token;
-  index: number;
-}
-
-/** Player has rotated a token; awaiting submit or undo. */
-interface TokenRotated {
-  kind: "token_rotated";
-  afterToken: Token;
-  index: number;
-}
-
-/** Player has moved a token; awaiting submit or undo. */
-interface TokenMoved {
-  kind: "token_moved";
-  srcIndex: number;
-  destIndex: number;
-}
-
-type ControllerState =
-  | Start
-  | TokenSelected
-  | CellClicked
-  | TokenPlaced
-  | TokenRotated
-  | TokenMoved;
+import { ControllerState } from "./controllerState";
 
 interface MatchControllerProps {
   state: GameState;
   player: Player;
   isActive: boolean;
   winner: Player | null;
-  place(token: Token, index: number): void;
-  move(srcIndex: number, destIndex: number): void;
-  rotate(afterToken: Token, index: number): void;
+  moves: {
+    placeToken: (token: Token, index: number) => void;
+    moveToken: (srcIndex: number, destIndex: number) => void;
+    rotateToken: (afterToken: Token, index: number) => void;
+  };
 }
 
 /** Controls a match. */
@@ -69,137 +26,180 @@ const MatchController = ({
   player,
   isActive,
   winner,
-  place,
-  move,
-  rotate,
+  moves,
 }: MatchControllerProps) => {
   const [controllerState, setControllerState] = useState<ControllerState>({
-    kind: "start",
+    tag: "initial",
   });
   const [highlightedIndices, setHighlightedIndices] = useState<Set<number>>(
     new Set()
   );
-  const [visibleState, setVisibleState] = useState<GameState>(state);
+  const [visibleGameState, setVisibleGameState] = useState<GameState>(state);
 
-  // Reset hooks whenever game state is updated.
-  useEffect(() => {
-    setControllerState({ kind: "start" });
-    setHighlightedIndices(new Set());
-    setVisibleState(state);
-  }, [state, player, isActive]);
+  // Defines the transitions between the controller states.
+  const actions = {
+    reset: (): boolean => {
+      setControllerState({ tag: "initial" });
+      setHighlightedIndices(new Set());
+      setVisibleGameState(state);
+      return true;
+    },
 
-  const handleCellClick = (index: number) => {
-    const cell = state.grid[index];
-    let newState: GameState | null;
-    switch (controllerState.kind) {
-      case "start":
-        if (cell && cell.owner === player) {
-          setControllerState({ kind: "cell_clicked", index });
-          setHighlightedIndices(possibleMovementsFrom(state, player, index));
-          setVisibleState(state);
-        }
-        break;
-      case "token_selected":
-        const { token } = controllerState;
-        if ((newState = placeToken(state, player, token, index))) {
-          setControllerState({ kind: "token_placed", token, index });
-          setHighlightedIndices(new Set());
-          setVisibleState(advanceState(newState, player) || state);
-        } else if ((newState = rotateToken(state, player, token, index))) {
-          const afterToken = token;
-          setControllerState({ kind: "token_rotated", afterToken, index });
-          setHighlightedIndices(new Set());
-          setVisibleState(advanceState(newState, player) || state);
-        } else if (cell && cell.owner === player) {
-          setControllerState({ kind: "cell_clicked", index });
-          setHighlightedIndices(possibleMovementsFrom(state, player, index));
-          setVisibleState(state);
-        }
-        break;
-      case "cell_clicked":
-        const { index: srcIndex } = controllerState;
-        if ((newState = moveToken(state, player, srcIndex, index))) {
-          const destIndex = index;
-          setControllerState({ kind: "token_moved", srcIndex, destIndex });
-          setHighlightedIndices(new Set());
-          setVisibleState(advanceState(newState, player) || state);
-        }
-        break;
-      default:
-        break;
-    }
-  };
+    selectToken: (token: Token): boolean => {
+      setControllerState({ tag: "token_selected", token });
+      setHighlightedIndices(
+        new Set([
+          ...possiblePlacementFor(state, player, token),
+          ...possibleRotationsInto(state, player, token),
+        ])
+      );
+      setVisibleGameState(state);
+      return true;
+    },
 
-  const handleTokenSelect = (token: Token) => {
-    switch (controllerState.kind) {
-      case "start":
-      case "token_selected":
-      case "cell_clicked":
-        setControllerState({ kind: "token_selected", token });
-        setHighlightedIndices(
-          new Set([
-            ...possiblePlacementFor(state, player, token),
-            ...possibleRotationsInto(state, player, token),
-          ])
-        );
-        setVisibleState(state);
-        break;
-      default:
-        break;
-    }
-  };
+    clickCell: (index: number): boolean => {
+      const cell = state.grid[index];
+      if (cell && cell.owner === player) {
+        setControllerState({ tag: "cell_clicked", index });
+        setHighlightedIndices(possibleMovementsFrom(state, player, index));
+        setVisibleGameState(state);
+        return true;
+      }
+      return false;
+    },
 
-  const handleSubmit = () => {
-    switch (controllerState.kind) {
-      case "token_placed":
-        place(controllerState.token, controllerState.index);
-        break;
-      case "token_rotated":
-        rotate(controllerState.afterToken, controllerState.index);
-        break;
-      case "token_moved":
-        move(controllerState.srcIndex, controllerState.destIndex);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleUndo = () => {
-    switch (controllerState.kind) {
-      case "token_placed":
-      case "token_rotated":
-      case "token_moved":
-        setControllerState({ kind: "start" });
+    placeToken: (token: Token, index: number): boolean => {
+      const afterPlacement = placeToken(state, player, token, index);
+      if (afterPlacement) {
+        setControllerState({ tag: "token_placed", token, index });
         setHighlightedIndices(new Set());
-        setVisibleState(state);
-        break;
+        setVisibleGameState(afterPlacement);
+        return true;
+      }
+      return false;
+    },
+
+    moveToken: (srcIndex: number, destIndex: number): boolean => {
+      const afterMovement = moveToken(state, player, srcIndex, destIndex);
+      if (afterMovement) {
+        setControllerState({ tag: "token_moved", srcIndex, destIndex });
+        setHighlightedIndices(new Set());
+        setVisibleGameState(afterMovement);
+        return true;
+      }
+      return false;
+    },
+
+    rotateToken: (afterToken: Token, index: number): boolean => {
+      const afterRotation = rotateToken(state, player, afterToken, index);
+      if (afterRotation) {
+        setControllerState({ tag: "token_rotated", afterToken, index });
+        setHighlightedIndices(new Set());
+        setVisibleGameState(afterRotation);
+        return true;
+      }
+      return false;
+    },
+  };
+
+  // Reset the controller state whenever the game state is updated.
+  useEffect(
+    () => {
+      actions.reset();
+    },
+    // This is safe because actions only depends on state and player.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [state, player]
+  );
+
+  const handleCellClick = (index: number): boolean => {
+    switch (controllerState.tag) {
+      case "initial":
+        return actions.clickCell(index);
+      case "token_selected":
+        return (
+          actions.placeToken(controllerState.token, index) ||
+          actions.rotateToken(controllerState.token, index) ||
+          actions.clickCell(index)
+        );
+      case "cell_clicked":
+        return actions.moveToken(controllerState.index, index);
       default:
-        break;
+        return false;
+    }
+  };
+
+  const canSelectToken = () => {
+    switch (controllerState.tag) {
+      case "initial":
+      case "token_selected":
+      case "cell_clicked":
+        return isActive;
+      default:
+        return false;
+    }
+  };
+
+  const handleTokenSelect = (token: Token): boolean => {
+    switch (controllerState.tag) {
+      case "initial":
+      case "token_selected":
+      case "cell_clicked":
+        return actions.selectToken(token);
+      default:
+        return false;
+    }
+  };
+
+  const canSubmitOrUndo = (): boolean => {
+    switch (controllerState.tag) {
+      case "token_placed":
+      case "token_rotated":
+      case "token_moved":
+        return isActive;
+      default:
+        return false;
+    }
+  };
+
+  const handleSubmit = (): boolean => {
+    switch (controllerState.tag) {
+      case "token_placed":
+        moves.placeToken(controllerState.token, controllerState.index);
+        return true;
+      case "token_rotated":
+        moves.rotateToken(controllerState.afterToken, controllerState.index);
+        return true;
+      case "token_moved":
+        moves.moveToken(controllerState.srcIndex, controllerState.destIndex);
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const handleUndo = (): boolean => {
+    switch (controllerState.tag) {
+      case "token_placed":
+      case "token_rotated":
+      case "token_moved":
+        return actions.reset();
+      default:
+        return false;
     }
   };
 
   return (
     <MatchView
-      state={visibleState}
+      state={visibleGameState}
       player={player}
       isActive={isActive}
       winner={winner}
       highlightedIndices={highlightedIndices}
-      canSelect={
-        isActive &&
-        ["start", "token_selected", "cell_clicked"].includes(
-          controllerState.kind
-        )
-      }
-      canSubmitOrUndo={
-        isActive &&
-        ["token_placed", "token_rotated", "token_moved"].includes(
-          controllerState.kind
-        )
-      }
       handleCellClick={(i) => handleCellClick(i)}
+      canSelectToken={canSelectToken()}
       handleTokenSelect={(t) => handleTokenSelect(t)}
+      canSubmitOrUndo={canSubmitOrUndo()}
       handleSubmit={() => handleSubmit()}
       handleUndo={() => handleUndo()}
     />

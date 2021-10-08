@@ -10,6 +10,8 @@ import { toHeld, Token } from "./token";
 /**
  * Advance the game state after a player takes an action.
  *
+ * This is an internal method that should not be directly called.
+ *
  * Returns the updated game state, or null iff the self-preservation rule is violated.
  */
 export const advanceState = (
