@@ -24,3 +24,7 @@
 .grid-cell.highlighted .token.player-two {
   background-color: var(--highlight-color);
 }
+
+.grid-cell .token.position {
+  color: var(--grid-border-color);
+}

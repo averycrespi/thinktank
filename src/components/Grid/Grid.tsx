@@ -1,5 +1,10 @@
 import React from "react";
-import { GRID_HEIGHT, GRID_WIDTH, isInHome } from "../../logic/grid";
+import {
+  GRID_HEIGHT,
+  GRID_WIDTH,
+  isInHome,
+  toPosition,
+} from "../../logic/grid";
 import { PlacedToken } from "../../logic/token";
 import { classOf } from "../../utils/classOf";
 import TokenIcon from "../TokenIcon/TokenIcon";
@@ -22,10 +27,16 @@ interface GridProps {
   grid: Array<PlacedToken | null>;
   highlightedIndices?: Set<number>;
   handleCellClick(index: number): void;
+  showPositions: boolean;
 }
 
 /** Renders a grid of cells. */
-const Grid = ({ grid, highlightedIndices, handleCellClick }: GridProps) => (
+const Grid = ({
+  grid,
+  highlightedIndices,
+  handleCellClick,
+  showPositions,
+}: GridProps) => (
   <table className="grid">
     <tbody>
       {Y_INDICES.map((y) => (
@@ -44,7 +55,9 @@ const Grid = ({ grid, highlightedIndices, handleCellClick }: GridProps) => (
                     <TokenIcon token={cell.token} />
                   </div>
                 ) : (
-                  <div className="token"></div>
+                  <div className="token position">
+                    {showPositions && toPosition(i)}
+                  </div>
                 )}
               </td>
             );

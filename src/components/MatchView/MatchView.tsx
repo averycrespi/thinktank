@@ -25,6 +25,7 @@ interface MatchViewProps {
   canSubmitOrUndo: boolean;
   handleSubmit(): void;
   handleUndo(): void;
+  showPositions: boolean;
 }
 
 /** Renders the view of a match. */
@@ -40,6 +41,7 @@ const MatchView = ({
   canSubmitOrUndo,
   handleSubmit,
   handleUndo,
+  showPositions,
 }: MatchViewProps) => {
   const toggleContextSidebar = () =>
     getContextSidebar()?.classList.toggle("open");
@@ -68,6 +70,7 @@ const MatchView = ({
           grid={state.grid}
           highlightedIndices={highlightedIndices}
           handleCellClick={(i) => handleCellClick(i)}
+          showPositions={showPositions}
         />
         <TokenSelector
           player={player}

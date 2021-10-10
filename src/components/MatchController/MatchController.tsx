@@ -204,6 +204,7 @@ const MatchController = ({
       canSubmitOrUndo={canSubmitOrUndo()}
       handleSubmit={() => handleSubmit()}
       handleUndo={() => handleUndo()}
+      showPositions={true} // TODO: conditionally show
     />
   );
 };

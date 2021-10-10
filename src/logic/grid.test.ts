@@ -13,8 +13,16 @@ import {
   isInHomeOf,
   isInSpawnOf,
   lineFrom,
+  toPosition,
 } from "./grid";
 import { opponentOf, Player } from "./player";
+
+test("corner indices have correct positions", () => {
+  expect(toPosition(0)).toBe("A18");
+  expect(toPosition(GRID_WIDTH - 1)).toBe("O18");
+  expect(toPosition(GRID_SIZE - GRID_WIDTH)).toBe("A1");
+  expect(toPosition(GRID_SIZE - 1)).toBe("O1");
+});
 
 test("index is in grid", () => {
   expect(isInGrid(0)).toBeTruthy();

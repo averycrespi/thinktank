@@ -26,6 +26,19 @@ const toCoords = (index: number): Coords => ({
 });
 
 /**
+ * Represents the rendered position of a index.
+ */
+export type Position = string;
+
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+/** Convert an index to a position. */
+export const toPosition = (index: number): Position => {
+  const { x, y } = toCoords(index);
+  return ALPHABET[x] + (GRID_HEIGHT - y).toString();
+};
+
+/**
  * Represents a rectangular region on the grid.
  *
  * Includes topLeft and excludes bottomRight.
