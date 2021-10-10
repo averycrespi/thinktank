@@ -9,9 +9,12 @@
   --player-two-color: black;
   --player-two-contrast-color: white;
 
-  --grid-background-color: white;
+  --submit-color: green;
+  --undo-color: red;
+  --highlight-color: lightblue;
+
+  --grid-color: white;
   --grid-home-color: lightgray;
-  --grid-highlighted-color: lightgreen;
   --grid-border-color: gray;
 }
 
@@ -23,8 +26,8 @@ body {
 
 .token {
   /* 100 / max(GRID_WIDTH, GRID_HEIGHT) ~= 5.5, minus some space for padding/borders. */
-  width: 5.1vmin;
-  height: 5.1vmin;
+  width: 5vmin;
+  height: 5vmin;
   display: flex;
   justify-content: center;
   align-items: center;

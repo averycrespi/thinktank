@@ -3,7 +3,7 @@
   border: 1vmin solid var(--grid-border-color);
   border-radius: 1vmin;
   border-spacing: 0;
-  background-color: var(--grid-background-color);
+  background-color: var(--grid-color);
 }
 
 .grid-cell {
@@ -17,10 +17,10 @@
 }
 
 .grid-cell.highlighted {
-  background-color: var(--grid-highlighted-color);
+  background-color: var(--highlight-color);
 }
 
 .grid-cell.highlighted .token.player-one,
 .grid-cell.highlighted .token.player-two {
-  color: var(--grid-highlighted-color);
+  background-color: var(--highlight-color);
 }

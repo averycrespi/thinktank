@@ -37,6 +37,7 @@
     "lodash": "^4.17.21",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-responsive": "^9.0.0-beta.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-spinners": "^0.9.0",

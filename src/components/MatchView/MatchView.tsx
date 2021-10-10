@@ -1,21 +1,17 @@
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { useMediaQuery } from "react-responsive";
 import { useSwipeable } from "react-swipeable";
 import { Player } from "../../logic/player";
 import { GameState } from "../../logic/state";
 import { Token } from "../../logic/token";
+import Context from "../Context/Context";
 import Grid from "../Grid/Grid";
-import MatchInfo from "../MatchInfo/MatchInfo";
 import TokenSelector from "../TokenSelector/TokenSelector";
 import "./MatchView.css";
 
-const canControlSidebar = () =>
-  !window.matchMedia("(min-width: 1200px)").matches;
-
-const toggleSidebar = () =>
-  canControlSidebar() &&
-  document.getElementById("match-view-sidebar")?.classList.toggle("open");
+const getContextSidebar = () => document.getElementById("context-sidebar");
 
 interface MatchViewProps {
   state: GameState;
@@ -45,49 +41,44 @@ const MatchView = ({
   handleSubmit,
   handleUndo,
 }: MatchViewProps) => {
-  const handlers = useSwipeable({
-    onSwipedRight: () =>
-      canControlSidebar() &&
-      document.getElementById("match-view-sidebar")?.classList.add("open"),
-    onSwipedLeft: () =>
-      canControlSidebar() &&
-      document.getElementById("match-view-sidebar")?.classList.remove("open"),
+  const toggleContextSidebar = () =>
+    getContextSidebar()?.classList.toggle("open");
+
+  const swipeHandlers = useSwipeable({
+    onSwipedRight: () => getContextSidebar()?.classList.add("open"),
+    onSwipedLeft: () => getContextSidebar()?.classList.remove("open"),
   });
 
+  const isWideScreen = useMediaQuery({ query: "(min-aspect-ratio: 3/2)" });
+
   return (
-    <div className="match-view" {...handlers}>
-      <div id="match-view-sidebar">
-        <MatchInfo player={player} isActive={isActive} winner={winner} />
+    <div className="match-view" {...swipeHandlers}>
+      <div id="context-sidebar" className={isWideScreen ? "open" : ""}>
+        <Context player={player} isActive={isActive} winner={winner} />
       </div>
       <button
-        className="match-view-sidebar-toggle"
-        title="Toggle sidebar"
-        onClick={() => toggleSidebar()}
+        className="context-sidebar-toggle"
+        title="Toggle context sidebar"
+        onClick={() => toggleContextSidebar()}
       >
         <FontAwesomeIcon icon={faBars} />
       </button>
       <div className="match-view-content">
-        <div className="info-panel">
-          <MatchInfo player={player} isActive={isActive} winner={winner} />
-        </div>
-        <div className="grid-panel">
-          <Grid
-            grid={state.grid}
-            highlightedIndices={highlightedIndices}
-            handleCellClick={(i) => handleCellClick(i)}
-          />
-        </div>
-        <div className="selector-panel">
-          <TokenSelector
-            player={player}
-            hand={state.hands[player]}
-            canSelectToken={isActive && canSelectToken}
-            canSubmitOrUndo={isActive && canSubmitOrUndo}
-            handleTokenSelect={(t) => handleTokenSelect(t)}
-            handleSubmit={() => handleSubmit()}
-            handleUndo={() => handleUndo()}
-          />
-        </div>
+        <Grid
+          grid={state.grid}
+          highlightedIndices={highlightedIndices}
+          handleCellClick={(i) => handleCellClick(i)}
+        />
+        <TokenSelector
+          player={player}
+          isActive={isActive}
+          hand={state.hands[player]}
+          canSelectToken={canSelectToken}
+          canSubmitOrUndo={canSubmitOrUndo}
+          handleTokenSelect={(t) => handleTokenSelect(t)}
+          handleSubmit={() => handleSubmit()}
+          handleUndo={() => handleUndo()}
+        />
       </div>
     </div>
   );

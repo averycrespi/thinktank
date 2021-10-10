@@ -1,8 +1,8 @@
-.match-info-title {
+.context-title {
   font-size: max(5vmin, 2em);
 }
 
-.match-info-item {
+.context-item {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;

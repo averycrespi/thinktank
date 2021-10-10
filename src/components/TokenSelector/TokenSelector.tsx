@@ -1,11 +1,12 @@
 import { faCheck, faUndo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState } from "react";
 import { Player } from "../../logic/player";
-import { HeldToken, toHeld, Token } from "../../logic/token";
+import { HeldToken, nameOf, toHeld, Token } from "../../logic/token";
 import TokenIcon from "../TokenIcon/TokenIcon";
 import "./TokenSelector.css";
 
+// Defines which tokens are selectable.
 const SELECTABLE = [
   Token.Blocker,
   Token.UpTank,
@@ -17,15 +18,21 @@ const SELECTABLE = [
   Token.Mine,
 ];
 
-const tokenClasses = (player: Player): Array<String> =>
+const tokenClasses = (
+  player: Player,
+  token: Token,
+  selectedToken: Token | null
+): Array<String> =>
   [
     "token",
     player === Player.One ? "player-one" : "",
     player === Player.Two ? "player-two" : "",
+    token === selectedToken ? "selected" : "",
   ].filter((c) => c.length > 0);
 
 interface TokenSelectorProps {
   player: Player;
+  isActive: Boolean;
   hand: Array<HeldToken>;
   canSelectToken: Boolean;
   handleTokenSelect(token: Token): void;
@@ -37,44 +44,58 @@ interface TokenSelectorProps {
 /** Renders a token selector. */
 const TokenSelector = ({
   player,
+  isActive,
   hand,
   canSelectToken,
   handleTokenSelect,
   canSubmitOrUndo,
   handleSubmit,
   handleUndo,
-}: TokenSelectorProps) => (
-  <div className="token-selector">
-    {SELECTABLE.map((token, i) => (
+}: TokenSelectorProps) => {
+  const [selectedToken, setSelectedToken] = useState<Token | null>(null);
+
+  return (
+    <div className="token-selector">
+      {SELECTABLE.map((token, i) => (
+        <button
+          className={tokenClasses(player, token, selectedToken).join(" ")}
+          disabled={
+            !isActive || !canSelectToken || !hand.includes(toHeld(token))
+          }
+          key={i}
+          onClick={() => {
+            setSelectedToken(token);
+            handleTokenSelect(token);
+          }}
+          title={nameOf(token)}
+        >
+          <TokenIcon token={token} />
+        </button>
+      ))}
       <button
-        className={tokenClasses(player).join(" ")}
-        disabled={!canSelectToken || !hand.includes(toHeld(token))}
-        key={i}
-        onClick={() => handleTokenSelect(token)}
-        onKeyDown={() => handleTokenSelect(token)}
+        className="token submit"
+        disabled={!isActive || !canSubmitOrUndo}
+        onClick={() => {
+          setSelectedToken(null);
+          handleSubmit();
+        }}
+        title="Submit"
       >
-        <TokenIcon token={token} />
+        <FontAwesomeIcon icon={faCheck} />
       </button>
-    ))}
-    <button
-      className="token submit"
-      disabled={!canSubmitOrUndo}
-      onClick={() => handleSubmit()}
-      onKeyDown={() => handleSubmit()}
-      title="Submit"
-    >
-      <FontAwesomeIcon icon={faCheck} />
-    </button>
-    <button
-      className="token undo"
-      disabled={!canSubmitOrUndo}
-      onClick={() => handleUndo()}
-      onKeyDown={() => handleUndo()}
-      title="Undo"
-    >
-      <FontAwesomeIcon icon={faUndo} />
-    </button>
-  </div>
-);
+      <button
+        className="token undo"
+        disabled={!isActive || !canSubmitOrUndo}
+        onClick={() => {
+          setSelectedToken(null);
+          handleUndo();
+        }}
+        title="Undo"
+      >
+        <FontAwesomeIcon icon={faUndo} />
+      </button>
+    </div>
+  );
+};
 
 export default TokenSelector;

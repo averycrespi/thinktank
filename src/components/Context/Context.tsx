@@ -3,13 +3,7 @@ import { nameOf, opponentOf, Player } from "../../logic/player";
 import { Token } from "../../logic/token";
 import Title from "../Title/Title";
 import TokenIcon from "../TokenIcon/TokenIcon";
-import "./MatchInfo.css";
-
-interface MatchInfo {
-  player: Player;
-  isActive: boolean;
-  winner: Player | null;
-}
+import "./Context.css";
 
 const playerClasses = (player: Player) =>
   [
@@ -18,30 +12,40 @@ const playerClasses = (player: Player) =>
     player === Player.Two ? "player-two" : "",
   ].filter((c) => c.length > 0);
 
-/* Renders information about a match. */
-const MatchInfo = ({ player, isActive, winner }: MatchInfo) => {
+interface ContextProps {
+  player: Player;
+  isActive: boolean;
+  winner: Player | null;
+}
+
+/* Renders the context of a match. */
+const Context = ({ player, isActive, winner }: ContextProps) => {
   const turnOf = isActive ? player : opponentOf(player);
 
   return (
-    <div className="match-info">
-      <h1 className="match-info-title">
+    <div className="context">
+      <h1 className="context-title">
         <Title />
       </h1>
-      <div className="match-info-item">
+      <div className="context-item">
         <p>You are:</p>
         <div className={playerClasses(player).join(" ")}>
           <TokenIcon token={Token.Base} />
         </div>
       </div>
-      <div className="match-info-item">
+      <div className="context-item">
         <p>Turn of:</p>
         <div className={playerClasses(turnOf).join(" ")}>
           <TokenIcon token={Token.Base} />
         </div>
       </div>
-      {winner && <p>Winner: {nameOf(winner)}</p>}
+      {winner && (
+        <div className="context-item">
+          <p>Winner: {nameOf(winner)}</p>
+        </div>
+      )}
     </div>
   );
 };
 
-export default MatchInfo;
+export default Context;

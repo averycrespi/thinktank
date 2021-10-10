@@ -31,17 +31,19 @@ const MatchController = ({
   const [controllerState, setControllerState] = useState<ControllerState>({
     tag: "initial",
   });
+
   const [highlightedIndices, setHighlightedIndices] = useState<Set<number>>(
     new Set()
   );
-  const [visibleGameState, setVisibleGameState] = useState<GameState>(state);
+
+  const [projectedState, setProjectedState] = useState<GameState>(state);
 
   // Defines the transitions between the controller states.
   const actions = {
     reset: (): boolean => {
       setControllerState({ tag: "initial" });
       setHighlightedIndices(new Set());
-      setVisibleGameState(state);
+      setProjectedState(state);
       return true;
     },
 
@@ -53,7 +55,7 @@ const MatchController = ({
           ...possibleRotationsInto(state, player, token),
         ])
       );
-      setVisibleGameState(state);
+      setProjectedState(state);
       return true;
     },
 
@@ -62,7 +64,7 @@ const MatchController = ({
       if (cell && cell.owner === player) {
         setControllerState({ tag: "cell_clicked", index });
         setHighlightedIndices(possibleMovementsFrom(state, player, index));
-        setVisibleGameState(state);
+        setProjectedState(state);
         return true;
       }
       return false;
@@ -73,7 +75,7 @@ const MatchController = ({
       if (afterPlacement) {
         setControllerState({ tag: "token_placed", token, index });
         setHighlightedIndices(new Set());
-        setVisibleGameState(afterPlacement);
+        setProjectedState(afterPlacement);
         return true;
       }
       return false;
@@ -84,7 +86,7 @@ const MatchController = ({
       if (afterMovement) {
         setControllerState({ tag: "token_moved", srcIndex, destIndex });
         setHighlightedIndices(new Set());
-        setVisibleGameState(afterMovement);
+        setProjectedState(afterMovement);
         return true;
       }
       return false;
@@ -95,7 +97,7 @@ const MatchController = ({
       if (afterRotation) {
         setControllerState({ tag: "token_rotated", afterToken, index });
         setHighlightedIndices(new Set());
-        setVisibleGameState(afterRotation);
+        setProjectedState(afterRotation);
         return true;
       }
       return false;
@@ -191,7 +193,7 @@ const MatchController = ({
 
   return (
     <MatchView
-      state={visibleGameState}
+      state={projectedState}
       player={player}
       isActive={isActive}
       winner={winner}
