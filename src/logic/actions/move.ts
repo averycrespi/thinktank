@@ -50,7 +50,7 @@ const reachableFrom = (token: Token, index: number): Set<number> => {
  * - The movement does not cause the self-preservation rule to be violated
  */
 export const moveToken = (
-  state: GameState,
+  state: Readonly<GameState>,
   player: Player,
   srcIndex: number,
   destIndex: number
@@ -77,7 +77,7 @@ export const moveToken = (
 
 /** Check if a token can be moved from a source index to a destination index. */
 export const canMoveToken = (
-  state: GameState,
+  state: Readonly<GameState>,
   player: Player,
   srcIndex: number,
   destIndex: number
@@ -85,7 +85,7 @@ export const canMoveToken = (
 
 /** Find all possible destination indices that the token at the source index could move to. */
 export const possibleMovementsFrom = (
-  state: GameState,
+  state: Readonly<GameState>,
   player: Player,
   srcIndex: number
 ): Set<number> => {

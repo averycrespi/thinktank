@@ -2,21 +2,27 @@ import { baseIndexOf, GRID_SIZE } from "./grid";
 import { Player } from "./player";
 import { HeldToken, PlacedToken, Token } from "./token";
 
+/** Represents a grid of cells. */
+export type Grid = Array<PlacedToken | null>;
+
+/** Represents a player's hand. */
+export type Hand = Array<HeldToken>;
+
 /**
  * Represents the current state of a game.
  *
  * The state must be JSON serializable for boardgame.io to work properly.
  */
 export interface GameState {
-  grid: Array<PlacedToken | null>;
+  grid: Grid;
   hands: {
-    [Player.One]: Array<HeldToken>;
-    [Player.Two]: Array<HeldToken>;
+    [Player.One]: Hand;
+    [Player.Two]: Hand;
   };
 }
 
 /** The initial state of the grid. */
-const initialGrid = (): Array<PlacedToken | null> => {
+const initialGrid = (): Grid => {
   let grid = Array(GRID_SIZE).fill(null);
   grid[baseIndexOf(Player.One)] = { owner: Player.One, token: Token.Base };
   grid[baseIndexOf(Player.Two)] = { owner: Player.Two, token: Token.Base };
@@ -24,7 +30,7 @@ const initialGrid = (): Array<PlacedToken | null> => {
 };
 
 /** The initial state of a player's hand. */
-const initialHand: Array<HeldToken> = [
+const initialHand: Hand = [
   ...Array(3).fill(HeldToken.Blocker),
   ...Array(5).fill(HeldToken.Tank),
   HeldToken.CardinalInfiltrator,
@@ -42,7 +48,7 @@ export const initialState: GameState = {
 };
 
 /** Returns the winner of the game, or null iff the game is not over. */
-export const winnerOf = (state: GameState): Player | null => {
+export const winnerOf = (state: Readonly<GameState>): Player | null => {
   const bases = state.grid.filter(
     (t) => t && t.token === Token.Base
   ) as Array<PlacedToken>; // TypeScript doesn't recognize the null check, so we need to cast.

@@ -1,9 +1,9 @@
 import React from "react";
 import { nameOf, opponentOf, Player } from "../../logic/player";
 import { Token } from "../../logic/token";
-import Title from "../Title/Title";
+import TitleView from "../TitleView/TitleView";
 import TokenIcon from "../TokenIcon/TokenIcon";
-import "./Context.css";
+import "./ContextView.css";
 
 const playerClasses = (player: Player) =>
   [
@@ -12,20 +12,20 @@ const playerClasses = (player: Player) =>
     player === Player.Two ? "player-two" : "",
   ].filter((c) => c.length > 0);
 
-interface ContextProps {
+interface ContextViewProps {
   player: Player;
   isActive: boolean;
   winner: Player | null;
 }
 
 /* Renders the context of a match. */
-const Context = ({ player, isActive, winner }: ContextProps) => {
+const ContextView = ({ player, isActive, winner }: ContextViewProps) => {
   const turnOf = isActive ? player : opponentOf(player);
 
   return (
     <div className="context">
       <h1 className="context-title">
-        <Title />
+        <TitleView />
       </h1>
       <div className="context-item">
         <p>You are:</p>
@@ -48,4 +48,4 @@ const Context = ({ player, isActive, winner }: ContextProps) => {
   );
 };
 
-export default Context;
+export default ContextView;

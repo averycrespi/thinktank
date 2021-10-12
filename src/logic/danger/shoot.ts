@@ -1,5 +1,6 @@
 import { Direction, isInGrid, lineFrom } from "../grid";
-import { PlacedToken, Token } from "../token";
+import { Grid } from "../state";
+import { Token } from "../token";
 
 // Defines which tokens can be shot by tanks.
 const SHOOTABLE = new Set<Token>([
@@ -20,8 +21,8 @@ const SHOOTABLE = new Set<Token>([
  * This invariant is upheld by the only caller, canBeShot.
  */
 const canBeShotFrom = (
-  grid: Array<PlacedToken | null>,
-  srcIndices: Array<number>,
+  grid: Readonly<Grid>,
+  srcIndices: Readonly<Array<number>>,
   targetIndex: number,
   tank: Token.UpTank | Token.DownTank | Token.RightTank | Token.LeftTank
 ): boolean => {
@@ -40,10 +41,7 @@ const canBeShotFrom = (
 };
 
 /** Check if a token at an index can be shot by an enemy tank. */
-export const canBeShot = (
-  grid: Array<PlacedToken | null>,
-  index: number
-): boolean => {
+export const canBeShot = (grid: Readonly<Grid>, index: number): boolean => {
   if (!isInGrid(index)) {
     return false; // Out of bounds.
   }

@@ -1,6 +1,7 @@
 import { filter } from "../../utils/setOps";
 import { adjacentTo, isInGrid } from "../grid";
-import { PlacedToken, Token } from "../token";
+import { Grid } from "../state";
+import { Token } from "../token";
 
 // Defines which tokens can be exploded by mines.
 const EXPLODABLE = new Set<Token>([
@@ -22,7 +23,7 @@ const EXPLODABLE = new Set<Token>([
  * - The token is adjacent to an explodable enemy token
  */
 export const canExplodeDueToProximity = (
-  grid: Array<PlacedToken | null>,
+  grid: Readonly<Grid>,
   index: number
 ): boolean => {
   if (!isInGrid(index)) {
@@ -45,8 +46,8 @@ export const canExplodeDueToProximity = (
  * - The token is adjacent to an exploding mine
  * */
 export const canBeExploded = (
-  grid: Array<PlacedToken | null>,
-  explodingMines: Set<number>,
+  grid: Readonly<Grid>,
+  explodingMines: Readonly<Set<number>>,
   index: number
 ): boolean => {
   if (!isInGrid(index)) {

@@ -1,12 +1,12 @@
 import React from "react";
-import "./Title.css";
+import "./TitleView.css";
 
 /** Renders the game title. */
-const Title = () => (
+const TitleView = () => (
   <span>
     <span className="title think">think</span>
     <span className="title tank">tank</span>
   </span>
 );
 
-export default Title;
+export default TitleView;

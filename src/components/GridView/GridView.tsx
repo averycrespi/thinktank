@@ -5,10 +5,10 @@ import {
   isInHome,
   toPosition,
 } from "../../logic/grid";
-import { PlacedToken } from "../../logic/token";
+import { Grid } from "../../logic/state";
 import { classOf } from "../../utils/classOf";
 import TokenIcon from "../TokenIcon/TokenIcon";
-import "./Grid.css";
+import "./GridView.css";
 
 const Y_INDICES = [...Array(GRID_HEIGHT).keys()];
 const X_INDICES = [...Array(GRID_WIDTH).keys()];
@@ -23,20 +23,20 @@ const cellClasses = (
     highlightedIndices && highlightedIndices.has(index) ? "highlighted" : "",
   ].filter((c) => c.length > 0);
 
-interface GridProps {
-  grid: Array<PlacedToken | null>;
+interface GridViewProps {
+  grid: Grid;
   highlightedIndices?: Set<number>;
   handleCellClick(index: number): void;
   showPositions: boolean;
 }
 
 /** Renders a grid of cells. */
-const Grid = ({
+const GridView = ({
   grid,
   highlightedIndices,
   handleCellClick,
   showPositions,
-}: GridProps) => (
+}: GridViewProps) => (
   <table className="grid">
     <tbody>
       {Y_INDICES.map((y) => (
@@ -68,4 +68,4 @@ const Grid = ({
   </table>
 );
 
-export default Grid;
+export default GridView;

@@ -6,8 +6,8 @@ import { useSwipeable } from "react-swipeable";
 import { Player } from "../../logic/player";
 import { GameState } from "../../logic/state";
 import { Token } from "../../logic/token";
-import Context from "../Context/Context";
-import Grid from "../Grid/Grid";
+import ContextView from "../ContextView/ContextView";
+import GridView from "../GridView/GridView";
 import TokenSelector from "../TokenSelector/TokenSelector";
 import "./MatchView.css";
 
@@ -56,7 +56,7 @@ const MatchView = ({
   return (
     <div className="match-view" {...swipeHandlers}>
       <div id="context-sidebar" className={isWideScreen ? "open" : ""}>
-        <Context player={player} isActive={isActive} winner={winner} />
+        <ContextView player={player} isActive={isActive} winner={winner} />
       </div>
       <button
         className="context-sidebar-toggle"
@@ -66,7 +66,7 @@ const MatchView = ({
         <FontAwesomeIcon icon={faBars} />
       </button>
       <div className="match-view-content">
-        <Grid
+        <GridView
           grid={state.grid}
           highlightedIndices={highlightedIndices}
           handleCellClick={(i) => handleCellClick(i)}

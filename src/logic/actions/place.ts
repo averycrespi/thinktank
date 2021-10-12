@@ -16,7 +16,7 @@ import { toHeld, Token } from "../token";
  * - The placement does not cause the self-preservation rule to be violated
  */
 export const placeToken = (
-  state: GameState,
+  state: Readonly<GameState>,
   player: Player,
   token: Token,
   index: number
@@ -40,7 +40,7 @@ export const placeToken = (
 
 /** Check if a token can be placed at an index. */
 export const canPlaceToken = (
-  state: GameState,
+  state: Readonly<GameState>,
   player: Player,
   token: Token,
   index: number
@@ -48,7 +48,7 @@ export const canPlaceToken = (
 
 /** Find all indices that a token could be placed at. */
 export const possiblePlacementFor = (
-  state: GameState,
+  state: Readonly<GameState>,
   player: Player,
   token: Token
 ): Set<number> => {

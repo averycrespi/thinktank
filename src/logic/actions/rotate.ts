@@ -15,7 +15,7 @@ import { isTank, Token } from "../token";
  * - The rotation does not cause the self-preservation rule to be violated
  */
 export const rotateToken = (
-  state: GameState,
+  state: Readonly<GameState>,
   player: Player,
   afterToken: Token,
   index: number
@@ -40,7 +40,7 @@ export const rotateToken = (
 
 /** Check if a token at an index can be rotated into afterToken. */
 export const canRotateToken = (
-  state: GameState,
+  state: Readonly<GameState>,
   player: Player,
   afterToken: Token,
   index: number
@@ -48,7 +48,7 @@ export const canRotateToken = (
 
 /** Find the indices of all possible tokens that could be rotated into afterToken. */
 export const possibleRotationsInto = (
-  state: GameState,
+  state: Readonly<GameState>,
   player: Player,
   afterToken: Token
 ): Set<number> => {

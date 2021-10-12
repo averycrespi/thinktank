@@ -1,5 +1,6 @@
 import { adjacentTo, isInGrid } from "../grid";
-import { isInfiltrator, PlacedToken, Token } from "../token";
+import { Grid } from "../state";
+import { isInfiltrator, Token } from "../token";
 
 // Defines which tokens can be captured by infiltrators.
 const CAPTURABLE = new Set<Token>([
@@ -19,10 +20,7 @@ const CAPTURABLE = new Set<Token>([
  * - The token is not adjacent to a friendly infiltrator
  * - The token is adjacent to an enemy infiltrator
  */
-export const canBeCaptured = (
-  grid: Array<PlacedToken | null>,
-  index: number
-): boolean => {
+export const canBeCaptured = (grid: Readonly<Grid>, index: number): boolean => {
   if (!isInGrid(index)) {
     return false; // Out of bounds.
   }

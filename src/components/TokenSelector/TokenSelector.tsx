@@ -2,7 +2,8 @@ import { faCheck, faUndo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Player } from "../../logic/player";
-import { HeldToken, nameOf, toHeld, Token } from "../../logic/token";
+import { Hand } from "../../logic/state";
+import { nameOf, toHeld, Token } from "../../logic/token";
 import TokenIcon from "../TokenIcon/TokenIcon";
 import "./TokenSelector.css";
 
@@ -33,7 +34,7 @@ const tokenClasses = (
 interface TokenSelectorProps {
   player: Player;
   isActive: Boolean;
-  hand: Array<HeldToken>;
+  hand: Hand;
   canSelectToken: Boolean;
   handleTokenSelect(token: Token): void;
   canSubmitOrUndo: boolean;
