@@ -31,12 +31,11 @@ const MatchController = ({
   const [controllerState, setControllerState] = useState<ControllerState>({
     tag: "initial",
   });
-
   const [highlightedIndices, setHighlightedIndices] = useState<Set<number>>(
     new Set()
   );
-
   const [projectedState, setProjectedState] = useState<GameState>(state);
+  const [showPositions, setShowPositions] = useState<boolean>(false);
 
   // Defines the transitions between the controller states.
   const actions = {
@@ -204,7 +203,8 @@ const MatchController = ({
       canSubmitOrUndo={canSubmitOrUndo()}
       handleSubmit={() => handleSubmit()}
       handleUndo={() => handleUndo()}
-      showPositions={true} // TODO: conditionally show
+      showPositions={showPositions}
+      toggleShowPositions={() => setShowPositions(!showPositions)}
     />
   );
 };

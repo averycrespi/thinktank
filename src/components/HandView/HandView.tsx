@@ -5,7 +5,7 @@ import { Player } from "../../logic/player";
 import { Hand } from "../../logic/state";
 import { nameOf, toHeld, Token } from "../../logic/token";
 import TokenIcon from "../TokenIcon/TokenIcon";
-import "./TokenSelector.css";
+import "./HandView.css";
 
 // Defines which tokens are selectable.
 const SELECTABLE = [
@@ -31,7 +31,7 @@ const tokenClasses = (
     token === selectedToken ? "selected" : "",
   ].filter((c) => c.length > 0);
 
-interface TokenSelectorProps {
+interface HandViewProps {
   player: Player;
   isActive: Boolean;
   hand: Hand;
@@ -42,8 +42,8 @@ interface TokenSelectorProps {
   handleUndo(): void;
 }
 
-/** Renders a token selector. */
-const TokenSelector = ({
+/** Renders a player's hand. */
+const HandView = ({
   player,
   isActive,
   hand,
@@ -52,11 +52,11 @@ const TokenSelector = ({
   canSubmitOrUndo,
   handleSubmit,
   handleUndo,
-}: TokenSelectorProps) => {
+}: HandViewProps) => {
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
 
   return (
-    <div className="token-selector">
+    <div className="hand">
       {SELECTABLE.map((token, i) => (
         <button
           className={tokenClasses(player, token, selectedToken).join(" ")}
@@ -99,4 +99,4 @@ const TokenSelector = ({
   );
 };
 
-export default TokenSelector;
+export default HandView;

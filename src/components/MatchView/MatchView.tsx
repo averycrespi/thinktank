@@ -7,8 +7,9 @@ import { Player } from "../../logic/player";
 import { GameState } from "../../logic/state";
 import { Token } from "../../logic/token";
 import ContextView from "../ContextView/ContextView";
+import ControlsView from "../ControlsView/ControlsView";
 import GridView from "../GridView/GridView";
-import TokenSelector from "../TokenSelector/TokenSelector";
+import HandView from "../HandView/HandView";
 import "./MatchView.css";
 
 const getContextSidebar = () => document.getElementById("context-sidebar");
@@ -26,6 +27,7 @@ interface MatchViewProps {
   handleSubmit(): void;
   handleUndo(): void;
   showPositions: boolean;
+  toggleShowPositions: () => void;
 }
 
 /** Renders the view of a match. */
@@ -42,6 +44,7 @@ const MatchView = ({
   handleSubmit,
   handleUndo,
   showPositions,
+  toggleShowPositions,
 }: MatchViewProps) => {
   const toggleContextSidebar = () =>
     getContextSidebar()?.classList.toggle("open");
@@ -57,6 +60,10 @@ const MatchView = ({
     <div className="match-view" {...swipeHandlers}>
       <div id="context-sidebar" className={isWideScreen ? "open" : ""}>
         <ContextView player={player} isActive={isActive} winner={winner} />
+        <ControlsView
+          showPositions={showPositions}
+          toggleShowPositions={toggleShowPositions}
+        />
       </div>
       <button
         className="context-sidebar-toggle"
@@ -72,7 +79,7 @@ const MatchView = ({
           handleCellClick={(i) => handleCellClick(i)}
           showPositions={showPositions}
         />
-        <TokenSelector
+        <HandView
           player={player}
           isActive={isActive}
           hand={state.hands[player]}

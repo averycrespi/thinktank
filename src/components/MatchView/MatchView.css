@@ -1,6 +1,7 @@
 #context-sidebar {
   display: flex;
   flex-flow: column nowrap;
+  gap: 2vmin;
   height: 100%;
   width: 0;
   position: fixed;

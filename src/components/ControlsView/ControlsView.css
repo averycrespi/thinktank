@@ -1,0 +1,6 @@
+button.control {
+  font-size: 1em;
+  padding: 1em;
+  background-color: var(--player-one-color);
+  color: var(--player-one-contrast-color);
+}
